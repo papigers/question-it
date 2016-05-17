@@ -1,0 +1,25 @@
+{
+  "name": "question-it",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/papigers/question-it.git"
+  },
+  "author": "Gershon Papi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/papigers/question-it/issues"
+  },
+  "homepage": "https://github.com/papigers/question-it#readme",
+  "dependencies": {
+    "react": "^15.0.2",
+    "react-redux": "^4.4.5",
+    "react-router": "^2.4.0",
+    "redux": "^3.5.2"
+  }
+}
