@@ -1,0 +1,36 @@
+.Footer{
+	background-color: #854332;
+	color: #d8d8d8;
+	height: 100px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	overflow: hidden;
+	z-index: 1100;
+	box-shadow: rgba(0, 0, 0, 0.156863) 0px -3px 10px, rgba(0, 0, 0, 0.227451) 0px -3px 10px;
+	
+		.fa{
+			color: white !important;
+			position: relative;
+			
+			&:hover{
+				text-shadow: 1px 1px 20px white;
+			}
+		}
+	
+	button{
+		position: relative;
+	}
+	
+	p{
+		font-size: .9em;
+	}
+	
+	h1,h2,h3,h4{
+		margin: 0;
+		padding: 10px;
+		
+	}
+}
+

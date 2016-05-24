@@ -1,0 +1,20 @@
+.ChartPage{
+	.center-no-margin{
+		text-align: center;
+		margin-bottom: 0;
+		padding-bottom: 0;
+	}
+	
+	#chart-div{
+		margin-top: -20px;
+		margin-bottom: -40px;
+		
+		div[dir="ltr"]{
+			margin: 0 auto;
+		}
+		
+		rect{
+			fill: transparent;
+		}
+	}
+}

@@ -1,0 +1,23 @@
+.Index-nav-btn{
+	margin: 0 15px;
+	
+	span{
+		font-weight: 600 !important;
+	}
+}
+
+
+
+.content > *{
+	padding: 30px 0;
+}
+
+.Index-small-nav-btn{
+	& button{
+		height: 64px !important;	
+		
+		svg{
+			fill: white !important;
+		}
+	}	
+}

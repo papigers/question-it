@@ -1,0 +1,43 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+
+body{
+	margin: 0;
+	font-family: 'Roboto', sans-serif;
+	overflow-y: scroll;
+	position: relative;
+}
+
+.center-text{
+	text-align: center;
+}
+
+.center-div{
+	display: inline-block;
+	left: 50%;
+	position: relative;
+	transform: translate(-50%);
+}
+
+.padded{
+	padding: 0 30px;
+}
+
+html{
+	height: 100%;
+}
+
+body{
+	min-height: calc(100% - 64px);
+}
+
+#react-view, #app-view, .content{
+	min-height: 100%;
+}
+
+
+.content{
+	padding-bottom: 100px;
+}
+
+
+

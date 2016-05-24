@@ -1,0 +1,39 @@
+
+
+$fb-color: #3b5998;
+$gg-color: #d50000;
+
+.LoginSocial{
+	margin: 30px auto;
+}
+
+.LoginSocial-btn{
+	width: 33% !important;
+	
+	span{
+		width: 100% !important;
+	}
+	
+	&, span{
+		border-radius: 0px !important;
+	}
+	
+	&.LoginSocial-fb{
+		&>span{
+			background-color: $fb-color !important;
+		}
+	}
+	
+	&.LoginSocial-tw{
+		&>span{
+			background-color: cornflowerblue !important;
+		}
+	}
+	
+	&.LoginSocial-gg{
+		&>span{
+			background-color: $gg-color !important;
+			
+		}
+	}
+}
