@@ -7,7 +7,7 @@ class Home extends React.Component{
 	render(){ 
 		return (
 			<div className="container">
-			test
+			  test
 				<div className="row">
 					<h1 className="center-text">Popular Polls</h1>
 					<PollItem
