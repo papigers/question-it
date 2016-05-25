@@ -75,7 +75,7 @@ class VoteArea extends React.Component{
 				);
 			}
 			return (
-				<div key={i}>
+				<div key={i} className="VoteArea-list-item">
 					{i !== 0 ? (<Divider key={'divider'+i} />) : ''}
 					<ListItem key={'item'+i} onTouchTap={checkbox.props.onCheckFunc}>
 						{checkbox}
@@ -90,8 +90,8 @@ class VoteArea extends React.Component{
 				<List>
 					{options}
 				</List>
-				<RaisedButton label="submit" secondary={true} className="submit-btn" onMouseUp={this.checkSubmit.bind(this)} />
-				<p className="error">{this.state.error}</p>
+				<RaisedButton label="submit" secondary={true} className="VoteArea-submit-btn" onMouseUp={this.checkSubmit.bind(this)} />
+				<p className="VoteArea-error">{this.state.error}</p>
 			</div>
 		);
 	}

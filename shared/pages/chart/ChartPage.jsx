@@ -54,7 +54,7 @@ class ChartPage extends React.Component{
 		// Set chart options
 		var options = {
 			'is3D': true,
-			legend: {position: 'top', alignment: 'center', maxLines: 2},
+			legend: {position: 'top', alignment: 'center', maxLines: 2, textStyle: {fontSize: 16}},
 			titlePosition: 'none',
 			width,
 			height: width
@@ -102,7 +102,6 @@ class ChartPage extends React.Component{
 			<div className="container ChartPage">
 				<div className="row">
 					<div id="chart-col" className="col-xs-12 col-md-7">
-						<h2 className="center-no-margin">{this.props.title}</h2>
 						<div id="chart-div">
 						</div>
 					</div>

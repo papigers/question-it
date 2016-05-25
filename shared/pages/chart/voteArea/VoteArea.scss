@@ -1,5 +1,5 @@
 .VoteArea{
-	.submit-btn{
+	.VoteArea-submit-btn{
 		margin: 20px auto !important;
 		margin-bottom: 10px !important;
 		width: 50% !important;
@@ -8,8 +8,12 @@
 		transform: translate(-50%);
 	}
 	
-	.error{
+	.VoteArea-error{
 		text-align: center;
 		color: #d50000;
+	}
+	
+	.VoteArea-list-item{
+		max-width: 450px;
 	}
 }

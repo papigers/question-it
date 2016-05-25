@@ -8,7 +8,9 @@
     "start": "node index",
     "dev": "webpack-dev-server --colors --progress --config webpack.dev.js",
     "build": "webpack --progress --color -p",
-    "clean": "del /Q /S .\\public\\build\\*"
+    "clean": "del /Q /S .\\public\\build\\*",
+		"buildrun": "npm run build & npm start",
+		"devrun": "start npm start & npm run dev"
   },
   "repository": {
     "type": "git",

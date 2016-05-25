@@ -1,0 +1,33 @@
+.PollItem{
+	margin: 12px 0;
+	
+	.PollItem-color-spread{
+		height: 100%;
+		display: inline-block;
+	}
+	
+	.PollItem-content{
+		padding: 10px 20px;
+		height: 250px;
+		position: relative;
+		overflow: hidden;
+		
+		.PollItem-gradinet-hide{
+			position: absolute;
+			height: 50%;
+			bottom: 0; left: 0;
+			background: linear-gradient(rgba(0,0,0,0), white);
+			width: 100%;
+		}
+	}
+	
+	.PollItem-color-spread-container{
+		display: flex;
+		width: 100%;
+		height: 10px;
+		
+		&.top{
+			height: 5px;	
+		}
+	}
+}
