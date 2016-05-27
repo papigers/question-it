@@ -99,17 +99,21 @@ class App extends React.Component {
 		
     return (
       <div id="app-view">
-				<AppToolbar onLogoClick={this.onLogoClick.bind(this)} zDepth={2} title="QUESTION IT" flexibleSpaceElement={flexibleSpace} logoUrl="/logo.png">
-					<ToolbarGroup lastChild={true} float='right'>
-						{navButtons}
-					</ToolbarGroup>
-				</AppToolbar>
+				<header>
+					<AppToolbar onLogoClick={this.onLogoClick.bind(this)} zDepth={2} title="QUESTION IT" flexibleSpaceElement={flexibleSpace} logoUrl="/logo.png">
+						<ToolbarGroup lastChild={true} float='right'>
+							{navButtons}
+						</ToolbarGroup>
+					</AppToolbar>
+				</header>
 				
-				<div className="content">
+				<main>
 					{this.props.children}
-				</div>
+				</main>
 			
-				<Footer />
+				<footer>
+					<Footer />
+				</footer>
       </div>
     );
   }

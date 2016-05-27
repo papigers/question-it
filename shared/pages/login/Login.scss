@@ -9,6 +9,10 @@ $amber: rgba(255, 160, 0, .15);
 	.row{
 		height: 100%;
 		margin: 0;
+		
+		@media (min-width: $md-width) {
+  		display:flex;
+		}
 	}
 }
 
@@ -26,12 +30,11 @@ $amber: rgba(255, 160, 0, .15);
 
 
 .Login-register{
-	padding: 0px 50px !important;
+	padding: 20px 50px !important;
 	background: $amber;
 	
 	@media (min-width: $md-width) {
   	border-right: $border;
-		height: calc(100vh - 164px);
 	}
 	
 	@media (max-width: $md-width - 1){
@@ -40,10 +43,10 @@ $amber: rgba(255, 160, 0, .15);
 }
 
 .Login-login{
-	padding: 0px 50px !important;
+	padding: 20px 50px !important;
 	
 	@media (min-width: $md-width) {
-  	
+  	min-height: 100%;
 	}
 	
 	@media (max-width: $md-width - 1){

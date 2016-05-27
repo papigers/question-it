@@ -1,6 +1,7 @@
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import ValidTextField from 'components/validTextField';
 
 const styles = {
 	input: {
@@ -12,13 +13,23 @@ const styles = {
 
 class RegisterForm extends React.Component{
 	render(){
-		return (
-			<div>
-				<TextField
+		let lol = (
+		<TextField
 					floatingLabelText="Username"
 					id={"register-form-username-" + this.props.uniqueId}
 					style={styles.input}
 				/>
+	);
+		
+		return (
+			<div>
+				<ValidTextField
+					muiId={"register-form-username-" + this.props.uniqueId}
+					style={styles.input}
+					label="Username"
+					required="Username is required."
+				/>
+			
 				<TextField
 					id={"register-form-pass-" + this.props.uniqueId}
 					floatingLabelText="Password"
