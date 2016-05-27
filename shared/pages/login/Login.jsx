@@ -1,7 +1,7 @@
 import React from 'react';
-import LoginForm from 'pages/login/loginForm';
-import LoginSocial from 'pages/login/loginSocial';
-import RegisterForm from 'pages/login/registerForm';
+import LoginForm from 'components/loginForm';
+import LoginSocial from 'components/loginSocial';
+import RegisterForm from 'components/registerForm';
 
 if(process.env.BROWSER){
 	require('./Login.scss');

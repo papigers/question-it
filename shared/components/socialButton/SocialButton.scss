@@ -1,14 +1,8 @@
-
-
 $fb-color: #3b5998;
 $gg-color: #d50000;
 
-.LoginSocial{
-	margin: 30px auto;
-}
-
-.LoginSocial-btn{
-	width: 33% !important;
+.SocialButton{
+	flex-grow: 1;
 	
 	span{
 		width: 100% !important;
@@ -17,20 +11,19 @@ $gg-color: #d50000;
 	&, span{
 		border-radius: 0px !important;
 	}
-	
-	&.LoginSocial-fb{
+	&.facebook{
 		&>span{
 			background-color: $fb-color !important;
 		}
 	}
 	
-	&.LoginSocial-tw{
+	&.twitter{
 		&>span{
 			background-color: cornflowerblue !important;
 		}
 	}
 	
-	&.LoginSocial-gg{
+	&.google{
 		&>span{
 			background-color: $gg-color !important;
 			

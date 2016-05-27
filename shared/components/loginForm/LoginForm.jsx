@@ -9,6 +9,7 @@ const styles = {
 		display: 'block'
 	}
 }
+
 class LoginForm extends React.Component{
 	render(){
 		return (
@@ -16,22 +17,19 @@ class LoginForm extends React.Component{
 				<TextField
 					floatingLabelText="Username or Email"
 					id={"login-form-email-" + this.props.uniqueId}
-					fullWidth={true}
 					style={styles.input}
 					type="email"
 				/>
 				<TextField
 					id={"login-form-pass-" + this.props.uniqueId}
 					floatingLabelText="Password"
-					fullWidth={true}
 					style={styles.input}
 					type="password"
 				/>
 				<RaisedButton
 					secondary={true}
-					fullWidth={true}
 					label="Login"
-					className="Login-form-btn"
+					className="LoginForm-btn"
 				/>
 			</div>
 		);

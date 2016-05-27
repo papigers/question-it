@@ -12,16 +12,16 @@ $amber: rgba(255, 160, 0, .15);
 	}
 }
 
-.Login-form-btn{
-	width: 100%;
-	max-width: 500px; 
-	margin: 30px auto;
-	display: block !important;
-}
-
 .Login-or{
 	position: relative;
 	top: 60px;
+}
+
+.LoginForm-btn{
+	width: 100%;
+	max-width: 200px; 
+	margin: 30px auto;
+	display: block !important;
 }
 
 

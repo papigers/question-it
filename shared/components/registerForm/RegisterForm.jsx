@@ -18,19 +18,16 @@ class RegisterForm extends React.Component{
 					floatingLabelText="Username"
 					id={"register-form-username-" + this.props.uniqueId}
 					style={styles.input}
-					fullWidth={true}
 				/>
 				<TextField
 					id={"register-form-pass-" + this.props.uniqueId}
 					floatingLabelText="Password"
-					fullWidth={true}
 					style={styles.input}
 					type="password"
 				/>
 				<TextField
 					floatingLabelText="Email"
 					id={"register-form-email-" + this.props.uniqueId}
-					fullWidth={true}
 					style={styles.input}
 					type="email"
 				/>
@@ -38,7 +35,7 @@ class RegisterForm extends React.Component{
 					primary={true}
 					fullWidth={true}
 					label="Register"
-					className="Login-form-btn"
+					className="LoginForm-btn"
 				/>
 			</div>
 		);

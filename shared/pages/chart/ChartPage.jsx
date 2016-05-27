@@ -1,6 +1,6 @@
 import React from 'react';
 
-import VoteArea from 'pages/chart/voteArea';
+import VoteArea from 'components/voteArea';
 
 const GoogleChartsLoader = function(){
 	let script = require('scriptjs');
