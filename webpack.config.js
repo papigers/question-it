@@ -2,7 +2,23 @@ var path = require('path');
 var webpack = require('webpack');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-module.exports = {
+Array.prototype.contains = function(val){
+	return this.indexOf(val) > -1;
+}
+var DEBUG = !(process.env.NODE_ENV === 'production' || process.argv.contains('-p'));
+var ENV = process.env.NODE_ENV || 'development';
+
+
+function getStyleLoder(ext){
+	var style = "style",
+			extra = "css!autoprefixer" + (ext ? "!"+ext : "");
+	
+	return (DEBUG ? 
+					style + "!" + extra : 
+					ExtractTextPlugin.extract(style, extra));
+}
+
+var config = {
   entry: ['./client/index.jsx'],
   resolve: {
     modulesDirectories: ['node_modules', 'shared'],
@@ -22,15 +38,15 @@ module.exports = {
       },
 			{
 				test: /\.css$/,
-				loader: ExtractTextPlugin.extract("style-loader", "css-loader!autoprefixer-loader")
+				loader: getStyleLoder()
 			},
 			{
 				test: /\.less$/,
-				loader: ExtractTextPlugin.extract("style-loader", "css-loader!autoprefixer-loader!less-loader")
+				loader: getStyleLoder("less")
 			},
 			{
 				test: /\.scss$/,
-				loader: ExtractTextPlugin.extract("style-loader", "css-loader!autoprefixer-loader!sass-loader")
+				loader: getStyleLoder("sass")
 			},
 			{ 
 				test: /\.gif$/, loader: "url-loader?limit=10000&mimetype=image/gif" 
@@ -53,9 +69,20 @@ module.exports = {
 		new webpack.DefinePlugin({
 			"process.env": {
         BROWSER: JSON.stringify(true),
-				NODE_ENV: JSON.stringify( process.env.NODE_ENV || 'development' )
+				NODE_ENV: JSON.stringify(ENV)
     	}
-		}),
-		new ExtractTextPlugin("bundle.css")
-	]
+		})
+	],
+	devServer: {
+    hot: true,
+    proxy: {
+      '*': 'http://127.0.0.1:' + (process.env.PORT || 3000)
+    },
+    host: '127.0.0.1'
+  }
 };
+
+if(!DEBUG)
+	config.plugins.push(new ExtractTextPlugin("bundle.css"));
+
+module.exports = config;

@@ -1,5 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
+
 
 module.exports = {
   entry: ['webpack-dev-server/client?http://127.0.0.1:8080/',
@@ -20,7 +22,7 @@ module.exports = {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         loaders: ['react-hot', 'babel']
-      },
+      },/*
 			{
 				test: /\.css$/,
 				loader: "style-loader!css-loader!autoprefixer-loader"
@@ -32,6 +34,19 @@ module.exports = {
 			{
 				test: /\.scss$/,
 				loader: "style-loader!css-loader!autoprefixer-loader!sass-loader"
+			},
+			*/
+			{
+				test: /\.css$/,
+				loader: ExtractTextPlugin.extract("style", "css!autoprefixer")
+			},
+			{
+				test: /\.less$/,
+				loader: ExtractTextPlugin.extract("style", "css!autoprefixer!less")
+			},
+			{
+				test: /\.scss$/,
+				loader: ExtractTextPlugin.extract("style", "css!autoprefixer!sass")
 			},
 			{ 
 				test: /\.gif$/, loader: "url-loader?limit=10000&mimetype=image/gif" 
@@ -54,11 +69,12 @@ module.exports = {
 		new webpack.DefinePlugin({
 			"process.env": {
         BROWSER: JSON.stringify(true),
-				NODE_ENV: JSON.stringify( process.env.NODE_ENV || 'development' )
+				NODE_ENV: JSON.stringify("production")//process.env.NODE_ENV || 'development' )
     	}
 		}),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.NoErrorsPlugin(),
+		new ExtractTextPlugin("bundle.css")
   ],
   devtool: 'inline-source-map',
 	devServer: {
