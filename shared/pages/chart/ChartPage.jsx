@@ -97,12 +97,6 @@ class ChartPage extends React.Component{
 		}
 	
 	onSubmitVote(){
-		console.log("got here");
-		let choices = this.state.choices;
-		console.log(choices);
-		choices[1][1] += 2;
-		console.log(choices);
-		this.setState({choices});
 	}
 	
 	render(){
