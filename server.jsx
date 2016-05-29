@@ -39,8 +39,9 @@ app.use((req, res) => {
     <html>
       <head>
         <meta charset="utf-8">
+				<meta name="theme-color" content="#950000">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Isomorphic Redux Demo</title>
+        <title>Question It - Online Polls</title>
 				<link rel="stylesheet" href="build/bundle.css">
       </head>
       <body>

@@ -1,6 +1,8 @@
 import React from 'react';
+import RefreshIndicator from 'material-ui/RefreshIndicator';
 
 import VoteArea from 'components/voteArea';
+
 
 const GoogleChartsLoader = function(){
 	let script = require('scriptjs');
@@ -73,7 +75,7 @@ class ChartPage extends React.Component{
 			});
 		}
 		else
-			this.drawChart();
+			self.drawChart();
 	}
 
 	componentDidUpdate(){
@@ -95,6 +97,12 @@ class ChartPage extends React.Component{
 		}
 	
 	onSubmitVote(){
+		console.log("got here");
+		let choices = this.state.choices;
+		console.log(choices);
+		choices[1][1] += 2;
+		console.log(choices);
+		this.setState({choices});
 	}
 	
 	render(){
@@ -103,10 +111,20 @@ class ChartPage extends React.Component{
 				<div className="row">
 					<div id="chart-col" className="col-xs-12 col-md-7">
 						<div id="chart-div">
+							<div style={{ display: "flex", flex: "1", alignItems: "center", justifyContent: "center" }}>
+								<div style={{ position: "relative", alignSelf: "center" }}>
+									<RefreshIndicator
+										size={90}
+										left={-50}
+										top={150}
+										status="loading"
+									/>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div className="col-xs-12 col-md-5">
-						<VoteArea choices={this.props.choices} multi={this.props.multi} title={this.props.title} onSubmit={this.onSubmitVote}/>
+						<VoteArea choices={this.props.choices} multi={this.props.multi} title={this.props.title} onSubmit={this.onSubmitVote.bind(this)}/>
 					</div>
 				</div>
 			</div>

@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
 		"prestart": "npm run prod",
     "start": "node index",
-    "dev": "webpack-dev-server --port 8080 --hot --inline --progress --color",
+    "dev": "webpack-dev-server --port 8080 --host 0.0.0.0 --hot --inline --progress --color",
 		"prod": "npm run build -- -p",
 		"dbgprod": "npm run build -- -d",
 		"prebuild": "npm run clean",
