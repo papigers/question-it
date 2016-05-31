@@ -1,7 +1,8 @@
 import React from 'react';
 import Paper from 'material-ui/Paper';
 import AppBar from 'material-ui/AppBar';
-import PollItem from 'components/pollItem';
+
+import PollItem from '../../components/pollItem';
 
 class Home extends React.Component{
 	render(){ 

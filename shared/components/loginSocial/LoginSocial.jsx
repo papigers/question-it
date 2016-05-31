@@ -1,5 +1,6 @@
 import React from 'react';
-import SocialButton from 'components/socialButton';
+
+import SocialButton from '../socialButton';
 
 if(process.env.BROWSER){
 	require('./LoginSocial.scss');

@@ -1,14 +1,14 @@
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import { ToolbarGroup } from 'material-ui/Toolbar';
-import AppToolbar from 'components/appToolbar';
 import { Link } from 'react-router';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
-import Footer from 'pages/footer';
+import Footer from '../footer';
+import AppToolbar from '../../components/appToolbar';
 
 const pages = [
 	{label: 'Home', path: '/'},
@@ -17,7 +17,7 @@ const pages = [
 	{label: 'Login', path: 'login'}
 ];
 
-if(process.env.BROWSER)
+//if(process.env.BROWSER)
 	require('./Index.scss');
 
 
@@ -92,15 +92,16 @@ class App extends React.Component {
 			})
 		);	
 		
+		let logo = require('./logo.png');
 		
 		let flexibleSpace = this.context.router.isActive('/', true) ? (
-			React.createElement(require('./home/flexibleSpace'))
+			React.createElement(require('./flexibleSpace'), {logo})
 		) : null;
 		
     return (
       <div id="app-view">
 				<header>
-					<AppToolbar onLogoClick={this.onLogoClick.bind(this)} zDepth={2} title="QUESTION IT" flexibleSpaceElement={flexibleSpace} logoUrl="/logo.png">
+					<AppToolbar onLogoClick={this.onLogoClick.bind(this)} zDepth={2} title="QUESTION IT" flexibleSpaceElement={flexibleSpace} logoUrl={logo}>
 						<ToolbarGroup lastChild={true} float='right'>
 							{navButtons}
 						</ToolbarGroup>

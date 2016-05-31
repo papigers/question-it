@@ -6,5 +6,6 @@
     "transform-decorators",
     "transform-object-rest-spread",
     "transform-runtime"
-  ]
+  ],
+	"compact": true
 }

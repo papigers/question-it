@@ -19,22 +19,23 @@ function getStyleLoder(ext){
 }
 
 var config = {
-  entry: ['./client/index.jsx'],
+	context: path.resolve(__dirname, '..'),
+  entry: [path.resolve(__dirname, '../client/index.jsx')],
   resolve: {
     modulesDirectories: ['node_modules', 'shared'],
     extensions:         ['', '.js', '.jsx']
   },
   output: {
-    path: path.join(__dirname, 'public', 'build'),
+    path: path.join(__dirname, '..', 'public', 'build'),
     filename: 'bundle.js',
-		publicPath: "/build"
+		publicPath: "/build/"
   },
   module: {
     loaders: [
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        loaders: ['react-hot', 'babel']
+        loader: 'react-hot!babel'
       },
 			{
 				test: /\.css$/,

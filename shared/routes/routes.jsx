@@ -1,10 +1,10 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 
-import Index from 'pages';
-import Home from 'pages/home';
-import Login from 'pages/login';
-import Chart from 'pages/chart';
+import Index from './index';
+import Home from './home';
+import Login from './login';
+import Chart from './chart';
 
 
 export default (

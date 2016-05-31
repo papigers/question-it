@@ -1,8 +1,9 @@
 import React from 'react';
 import RefreshIndicator from 'material-ui/RefreshIndicator';
 
-import VoteArea from 'components/voteArea';
+import VoteArea from '../../components/voteArea';
 
+let googleLoader;
 
 const GoogleChartsLoader = function(){
 	let script = require('scriptjs');
@@ -26,17 +27,17 @@ const GoogleChartsLoader = function(){
 	};
 }
 
-let loadGoogleCharts;
-
-if(process.env.BROWSER){
-	require('./ChartPage.scss');
-	 loadGoogleCharts = new GoogleChartsLoader();
+function getGoogleChartsLoader(){
+	if(!googleLoader)
+		 googleLoader = new GoogleChartsLoader();
+	return googleLoader;	
 }
+
+require('./ChartPage.scss');
 
 class ChartPage extends React.Component{
 	constructor(props){
 		super();
-		this.loadGoogleCharts = loadGoogleCharts;
 		const {title, choices, multi} = props;
 		this.state= {
 			title,
@@ -68,6 +69,8 @@ class ChartPage extends React.Component{
 	}
 	
 	componentDidMount(){
+		//if ((typeof google === 'undefined') || (typeof google.visualization === 'undefined'))
+			this.loadGoogleCharts = getGoogleChartsLoader();
 		let self = this;
 		if (!this.loadGoogleCharts.loaded){
 			this.loadGoogleCharts.load().then(function(){

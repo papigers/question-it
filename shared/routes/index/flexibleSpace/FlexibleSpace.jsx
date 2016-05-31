@@ -10,7 +10,7 @@ class FlexibleSpace extends React.Component{
 		return (
 			<div className="container flexibleSpace">
 				<h1>QUESTION IT</h1>
-				<img src="/logo.png" className="logo" />
+				<img src={this.props.logo} className="logo" />
 				<h2 style={{color: this.context.muiTheme.palette.accent2Color}} >Online Voting Application</h2>
 				<p>Question It is an online voting application, inspired by a FreeCodeCamp project.<br/>
 				It is created using React and Material-UI.</p>
