@@ -17,8 +17,7 @@ const pages = [
 	{label: 'Login', path: 'login'}
 ];
 
-//if(process.env.BROWSER)
-	require('./Index.scss');
+import s from './Index.css';
 
 
 class App extends React.Component {
@@ -55,7 +54,7 @@ class App extends React.Component {
 				iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
 				anchorOrigin={{horizontal: 'middle', vertical: 'center'}}
 				targetOrigin={{horizontal: 'right', vertical: 'top'}}
-				className="Index-small-nav-btn"
+				className={s.navBtnSmall}
 				onChange={(event, path) => this.context.router.push(path)}
 			>
 				{
@@ -85,7 +84,7 @@ class App extends React.Component {
 						}
 						label={obj.label}
 						secondary={this.context.router.isActive(obj.path, true)}
-						className='Index-nav-btn'
+						className={s.navBtn}
 						key={i}
 					/>
 			 	);

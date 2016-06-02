@@ -3,9 +3,7 @@ import Paper from 'material-ui/Paper';
 
 import chartColors from './chartColors';
 
-if(process.env.BROWSER){
-	require('./PollItem.scss');
-}
+import s from './PollItem.css';
 
 class PollItem extends React.Component{
 	
@@ -14,25 +12,25 @@ class PollItem extends React.Component{
 		let choices = this.props.choices;
 		let colorSpread = choices.map((choice, i) => {
 			return (
-				<div key={i} className="PollItem-color-spread" style={{flexGrow: choice[1], backgroundColor: chartColors[i]}}>
+				<div key={i} className="colorSpread" style={{flexGrow: choice[1], backgroundColor: chartColors[i]}}>
 				</div>
 			);
 		});
 		
 		return (
-			<div className="col-xs-6 col-sm-4 col-md-3 col-xlg-2 PollItem">
+			<div className={`col-xs-6 col-sm-4 col-md-3 col-xlg-2 ${s.root}`}>
 				<Paper zDepth={2}>
-					<div className="PollItem-color-spread-container top">
+					<div className={`${s.colorSpreadContainer} ${s.top}`}>
 						{colorSpread}
 					</div>
-					<div className="PollItem-content">
+					<div className={s.content}>
 						<h4>
-							<span style={{color: this.context.muiTheme.palette.primary1Color}}>{this.props.username}</span> asked:
+							<span className={s.user}>{this.props.username}</span> asked:
 						</h4>
 						<h2 className="center-text">{this.props.title}</h2>
-						<div className="PollItem-gradinet-hide"></div>
+						<div className={s.gradinetHide}></div>
 					</div>
-					<div className="PollItem-color-spread-container">
+					<div className={s.colorSpreadContainer}>
 						{colorSpread}
 					</div>
 				</Paper>

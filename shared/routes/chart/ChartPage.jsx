@@ -33,7 +33,7 @@ function getGoogleChartsLoader(){
 	return googleLoader;	
 }
 
-require('./ChartPage.scss');
+import s from './ChartPage.css';
 
 class ChartPage extends React.Component{
 	constructor(props){

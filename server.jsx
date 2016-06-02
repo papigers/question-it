@@ -6,7 +6,7 @@ import { RouterContext, match } 	from 'react-router';
 import createLocation             from 'history/lib/createLocation';
 
 import routes                     from './shared/routes';
-import Root                    	 	from './shared/Root';
+import Root                    	 	from './shared/root';
 
 
 export default function(){	
@@ -34,7 +34,7 @@ export default function(){
 			);
 
 			const componentHTML = renderToString(InitialComponent);
-			
+
 			const HTML = `
 			<!DOCTYPE html>
 			<html>
@@ -43,11 +43,13 @@ export default function(){
 					<meta name="theme-color" content="#950000">
 					<meta name="viewport" content="width=device-width, initial-scale=1.0">
 					<title>Question It - Online Polls</title>
+					<script async type="application/javascript" src="build/bundle.js"></script>
+					<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+					<link href="https://file.myfontastic.com/m6D5EwwEfBU4hxAfLHHbdR/icons.css" rel="stylesheet">
 					<link rel="stylesheet" href="build/bundle.css">
 				</head>
 				<body>
 					<div id="react-view">${componentHTML}</div>
-					<script type="application/javascript" src="build/bundle.js"></script>
 				</body>
 			</html>
 			`;

@@ -1,0 +1,44 @@
+$md-width: 992px;
+$border: 1px solid rgba(0,0,0,.2);
+$amber: rgba(255, 160, 0, .15);
+
+@custom-media --max-md (max-width: $screen-md-max);
+@custom-media --min-md (min-width: $screen-md);
+
+.root{
+	padding: 0;
+	height: 100%;
+}
+
+.row{
+	height: 100%;
+	margin: 0 !important;
+	
+	@media (--min-md){
+		display: flex;
+	}
+}
+
+.loginFormButton{
+	width: 100%;
+	max-width: 200px; 
+	margin: 30px auto;
+	display: block !important;
+}
+
+.login{
+	padding: 20px 50px !important;
+}
+
+.register{
+	padding: 20px 50px !important;
+	background: $amber;
+	
+	@media (--min-md) {
+  	border-right: $border;
+	}
+	
+	@media (--max-md){
+		border-top: $border;
+	}
+}

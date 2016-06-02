@@ -1,0 +1,40 @@
+$fb-color: #3b5998;
+$gg-color: #d50000;
+$tw-color: cornflowerblue;
+
+.root{
+	flex-grow: 1;
+	
+	& span{
+		width: 100% !important;
+	}
+	
+	&, & span{
+		border-radius: 0px !important;
+		
+		&:before{
+			font-size: larger;
+			line-height: inherit;
+		}
+	}
+	
+	
+	&.facebook{
+		&>span{
+			background-color: $fb-color !important;
+		}
+	}
+	
+	&.twitter{
+		&>span{
+			background-color: $tw-color !important;
+		}
+	}
+	
+	&.google{
+		&>span{
+			background-color: $gg-color !important;
+			
+		}
+	}
+}
