@@ -1,0 +1,12 @@
+.root{
+	text-align: center;
+	
+	& .logo{
+		height: 170px;
+		width: auto;
+	}
+}
+
+.joinBtn {
+	margin-bottom: 15px;
+}

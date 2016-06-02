@@ -1,0 +1,37 @@
+.root {
+	margin: 12px 0;
+}
+
+.colorSpread {
+	height: 100%;
+	display: inline-block;
+}
+
+.user{
+	color: $primary1Color;
+}
+
+.content {
+	padding: 10px 20px;
+	height: 250px;
+	position: relative;
+	overflow: hidden;
+}
+
+.gradinetHide {
+	position: absolute;
+	height: 50%;
+	bottom: 0;
+	left: 0;
+	background: linear-gradient(rgba(0, 0, 0, 0), white);
+	width: 100%;
+}
+
+.colorSpreadContainer {
+	display: flex;
+	width: 100%;
+	height: 10px;
+	&.top {
+		height: 5px;
+	}
+}

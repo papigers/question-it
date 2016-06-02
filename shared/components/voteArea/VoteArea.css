@@ -1,0 +1,17 @@
+.submitBtn{
+	margin: 20px auto !important;
+	margin-bottom: 10px !important;
+	width: 50% !important;
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+}
+
+.error{
+	text-align: center;
+	color: #d50000;
+}
+
+.listItem{
+	max-width: 450px;
+}

@@ -1,24 +1,19 @@
 import React from 'react';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
+
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 
-const types = {
-	facebook: {class: 'facebook', icon: 'fa-facebook'},
-	twitter: {class: 'twitter', icon: 'fa-twitter'},
-	google: {class: 'google', icon: 'fa-google'}
-};
+import s from './SocialButton.css';
 
-if(process.env.BROWSER){
-	require('./SocialButton.scss');
-}
 
 class SocialButton extends React.Component{
+	
 	render(){
-		let type = types[this.props.type];
-		
+		let type = this.props.type;
 		return (
-			<FloatingActionButton linkButton={true} className={`SocialButton ${type.class}`} iconClassName={`fa ${type.icon}`} />
+			<FloatingActionButton linkButton={true} className={`${s.root} ${s[type]}`} iconClassName={`icon-${type}`} />
 		);
 	}
 }
 
-export default SocialButton;
+export default withStyles(s)(SocialButton);

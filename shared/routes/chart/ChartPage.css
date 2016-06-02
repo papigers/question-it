@@ -1,0 +1,14 @@
+
+#chart-div{
+	margin-top: -20px;
+	margin-bottom: -40px;
+	min-height: 350px;
+
+	div[dir="ltr"]{
+		margin: 0 auto;
+	}
+
+	rect{
+		fill: transparent;
+	}
+}

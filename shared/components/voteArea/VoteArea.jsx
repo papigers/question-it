@@ -1,4 +1,6 @@
 import React from "react";
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
+
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Checkbox from 'material-ui/Checkbox';
@@ -6,9 +8,7 @@ import RadioChecked from 'material-ui/svg-icons/toggle/radio-button-checked';
 import RadioUnchecked from 'material-ui/svg-icons/toggle/radio-button-unchecked';
 import RaisedButton from 'material-ui/RaisedButton';
 
-if(process.env.BROWSER){
-	require('./VoteArea.scss');
-}
+import s from './VoteArea.css';
 
 class VoteArea extends React.Component{
 	constructor(props){
@@ -75,7 +75,7 @@ class VoteArea extends React.Component{
 				);
 			}
 			return (
-				<div key={i} className="VoteArea-list-item">
+				<div key={i} className={s.listItem}>
 					{i !== 0 ? (<Divider key={'divider'+i} />) : ''}
 					<ListItem key={'item'+i} onTouchTap={checkbox.props.onCheckFunc}>
 						{checkbox}
@@ -84,14 +84,14 @@ class VoteArea extends React.Component{
 			);
 		});
 		return (
-			<div className="VoteArea">
+			<div>
 				<h1>Vote:</h1>
 				<h2>{this.props.title}</h2>
 				<List>
 					{options}
 				</List>
-				<RaisedButton label="submit" secondary={true} className="VoteArea-submit-btn" onMouseUp={this.checkSubmit.bind(this)} />
-				<p className="VoteArea-error">{this.state.error}</p>
+				<RaisedButton label="submit" secondary={true} className={s.submitBtn} onMouseUp={this.checkSubmit.bind(this)} />
+				<p className={s.error}>{this.state.error}</p>
 			</div>
 		);
 	}
@@ -101,4 +101,4 @@ VoteArea.contextTypes = {
 	muiTheme: React.PropTypes.object.isRequired
 };
 
-export default VoteArea;
+export default withStyles(s)(VoteArea);

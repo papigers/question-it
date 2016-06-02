@@ -1,14 +1,14 @@
 import React from 'react';
-import SocialButton from 'components/socialButton';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
-if(process.env.BROWSER){
-	require('./LoginSocial.scss');
-}
+import SocialButton from '../socialButton';
+
+import s from './LoginSocial.css';
 
 class LoginSocial extends React.Component{
 	render(){
 		return (
-			<div className="LoginSocial">
+			<div className={s.root}>
 				<SocialButton type='facebook' />
 				<SocialButton type='twitter' />
 				<SocialButton type='google' />
@@ -17,4 +17,4 @@ class LoginSocial extends React.Component{
 	}
 }
 
-export default LoginSocial;
+export default withStyles(s)(LoginSocial);

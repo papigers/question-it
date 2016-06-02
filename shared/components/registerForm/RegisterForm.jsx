@@ -1,7 +1,7 @@
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
-import ValidTextField from 'components/validTextField';
+import ValidTextField from '../validTextField';
 
 const styles = {
 	input: {
@@ -13,13 +13,6 @@ const styles = {
 
 class RegisterForm extends React.Component{
 	render(){
-		let lol = (
-		<TextField
-					floatingLabelText="Username"
-					id={"register-form-username-" + this.props.uniqueId}
-					style={styles.input}
-				/>
-	);
 		
 		return (
 			<div>
