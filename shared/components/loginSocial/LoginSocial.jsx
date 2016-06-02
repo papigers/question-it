@@ -1,4 +1,5 @@
 import React from 'react';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import SocialButton from '../socialButton';
 
@@ -16,4 +17,4 @@ class LoginSocial extends React.Component{
 	}
 }
 
-export default LoginSocial;
+export default withStyles(s)(LoginSocial);

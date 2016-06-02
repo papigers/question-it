@@ -1,4 +1,6 @@
 import React from 'react';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
+
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 
 import s from './SocialButton.css';
@@ -14,4 +16,4 @@ class SocialButton extends React.Component{
 	}
 }
 
-export default SocialButton;
+export default withStyles(s)(SocialButton);

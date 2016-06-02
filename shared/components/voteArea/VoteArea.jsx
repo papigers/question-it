@@ -1,4 +1,6 @@
 import React from "react";
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
+
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Checkbox from 'material-ui/Checkbox';
@@ -99,4 +101,4 @@ VoteArea.contextTypes = {
 	muiTheme: React.PropTypes.object.isRequired
 };
 
-export default VoteArea;
+export default withStyles(s)(VoteArea);

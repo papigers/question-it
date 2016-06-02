@@ -1,4 +1,5 @@
 import React from 'react';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import LoginForm from '../../components/loginForm';
 import LoginSocial from '../../components/loginSocial';
@@ -35,4 +36,4 @@ LoginPage.contextTypes = {
 	muiTheme: React.PropTypes.object.isRequired
 };
 
-export default LoginPage;
+export default withStyles(s)(LoginPage);

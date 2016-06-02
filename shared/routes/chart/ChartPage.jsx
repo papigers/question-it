@@ -1,4 +1,6 @@
 import React from 'react';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
+
 import RefreshIndicator from 'material-ui/RefreshIndicator';
 
 import VoteArea from '../../components/voteArea';
@@ -129,4 +131,4 @@ class ChartPage extends React.Component{
 	}
 }
 
-export default ChartPage;
+export default withStyles(s)(ChartPage);

@@ -17,7 +17,7 @@
     "prod": "run-s prod-client prod-server prod-run",
     "prod-run": "node index",
     "prod-client": "webpack --progress --colors -p --config ./webpack/webpack.config.client.js",
-    "prod-server": "webpack --progress --colors --config ./webpack/webpack.config.server.js",
+    "prod-server": "webpack --progress --colors -p --config ./webpack/webpack.config.server.js",
     "debug": "run-s debug-client debug-server prod-run",
     "debug-client": "webpack --progress --colors -d --config ./webpack/webpack.config.client.js",
     "debug-server": "webpack --progress --colors -d --config ./webpack/webpack.config.server.js",

@@ -1,5 +1,5 @@
-import React from 'react';
-//import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import React, {PropTypes} from 'react';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import customTheme from '../theme';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -11,7 +11,7 @@ import grid from './bootstrap-grid/grid.css.less';
 class Root extends React.Component {
   constructor(props){
 		super();
-		this.muiTheme = getMuiTheme(customTheme, { userAgent: props.userAgent });
+		this.muiTheme = getMuiTheme(customTheme, { userAgent: props.userAgent });	
 	}
 
   render () {
@@ -23,4 +23,30 @@ class Root extends React.Component {
   }
 }
 
-export default Root;
+let SRoot = withStyles(s)(withStyles(grid)(Root));
+
+class StylesRoot extends React.Component{
+	static propTypes = {
+    children: PropTypes.element.isRequired,
+    onInsertCss: PropTypes.func.isRequired,
+  }
+
+  static childContextTypes = {
+    insertCss: PropTypes.func.isRequired,
+  }
+
+  getChildContext() {
+    return { insertCss: this.props.onInsertCss };
+  }
+
+	render(){
+		return (
+			<SRoot userAgent={this.props.userAgent}>
+				{this.props.children}
+			</SRoot>
+		);
+	}
+}
+
+
+export default StylesRoot;

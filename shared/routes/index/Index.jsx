@@ -1,4 +1,6 @@
 import React from 'react';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
+
 import RaisedButton from 'material-ui/RaisedButton';
 import { ToolbarGroup } from 'material-ui/Toolbar';
 import { Link } from 'react-router';
@@ -124,4 +126,4 @@ App.contextTypes = {
 	muiTheme: React.PropTypes.object.isRequired
 };
 
-export default App;
+export default withStyles(s)(App);

@@ -8,7 +8,6 @@ import createLocation             from 'history/lib/createLocation';
 import routes                     from './shared/routes';
 import Root                    	 	from './shared/root';
 
-
 export default function(){	
 	const app = express();
 
@@ -17,7 +16,7 @@ export default function(){
 	app.use((req, res) => {
 
 		const location = createLocation(req.url);
-		
+		const css = [];
 		match({ routes, location }, (err, redirectLocation, renderProps) => {
 
 			if (err) { 
@@ -25,16 +24,17 @@ export default function(){
 				return res.status(500).end('Internal server error');
 			}
 			if (!renderProps) return res.status(404).end('Not found.');
-
 			const userAgent = req.headers['user-agent'];
 			const InitialComponent = (
-				<Root userAgent={userAgent}>
+				<Root 
+					userAgent={userAgent}
+					onInsertCss={(styles) => css.push(styles._getCss())}
+				>
 					<RouterContext {...renderProps}/>
 				</Root>
 			);
 
 			const componentHTML = renderToString(InitialComponent);
-
 			const HTML = `
 			<!DOCTYPE html>
 			<html>
@@ -44,9 +44,10 @@ export default function(){
 					<meta name="viewport" content="width=device-width, initial-scale=1.0">
 					<title>Question It - Online Polls</title>
 					<script async type="application/javascript" src="build/bundle.js"></script>
+					<style type="text/css">${css.join('')}</style>
+					<link href="/build/bundle.css" rel="stylesheet" type="text/css">
 					<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 					<link href="https://file.myfontastic.com/m6D5EwwEfBU4hxAfLHHbdR/icons.css" rel="stylesheet">
-					<link rel="stylesheet" href="build/bundle.css">
 				</head>
 				<body>
 					<div id="react-view">${componentHTML}</div>

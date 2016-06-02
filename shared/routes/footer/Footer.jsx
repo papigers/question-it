@@ -1,4 +1,6 @@
 import React from 'react';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
+
 import IconButton from 'material-ui/IconButton';
 import Paper from 'material-ui/Paper';
 
@@ -37,4 +39,4 @@ Footer.contextTypes = {
 
 
 
-export default Footer;
+export default withStyles(s)(Footer);

@@ -1,5 +1,7 @@
 import React from 'react';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import { Link } from 'react-router';
+
 import RaisedButton from 'material-ui/RaisedButton';
 
 import s from './FlexibleSpace.css';
@@ -31,4 +33,4 @@ FlexibleSpace.contextTypes = {
 	muiTheme: React.PropTypes.object.isRequired
 };
 
-export default FlexibleSpace;
+export default withStyles(s)(FlexibleSpace);

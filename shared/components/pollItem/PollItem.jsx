@@ -1,5 +1,6 @@
 import React from 'react';
 import Paper from 'material-ui/Paper';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import chartColors from './chartColors';
 
@@ -43,4 +44,4 @@ PollItem.contextTypes = {
 	muiTheme: React.PropTypes.object.isRequired
 };
 
-export default PollItem;
+export default withStyles(s)(PollItem);

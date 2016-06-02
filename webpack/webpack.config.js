@@ -1,6 +1,5 @@
 var path = require('path');
 var webpack = require('webpack');
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 Array.prototype.contains = function(val){
 	return this.indexOf(val) > -1;
@@ -18,15 +17,6 @@ var AUTOPREFIXER_BROWSERS = [
   'Safari >= 7.1',
 ];
 
-
-function getStyleLoder(ext){
-	var style = "style",
-			extra = "css!autoprefixer" + (ext ? "!"+ext : "");
-	
-	return (DEBUG ? 
-					style + "!" + extra : 
-					ExtractTextPlugin.extract(style, extra));
-}
 
 var config = {
 	context: path.resolve(__dirname, '..'),
@@ -50,7 +40,7 @@ var config = {
 			{
 				test: /\.css$/,
 				loaders: [
-					"style-loader",
+					"isomorphic-style-loader",
 					`css-loader?${JSON.stringify({
 						sourceMap: DEBUG,
 						localIdentName: DEBUG ? '[name]_[local]_[hash:base64:3]' : '[hash:base64:4]',
@@ -62,7 +52,15 @@ var config = {
 			},
 			{
 				test: /\.less$/,
-				loader: getStyleLoder("less")
+				loaders: [
+					"isomorphic-style-loader",
+					`css-loader?${JSON.stringify({
+						sourceMap: DEBUG,
+						localIdentName: DEBUG ? '[name]_[local]_[hash:base64:3]' : '[hash:base64:4]',
+						minimize: !DEBUG,
+					})}`,
+					"less-loader"
+				]
 			},
 			{ 
 				test: /\.gif$/, loader: "url-loader?limit=10000&mimetype=image/gif" 
@@ -144,7 +142,5 @@ var config = {
 	}
 };
 
-if(!DEBUG)
-	config.plugins.push(new ExtractTextPlugin("bundle.css"));
 
 module.exports = config;

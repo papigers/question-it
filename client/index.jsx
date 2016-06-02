@@ -9,7 +9,7 @@ var injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
 
 render(
-  <Root>
+  <Root onInsertCss={(styles) => styles._insertCss()}>
 		<Router children={routes} history={browserHistory} />
 	</Root>, 
   document.getElementById('react-view')

@@ -13,13 +13,6 @@ const styles = {
 
 class RegisterForm extends React.Component{
 	render(){
-		let lol = (
-		<TextField
-					floatingLabelText="Username"
-					id={"register-form-username-" + this.props.uniqueId}
-					style={styles.input}
-				/>
-	);
 		
 		return (
 			<div>
