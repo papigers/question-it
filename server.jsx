@@ -45,7 +45,6 @@ export default function(){
 					<title>Question It - Online Polls</title>
 					<script async type="application/javascript" src="build/bundle.js"></script>
 					<style type="text/css">${css.join('')}</style>
-					<link href="/build/bundle.css" rel="stylesheet" type="text/css">
 					<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 					<link href="https://file.myfontastic.com/m6D5EwwEfBU4hxAfLHHbdR/icons.css" rel="stylesheet">
 				</head>
