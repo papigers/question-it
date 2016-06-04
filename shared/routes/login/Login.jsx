@@ -8,7 +8,6 @@ import RegisterForm from '../../components/registerForm';
 
 import s from './Login.css';
 
-
 class LoginPage extends React.Component{
 	render(){
 		return (

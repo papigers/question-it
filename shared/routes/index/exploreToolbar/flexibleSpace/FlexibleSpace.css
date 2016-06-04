@@ -1,0 +1,13 @@
+.root{
+  text-align: center;
+}
+
+.header{
+  font-size: 200%;
+  margin: 0;
+  padding: 12px;
+}
+
+.createBtn {;
+	margin: 15px;
+}

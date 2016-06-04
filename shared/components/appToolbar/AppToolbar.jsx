@@ -68,10 +68,10 @@ class AppToolbar extends React.Component {
 		
 		return (
 			<MuiThemeProvider muiTheme={this.muiTheme}>
-				<div id="calcHeight" style={{marginBottom: height}}>
+				<div style={{marginBottom: ( this.props.tabsElement && this.state.doDepth ? height + 48 : height)}}>
 					<Paper
 						id="appBar"
-						zDepth={ ((this.state.doDepth) ? this.props.zDepth : 0) }
+						zDepth={ ((this.state.doDepth && !this.props.tabsElement) ? this.props.zDepth : 0) }
 						style={{
 							 ...styles.toolbar,
 							backgroundColor,
@@ -86,8 +86,8 @@ class AppToolbar extends React.Component {
 							{this.props.children}
 						</Toolbar>
 					</Paper>
-					<Paper 
-						zDepth={this.props.zDepth}
+					<Paper id="calcHeight"
+						zDepth={this.props.tabsElement? 0 : this.props.zDepth}
 						style={{
 							backgroundColor,
 							color: textColor,
@@ -96,6 +96,18 @@ class AppToolbar extends React.Component {
 							zIndex: zIndex - 1
 						}}>
 						{this.props.flexibleSpaceElement}
+					</Paper>
+          <Paper
+						zDepth={this.props.zDepth}
+						style={{
+							backgroundColor,
+							color: textColor,
+							position: (this.state.doDepth ? 'fixed' : 'relative'),
+              width: '100%',
+							top: height,
+							zIndex: zIndex - 2
+						}}>
+						{this.props.tabsElement}
 					</Paper>
 				</div>
       </MuiThemeProvider>

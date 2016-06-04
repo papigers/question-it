@@ -39,7 +39,7 @@ class RegisterForm extends React.Component{
 					primary={true}
 					fullWidth={true}
 					label="Register"
-					className="LoginForm-btn"
+					className="formButton"
 				/>
 			</div>
 		);

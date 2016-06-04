@@ -13,10 +13,10 @@ import Footer from '../footer';
 import AppToolbar from '../../components/appToolbar';
 
 const pages = [
-	{label: 'Home', path: '/'},
-	{label: 'Chart', path: 'chart'},
+	{label: 'Home', path: '/', active: '/'},
+	{label: 'Explore', path: '/polls', active: '/polls'},
 	//{label: 'about', path: '/about'},
-	{label: 'Login', path: 'login'}
+	{label: 'Login', path: '/login', active: '/login'}
 ];
 
 import s from './Index.css';
@@ -49,7 +49,7 @@ class App extends React.Component {
 		this.context.router.push('/');
 	}
 	
-  render() {	
+  render() {
 		let navButtons = this.state.small ?
 		(
 			<IconMenu
@@ -66,7 +66,7 @@ class App extends React.Component {
 								primaryText={obj.label}
 								key={i}
 								value={obj.path}
-								style={this.context.router.isActive(obj.path, true) ?
+								style={this.context.router.isActive(obj.active, obj.path !== '/polls') ?
 									{ backgroundColor: this.context.muiTheme.palette.accent1Color, color: 'white' } : null
 								}
 							/>
@@ -85,7 +85,7 @@ class App extends React.Component {
 							<Link to={obj.path}/>
 						}
 						label={obj.label}
-						secondary={this.context.router.isActive(obj.path, true)}
+						secondary={this.context.router.isActive(obj.active, obj.path !== '/polls')}
 						className={s.navBtn}
 						key={i}
 					/>
@@ -96,13 +96,21 @@ class App extends React.Component {
 		let logo = require('./logo.png');
 		
 		let flexibleSpace = this.context.router.isActive('/', true) ? (
-			React.createElement(require('./flexibleSpace'), {logo})
+			React.createElement(require('./homeToolbar/flexibleSpace'), {logo})
 		) : null;
+
+    let tabs = null;
+    if(this.context.router.isActive('/polls')){
+      let tab = this.props.routes[this.props.routes.length-1].tab;
+      let { Tabs, FlexibleSpace } = require('./exploreToolbar');
+      tabs = React.createElement(Tabs, {tab});
+      flexibleSpace = React.createElement(FlexibleSpace);
+    }
 		
     return (
       <div id="app-view">
 				<header>
-					<AppToolbar onLogoClick={this.onLogoClick.bind(this)} zDepth={2} title="QUESTION IT" flexibleSpaceElement={flexibleSpace} logoUrl={logo}>
+					<AppToolbar onLogoClick={this.onLogoClick.bind(this)} zDepth={2} title="QUESTION IT" flexibleSpaceElement={flexibleSpace} logoUrl={logo} tabsElement={tabs}>
 						<ToolbarGroup lastChild={true} float='right'>
 							{navButtons}
 						</ToolbarGroup>

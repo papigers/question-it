@@ -29,7 +29,7 @@ class LoginForm extends React.Component{
 				<RaisedButton
 					secondary={true}
 					label="Login"
-					className="LoginForm-btn"
+					className="formButton"
 				/>
 			</div>
 		);

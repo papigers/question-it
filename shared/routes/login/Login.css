@@ -19,11 +19,13 @@ $amber: rgba(255, 160, 0, .15);
 	}
 }
 
-.loginFormButton{
-	width: 100%;
-	max-width: 200px; 
-	margin: 30px auto;
-	display: block !important;
+:global{
+  & .formButton{
+	 width: 100%;
+    max-width: 200px;
+    margin: 30px auto;
+    display: block !important;
+  }
 }
 
 .login{

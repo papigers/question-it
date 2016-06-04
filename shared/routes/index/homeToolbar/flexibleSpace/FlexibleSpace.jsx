@@ -15,7 +15,7 @@ class FlexibleSpace extends React.Component{
 				<h2 style={{color: this.context.muiTheme.palette.accent2Color}} >Online Voting Application</h2>
 				<p>Question It is an online voting application, inspired by a FreeCodeCamp project.<br/>
 				It is created using React and Material-UI.</p>
-				<RaisedButton 
+				<RaisedButton
 					linkButton={true}
 					containerElement={
 						<Link to="/login"/>

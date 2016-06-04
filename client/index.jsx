@@ -10,7 +10,7 @@ injectTapEventPlugin();
 
 render(
   <Root onInsertCss={(styles) => styles._insertCss()}>
-		<Router children={routes} history={browserHistory} />
+		<Router children={routes} history={browserHistory} onUpdate={() => window.scrollTo(0, 0)} />
 	</Root>, 
   document.getElementById('react-view')
 );

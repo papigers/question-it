@@ -6,6 +6,33 @@ class About extends React.Component{
 			<div className="container">
 				<h1>About</h1>
 				<p>This is about</p>
+      <p>This is about</p>
+      <p>This is about</p>
+      <p>This is about</p>
+      <p>This is about</p>
+
+      <p>This is about</p>
+      <p>This is about</p>
+      <p>This is about</p>
+      <p>This is about</p>
+      <p>This is about</p>
+      <p>This is about</p>
+      <p>This is about</p>
+      <p>This is about</p>
+      <p>This is about</p>
+      <p>This is about</p>
+      <p>This is about</p>
+      <p>This is about</p>
+      <p>This is about</p>
+      <p>This is about</p>
+      <p>This is about</p>
+      <p>This is about</p>
+      <p>This is about</p>
+      <p>This is about</p>
+      <p>This is about</p>
+      <p>This is about</p>
+      <p>This is about</p>
+
 			</div>
 		);
 	}
