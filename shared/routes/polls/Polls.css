@@ -1,0 +1,21 @@
+main:local{
+  padding-top: 20px;
+  padding-bottom: 50px;
+  background: color($accent2Color w(80%));
+}
+
+.header{
+  padding: 20px;
+  color: $primary1Color;
+  font-size: 3rem;
+}
+
+.content{
+  width: 85%;
+  margin: 0 auto;
+
+  & > div{
+    margin: 10px auto;
+    margin-bottom: 60px;
+  }
+}

@@ -100,7 +100,7 @@ class App extends React.Component {
 		) : null;
 
     let tabs = null;
-    if(this.context.router.isActive('/polls')){
+    if(this.context.router.isActive('/polls') && !this.props.params.id){
       let tab = this.props.routes[this.props.routes.length-1].tab;
       let { Tabs, FlexibleSpace } = require('./exploreToolbar');
       tabs = React.createElement(Tabs, {tab});

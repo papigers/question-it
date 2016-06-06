@@ -1,0 +1,60 @@
+.toolbar{
+  background-color: color($primary1Color w(22%)) !important;
+  border-radius: 5px;
+  max-width: 700px;
+  margin: 0 auto;
+  padding-left: 0 !important;
+  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+}
+
+.focus{
+    background-color: white !important;
+
+    & .textField{
+      color:black;
+    }
+
+    & .icon{
+      color: $primary1Color !important;
+    }
+  }
+
+.textField{
+  background: rgba(0,0,0,0);
+  border: none;
+  outline: none;
+  font-size: 1.8em;
+  //text-align: center;
+  margin-right: 64px;
+  color: white;
+  width: 100%;
+  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+
+  &.focus{
+    color: black;
+  }
+}
+
+::placeholder{
+  color: white;
+  font-size: 1.1em;
+  text-align: center;
+  font-weight: 600;
+  font-family: 'Roboto', sans-serif;
+}
+
+.icon{
+  color: white !important;
+  font-size: 38px !important;
+  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+
+  &.focused{
+    color: $primary1Color !important;
+  }
+}
+
+.button{
+  height: 64px !important;
+  width: 64px !important;
+  margin-right: 15px !important;
+}

@@ -4,14 +4,15 @@ import { Link } from 'react-router';
 
 import RaisedButton from 'material-ui/RaisedButton';
 
+import SearchBar from '../../../../components/searchBar';
+
 import s from './FlexibleSpace.css'
 
 class FlexibleSpace extends React.Component{
   render(){
     return (
       <div className={`container ${s.root}`}>
-        <h1 className={s.header}>Explore Polls</h1>
-
+        <SearchBar hint="Explore Polls"/>
         <RaisedButton
 					linkButton={true}
 					containerElement={

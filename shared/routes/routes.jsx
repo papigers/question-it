@@ -5,7 +5,8 @@ import Index from './index';
 import Home from './home';
 import About from './about';
 import Login from './login';
-import Polls from './polls'
+import Polls from './polls';
+import CreatePoll from './polls/createPoll'
 import Chart from './chart';
 
 
@@ -14,10 +15,10 @@ export default (
 			<IndexRoute component={Home} />
       <Route path="polls">
         <IndexRedirect to="trending" />
-        <Route path="trending" tab="trending" component={About} />
-        <Route path="top" tab="top" component={About} />
-        <Route path="new" tab="new" component={About} />
-        <Route path="create" component={About} />
+        <Route path="trending" tab="trending" component={Polls} />
+        <Route path="top" tab="top" component={Polls} />
+        <Route path="new" tab="new" component={Polls} />
+        <Route path="create" component={CreatePoll} />
         <Route path=":id" component={Chart} />
       </Route>
 			<Route component={Login} path="login" />

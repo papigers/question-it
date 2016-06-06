@@ -1,0 +1,60 @@
+.titleField{
+  width: 65% !important;
+  font-size: 1.4rem !important;
+
+  & input{
+    text-align: center;
+  }
+
+  & label{
+    left: 50%;
+    transform: translate(-50%) !important;
+  }
+
+}
+
+.titleField.focus{
+  & label{
+    transform: perspective(1px) scale(0.75) translate3d(0px, -28px, 0px) translate(-50%) !important;
+  }
+}
+
+.addDiv{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  margin-bottom: 25px;
+}
+.add{
+  position: relative;
+  left: 10px;
+  bottom: -10px;
+}
+
+.answerField{
+  //position: absolute !important;
+}
+
+.container{
+  width: 70% !important;
+  margin: 0 auto;
+}
+
+.answers{
+  width: 55% !important;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.checkbox{
+  width: 45% !important;
+  margin: 15px auto;
+  text-align: left;
+}
+
+.error{
+  color: $accent1Color;
+  font-size: .85em;
+  display: block;
+}

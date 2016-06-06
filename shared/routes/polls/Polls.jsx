@@ -1,35 +1,72 @@
 import React from 'react';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
-import RaisedButton from 'material-ui/RaisedButton';
-import {Tabs, Tab} from 'material-ui/Tabs';
 import Paper from 'material-ui/Paper';
 
-class Polls extends React.Component{
-  constructor(props){
-    super(props);
-    let tab = props.routes[props.routes.length-1].tab;
-    this.state = { tab: tab  || 'trending'};
-  }
+import PollItem from '../../components/pollItem';
 
-  switchTabs(tab){
-    this.context.router.push(`/polls/${tab}`);
-    this.setState({tab});
+import s from './Polls.css';
+
+const polls = {
+  trending: {
+    header: 'Trending'
+  },
+  top: {
+    header: 'Top'
+  },
+  new: {
+    header: 'New'
   }
+}
+
+class Polls extends React.Component{
 
   render(){
-    let value = this.state.tab;
+    let tab = this.props.routes[this.props.routes.length-1].tab;
+
     return (
-      <div style={{padding: 0}}>
-        <Tabs value={value} onChange={this.switchTabs.bind(this)}>
-          <Tab label="trending" value="trending" />
-          <Tab label="top" value="top" />
-          <Tab label="new" value="new" />
-        </Tabs>
-        <Paper className="container">
-          <h1>Polls</h1>
-          <RaisedButton label="hello" />
-        </Paper>
-        {this.props.children}
+      <div className={s.root}>
+        <Paper zDepth={2} className='container center-text'>
+          <h1 className={s.header}>{polls[tab].header} Polls</h1>
+        <div className={`${s.content}`}>
+          <PollItem
+            username="papigers"
+            title="Example Title"
+            choices={[
+              ['Mushrooms', 3],
+              ['Onions', 1],
+              ['Olives', 1],
+              ['Zucchini', 1],
+              ['Pepperoni', 2]
+            ]}
+          />
+
+          <PollItem
+            username="papigers"
+            title="Example Title"
+            choices={[
+              ['Mushrooms', 3],
+              ['Onions', 1],
+              ['Olives', 1],
+              ['Zucchini', 1],
+              ['Pepperoni', 2]
+            ]}
+          />
+
+          <PollItem
+            username="papigers"
+            title="Example Title"
+            choices={[
+              ['Mushrooms', 3],
+              ['Onions', 1],
+              ['Olives', 1],
+              ['Zucchini', 1],
+              ['Pepperoni', 2]
+            ]}
+          />
+
+        </div>
+</Paper>
       </div>
     );
   }
@@ -39,4 +76,4 @@ Polls.contextTypes = {
   router: React.PropTypes.object.isRequired
 }
 
-export default Polls;
+export default withStyles(s)(Polls);
