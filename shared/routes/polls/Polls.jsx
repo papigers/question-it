@@ -21,13 +21,18 @@ const polls = {
 
 class Polls extends React.Component{
 
+  componentWillMount(){
+    if(!this.props.location.query.q)
+      this.context.router.push('/polls');
+  }
+
   render(){
     let tab = this.props.routes[this.props.routes.length-1].tab;
-
     return (
       <div className={s.root}>
         <Paper zDepth={2} className='container center-text'>
-          <h1 className={s.header}>{polls[tab].header} Polls</h1>
+          {polls[tab] ? (<h1 className={s.header}>{polls[tab].header} Polls</h1>) : null}
+          <h3>Search</h3>
         <div className={`${s.content}`}>
           <PollItem
             username="papigers"

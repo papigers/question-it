@@ -25,7 +25,26 @@ class SearchBar extends React.Component{
   }
 
   onChange(event){
-    this.setState({value: event.target.value});
+    let value = event.target.value;
+    let router = this.context.router;
+    if(value === ''){
+      router.goBack();
+    }
+    else{
+      if(window.location.pathname === '/polls/search'){
+        router.replace({
+          pathname: '/polls/search',
+          query: { q: value }
+        });
+      }
+      else{
+        router.push({
+          pathname: '/polls/search',
+          query: { q: value }
+        });
+      }
+    }
+    this.setState({value});
   }
 
   render(){
@@ -49,6 +68,10 @@ class SearchBar extends React.Component{
       </div>
     );
   }
+}
+
+SearchBar.contextTypes={
+  router: React.PropTypes.object.isRequired
 }
 
 export default withStyles(s)(SearchBar);

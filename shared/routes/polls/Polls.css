@@ -12,7 +12,7 @@ main:local{
 
 .content{
   width: 85%;
-  margin: 0 auto;
+  margin: 40px auto;
 
   & > div{
     margin: 10px auto;

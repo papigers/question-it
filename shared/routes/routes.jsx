@@ -18,6 +18,7 @@ export default (
         <Route path="trending" tab="trending" component={Polls} />
         <Route path="top" tab="top" component={Polls} />
         <Route path="new" tab="new" component={Polls} />
+        <Route path="search" tab="search" component={Polls} />
         <Route path="create" component={CreatePoll} />
         <Route path=":id" component={Chart} />
       </Route>
