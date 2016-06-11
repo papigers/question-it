@@ -1,6 +1,7 @@
 $fb-color: #3b5998;
 $gg-color: #d50000;
 $tw-color: cornflowerblue;
+$disabled-color: gray;
 
 .root{
 	flex-grow: 1;
@@ -17,7 +18,16 @@ $tw-color: cornflowerblue;
 			line-height: inherit;
 		}
 	}
+
+  & .largeIcon{
+      width: 38px !important;
+  }
 	
+  &.disabled{
+		&>span{
+			background-color: $disabled-color !important;
+		}
+	}
 	
 	&.facebook{
 		&>span{

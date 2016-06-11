@@ -1,0 +1,123 @@
+:local{
+  & h2{
+    margin: 10px 0px;
+  }
+}
+
+.sidemenu{
+  background-color: color($primary1Color) !important;
+}
+
+.fixedMenu{
+  position: fixed;
+  width: 18%;
+}
+
+.tabs{
+  margin-bottom: 20px;
+}
+
+.menuItems span {
+  color: white !important;
+
+  &:hover{
+    background: rgba(255, 255, 255, 0.09) !important;
+  }
+}
+
+.editIcon{
+  position: absolute !important;
+  top: -3px;
+}
+
+.editBio{
+  position: absolute !important;
+  right: -2px;
+  bottom: 5px;
+}
+
+.addSocial{
+  position: absolute !important;
+  top: -5px;
+}
+
+.avatarContainer{
+  position: relative;
+}
+
+.avatar{
+  margin: 20px;
+  flex-shrink: 0;
+  position: relative;
+  background-color: $accent1Color !important;
+}
+
+.editAvatar{
+  position: absolute !important;
+  left: 70px;
+  top: 60px;
+}
+
+.editSocial{
+  display: flex;
+}
+
+.introRow{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.username{
+  flex-grow: 1;
+  position: relative;
+  top: 70px;
+  transform: translate(0,-50%);
+}
+
+.fullRow{
+  flex: 0 0  100%;
+}
+
+.category{
+  padding: 20px 20px;
+}
+
+.subheader{
+  line-height: normal !important;
+}
+
+.categoryHeader{
+  margin: 20px 20px;
+}
+
+.item > div > div{
+  padding: 8px 16px !important;
+}
+
+.stat{
+  margin-left: 10px;
+  font-weight: 600;
+}
+
+.privateCheckbox{
+  margin-left: 10px;
+}
+
+.social{
+  width: 100% !important;
+  margin-left: 10px;
+}
+
+.anchor {
+  display: block;
+  position: relative;
+  top: -64px;
+  visibility: hidden;
+}
+
+.pwdButton{
+  width: 200px;
+  display: block !important;
+  margin: 0 auto;
+  margin-bottom: 10px;
+}

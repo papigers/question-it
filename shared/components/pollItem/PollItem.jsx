@@ -19,13 +19,13 @@ class PollItem extends React.Component{
 		});
 		
 		return (
-			<div className={`col-xs-6 col-sm-4 col-md-3 col-xlg-2 ${s.root}`}>
+			<div className={`col-xs-12 col-sm-6 col-md-4 col-xlg-3 ${s.root}`}>
 				<Paper zDepth={2}>
 					<div className={`${s.colorSpreadContainer} ${s.top}`}>
 						{colorSpread}
 					</div>
 					<div className={s.content}>
-						<h4>
+						<h4 className="center-text">
 							<span className={s.user}>{this.props.username}</span> asked:
 						</h4>
 						<h2 className="center-text">{this.props.title}</h2>

@@ -36,7 +36,7 @@ class Polls extends React.Component{
         <div className={`${s.content}`}>
           <PollItem
             username="papigers"
-            title="Example Title"
+            title="Example Title dskjsad asdnasjkdnas djasnjk dasda dasdksan camckans asdnas dasdnas dasdnaskja sdasjnx asx asjdn asds dsns xsn cdj jnkas xsjanx"
             choices={[
               ['Mushrooms', 3],
               ['Onions', 1],

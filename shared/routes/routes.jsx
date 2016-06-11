@@ -8,6 +8,7 @@ import Login from './login';
 import Polls from './polls';
 import CreatePoll from './polls/createPoll'
 import Chart from './chart';
+import User from './user';
 
 
 export default (
@@ -20,8 +21,9 @@ export default (
         <Route path="new" tab="new" component={Polls} />
         <Route path="search" tab="search" component={Polls} />
         <Route path="create" component={CreatePoll} />
-        <Route path=":id" component={Chart} />
+        <Route path="poll/:id" component={Chart} />
       </Route>
+      <Route path="users/:id" component={User} />
 			<Route component={Login} path="login" />
     </Route>
 );

@@ -60,7 +60,7 @@ class CreatePoll extends React.Component{
   }
 
   multipleCheck(event, isChecked){
-    this.setState({multiple, isChecked});
+    this.setState({multiple: !this.state.multiple});
   }
 
   submit(event){

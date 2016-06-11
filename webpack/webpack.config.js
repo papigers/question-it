@@ -132,6 +132,7 @@ var config = {
         // W3C color() function, e.g. div { background: color(red alpha(90%)); }
         // https://github.com/postcss/postcss-color-function
         require('postcss-color-function')(),
+
         // Generate pixel fallback for "rem" units, e.g. div { margin: 2.5rem 2px 3em 100%; }
         // https://github.com/robwierzbowski/node-pixrem
         require('pixrem')(),

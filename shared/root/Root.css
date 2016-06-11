@@ -1,11 +1,25 @@
+@custom-media --max-md (max-width: $screen-md-max);
+@custom-media --min-md (min-width: $screen-md);
+
+@custom-media --max-sm (max-width: $screen-sm-max);
+@custom-media --min-sm (min-width: $screen-sm);
+
+
 :global {
   & body{
 		margin: 0;
 		font-family: 'Roboto', sans-serif;
 		overflow-y: scroll;
 		position: relative;
-		backround: green;
 	}
+
+  & a{
+    color: black;
+
+    &:hover{
+      text-decoration: none;
+    }
+  }
 
 	& .center-text{
 		text-align: center;
@@ -54,4 +68,34 @@
 	& footer {
 			flex-shrink: 0;
 	}
+
+  & .center-y{
+    position: relative !important;
+    top: 50%;
+    transform: translate(0,-50%);
+  }
+
+  & .hide-md-down{
+    @media(--max-md){
+      display: none;
+    }
+  }
+
+  & .hide-md-up{
+    @media(--min-md){
+      display: none;
+    }
+  }
+
+  & .hide-sm-down{
+    @media(--max-sm){
+      display: none;
+    }
+  }
+
+  & .hide-sm-up{
+    @media(--min-sm){
+      display: none;
+    }
+  }
 }

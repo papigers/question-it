@@ -16,7 +16,8 @@ const pages = [
 	{label: 'Home', path: '/', active: '/'},
 	{label: 'Explore', path: '/polls', active: '/polls'},
 	//{label: 'about', path: '/about'},
-	{label: 'Login', path: '/login', active: '/login'}
+	{label: 'Login', path: '/login', active: '/login'},
+  {label: 'My Profile', path: '/users/1', active: '/users/1'}
 ];
 
 import s from './Index.css';
