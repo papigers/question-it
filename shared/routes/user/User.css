@@ -10,11 +10,23 @@
 
 .fixedMenu{
   position: fixed;
+  margin-top: 10px;
   width: 18%;
 }
 
 .tabs{
   margin-bottom: 20px;
+}
+
+.fixedTabs{
+  position: fixed;
+  z-index: 1100;
+  width: 100%;
+  margin-top: -30px;
+
+  & > div{
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.23) !important;
+  }
 }
 
 .menuItems span {
@@ -23,6 +35,10 @@
   &:hover{
     background: rgba(255, 255, 255, 0.09) !important;
   }
+}
+
+.activeMenuItem{
+  background: $primary2Color !important;
 }
 
 .editIcon{
@@ -80,6 +96,8 @@
 
 .category{
   padding: 20px 20px;
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 
 .subheader{
@@ -88,6 +106,12 @@
 
 .categoryHeader{
   margin: 20px 20px;
+
+  &:first-of-type{
+    @media (max-width: $screen-md-max){
+      margin-top: 50px;
+    }
+  }
 }
 
 .item > div > div{
@@ -111,7 +135,7 @@
 .anchor {
   display: block;
   position: relative;
-  top: -64px;
+  top: -112px;
   visibility: hidden;
 }
 
