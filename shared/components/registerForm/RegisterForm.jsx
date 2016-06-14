@@ -29,6 +29,14 @@ class RegisterForm extends React.Component{
 					style={styles.input}
 					type="password"
 				/>
+        
+        <TextField
+					id={"register-form-pass-confirm-" + this.props.uniqueId}
+					floatingLabelText="Confirm Password"
+					style={styles.input}
+					type="password"
+				/>
+        
 				<TextField
 					floatingLabelText="Email"
 					id={"register-form-email-" + this.props.uniqueId}
@@ -36,7 +44,7 @@ class RegisterForm extends React.Component{
 					type="email"
 				/>
 				<RaisedButton
-					primary={true}
+					secondary={true}
 					fullWidth={true}
 					label="Register"
 					className="formButton"

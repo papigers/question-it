@@ -1,31 +1,47 @@
 import React from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
-import LoginForm from '../../components/loginForm';
-import LoginSocial from '../../components/loginSocial';
+import Dialog from 'material-ui/Dialog';
+import RegisterSection from '../../components/registerSection';
+import LoginSection from '../../components/loginSection';
 import RegisterForm from '../../components/registerForm';
-
 
 import s from './Login.css';
 
 class LoginPage extends React.Component{
+  constructor(props) {
+    super(props);
+    this.state = {open: false};
+  }
+  
+  handleClose(){
+    this.setState({open: !this.state.open});
+  }
+  
 	render(){
 		return (
 			<div className={s.root}>
 			
 				<div className={`row ${s.row}`}>
 					
-					<div className={`col-xs-12 col-md-7 col-md-push-5 ${s.login}`}>
-						<h1 className="center-text">Login</h1>
-						<LoginSocial />
-						<h2 className="center-text">OR</h2>
-						<LoginForm uniqueId="login-page" />
+					<div className={`col-xs-12 ${s.login}`}>
+						<LoginSection />
+            <span className="center-text">Not registered yet? <a className={s.link} onClick={()=> this.setState({open: true})}>Join Now!</a></span>
 					</div>
-					<div className={`col-xs-12 col-md-5 col-md-pull-7 ${s.register}`}>
-						<h1 className="center-text">Haven't joined yet?</h1>
-						<RegisterForm uniqueId="login-page" />
-					</div>
+          
 				</div>
+        
+        <Dialog
+          title="Haven't joined yet?"
+          titleClassName={"center-text " + s.dialogTitle}
+          //bodyClassName={}
+          open={this.state.open}
+          onRequestClose={this.handleClose.bind(this)}
+          autoScrollBodyContent={true}
+        >
+          <RegisterForm />
+        </Dialog>
+        
 			</div>
 		);
 	}

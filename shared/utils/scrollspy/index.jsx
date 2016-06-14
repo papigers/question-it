@@ -49,6 +49,7 @@ function scrollSpy(ComposedComponent){
 
     componentDidMount(){
       this.toSpy = this.refs.composed.scrollSpy;
+      console.log(this.toSpy);
       this.enabled = true;
       this.handleScroll();
       this.listener = this.handleScroll.bind(this);

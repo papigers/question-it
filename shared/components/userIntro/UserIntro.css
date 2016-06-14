@@ -1,0 +1,43 @@
+.editIcon{
+  position: absolute !important;
+  top: -3px;
+}
+
+.editBio{
+  position: absolute !important;
+  right: -2px;
+  bottom: 5px;
+}
+
+.avatarContainer{
+  position: relative;
+}
+
+.avatar{
+  margin: 20px;
+  flex-shrink: 0;
+  position: relative;
+  background-color: $accent1Color !important;
+}
+
+.editAvatar{
+  position: absolute !important;
+  left: 70px;
+  top: 60px;
+}
+
+.introRow{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.username{
+  flex-grow: 1;
+  position: relative;
+  top: 70px;
+  transform: translate(0,-50%);
+}
+
+.fullRow{
+  flex: 0 0  100%;
+}

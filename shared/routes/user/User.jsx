@@ -1,19 +1,15 @@
 import React from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import Link from 'react-router/lib/Link';
 
 import {List, ListItem} from 'material-ui/List';
-import Subheader from 'material-ui/Subheader';
 import {Tabs, Tab} from 'material-ui/Tabs';
-import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
-import Checkbox from 'material-ui/Checkbox';
-import Avatar from 'material-ui/Avatar';
-import IconButton from 'material-ui/IconButton';
-import ProfileAvatar from 'material-ui/svg-icons/social/person';
-import EditIcon from 'material-ui/svg-icons/image/edit';
 
 import SocialButton from '../../components/socialButton';
+import UserIntro from '../../components/userIntro';
+import UserStats from '../../components/userStats';
+import UserContact from '../../components/userContact';
+import UserPassword from '../../components/userPassword';
 
 import s from './User.css';
 
@@ -47,6 +43,7 @@ class User extends React.Component{
   componentDidMount(){
     let SweetScroll = require('sweet-scroll');
     this.sweetScroll  = new SweetScroll({
+      offset: -112,
       completeScroll: () => {
         this.props.enableScrollSpy(true);
       },
@@ -101,155 +98,21 @@ class User extends React.Component{
             </div>
 
             <div className="col-xs-12 col-sm-9">
-              <a className={s.anchor} id="user-intro" ref={(ref) => this.scrollSpy[0] = ref }></a>
-              <div>
-                <h2 className={s.categoryHeader}>Intro</h2>
-                <Paper zDepth={2} className={s.introRow + ' ' + s.category}>
-                  <div className={s.avatarContainer}>
-                    <Avatar
-                      icon={<ProfileAvatar />}
-                      size={70}
-                      backgroundColor="black"
-                      className={s.avatar}
-                    />
-                    <IconButton className={s.editAvatar}><EditIcon /></IconButton>
-                  </div>
-                  <div className={s.username}>
-                      <ListItem className={s.item} disabled={true}>
-                        <h2>Username</h2>
-                      </ListItem>
-                  </div>
-                  <div className={s.fullRow}>
-                      <Subheader className={s.subheader}>Name:</Subheader>
-                      <ListItem className={s.item} disabled={true}>
-                        Gershon Papi
-                        <IconButton className={s.editIcon}><EditIcon /></IconButton>
-                      </ListItem>
-                  </div>
-                  <div className={s.fullRow}>
-                      <Subheader className={s.subheader}>Age:</Subheader>
-                      <ListItem className={s.item} disabled={true}>
-                        23
-                        <IconButton className={s.editIcon}><EditIcon /></IconButton>
-                      </ListItem>
-                  </div>
-                  <div className={s.fullRow}>
-                      <Subheader className={s.subheader}>Bio:</Subheader>
-                      <ListItem className={s.item} disabled={true}>
-                        Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio
-                        Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio.
-                        Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio.
-                        <IconButton className={s.editBio}><EditIcon /></IconButton>
-                      </ListItem>
-                  </div>
-                </Paper>
+              <div ref={(ref) => this.scrollSpy[0] = ref } id="user-intro">
+                <UserIntro />
               </div>
 
-              <a className={s.anchor} id="user-stats" ref={(ref) => this.scrollSpy[1] = ref }></a>
-              <div>
-                <h2 className={s.categoryHeader}>Stats</h2>
-                <Paper zDepth={2} className={s.category}>
-                  <div className="row">
-                    <div className="col-xs-6 col-md-3">
-                      <Subheader className={s.subheader}>Polls:</Subheader>
-                      <ListItem className={s.item} disabled={true}>
-                        <span className={s.stat}>5</span>
-                      </ListItem>
-                    </div>
-
-                    <div className="col-xs-6 col-md-3">
-                      <Subheader className={s.subheader}>Votes:</Subheader>
-                      <ListItem className={s.item} disabled={true}>
-                        <span className={s.stat}>23</span>
-                      </ListItem>
-                    </div>
-
-                    <div className="col-xs-6 col-md-3">
-                      <Subheader className={s.subheader}>Votes Recieved:</Subheader>
-                      <ListItem className={s.item} disabled={true}>
-                        <span className={s.stat}>23</span>
-                      </ListItem>
-                    </div>
-
-                    <div className="col-xs-6 col-md-3">
-                      <Subheader className={s.subheader}>Most Voted Poll:</Subheader>
-                      <ListItem className={s.item} disabled={true}>
-                        <Link className={s.stat} to="/polls/poll/1">Example Poll Title</Link>
-                      </ListItem>
-                    </div>
-
-                  </div>
-                </Paper>
+              <div ref={(ref) => this.scrollSpy[1] = ref } id="user-stats">
+                <UserStats />
               </div>
 
-              <a className={s.anchor} id="user-contact" ref={(ref) => this.scrollSpy[2] = ref }></a>
-              <div>
-                <h2 className={s.categoryHeader}>Contact Info</h2>
-                <Paper zDepth={2} className={s.category}>
-                  <div className="row">
-                    <div className="col-xs-4">
-                      <Subheader className={s.subheader}>Email:</Subheader>
-                      <ListItem className={s.item} disabled={true}>
-                        <SocialButton className={s.social} type='envelope' />
-                      </ListItem>
-                      <Checkbox
-                        defaultChecked={true}
-                        label="private"
-                        className={s.privateCheckbox}
-                      />
-                    </div>
-
-                    <div className="col-xs-4">
-                      <Subheader className={s.subheader}>Facebook:</Subheader>
-                      <ListItem className={s.item} disabled={true}>
-                        <SocialButton className={s.social} type='facebook' />
-                      </ListItem>
-                      <Checkbox
-                        defaultChecked={true}
-                        label="private"
-                        className={s.privateCheckbox}
-                      />
-                    </div>
-
-                    <div className="col-xs-4">
-                      <Subheader className={s.subheader}>Twitter:</Subheader>
-                      <ListItem className={s.item} disabled={true}>
-                        <SocialButton className={s.social} type='add' />
-                      </ListItem>
-                      <Checkbox
-                        defaultChecked={true}
-                        label="private"
-                        className={s.privateCheckbox}
-                      />
-                    </div>
-                  </div>
-                </Paper>
+              <div ref={(ref) => this.scrollSpy[2] = ref } id="user-contact">
+                <UserContact />
               </div>
-
-              <a className={s.anchor} id="user-password" ref={(ref) => this.scrollSpy[3] = ref }></a>
-              <div>
-                <h2 className={s.categoryHeader}>Change Password</h2>
-                <Paper zDepth={2} className={s.category}>
-                  <div className="row">
-                    <div className="col-xs-12 col-md-6">
-                      <ListItem className={s.item + " center-text"} disabled={true}>
-                        Change password
-                      </ListItem>
-                      <RaisedButton label="change" secondary={true} className={s.pwdButton} />
-                      <Subheader className={s.subheader + " center-text"}>If you remember your old one</Subheader>
-                    </div>
-
-                    <div className="col-xs-12 col-md-6">
-                      <ListItem className={s.item + " center-text"} disabled={true}>
-                        Reset password
-                      </ListItem>
-                      <RaisedButton label="reset" secondary={true} className={s.pwdButton} />
-                      <Subheader className={s.subheader + " center-text"}>We will send you a new one to your email</Subheader>
-                    </div>
-                  </div>
-                </Paper>
+              
+              <div ref={(ref) => this.scrollSpy[3] = ref } id="user-password">
+                <UserPassword />
               </div>
-
             </div>
 
           </div>
