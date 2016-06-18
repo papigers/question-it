@@ -1,0 +1,14 @@
+.navBtn{
+	& button{
+		height: 64px !important;
+
+		& svg{
+			fill: white !important;
+		}
+	}
+}
+
+.active{
+  background: $accent1Color !important;
+  color: white !important;
+}

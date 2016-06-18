@@ -1,10 +1,13 @@
 import React from 'react';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
+
 import Paper from 'material-ui/Paper';
 import { Toolbar, ToolbarTitle, ToolbarGroup } from 'material-ui/Toolbar';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 
+import s from './AppToolbar.css';
 
 const styles = {
 	title: {
@@ -77,7 +80,9 @@ class AppToolbar extends React.Component {
 							backgroundColor,
 							color: textColor,
 							zIndex
-					}}>
+            }}
+            className={s.removeShadowTrans}
+          >
 						<Toolbar>
 							<ToolbarGroup onClick={this.props.onLogoClick} style={{cursor: (this.props.onLogoClick ? 'pointer' : '')}}>
 								{this.props.logoUrl ? <img src={this.props.logoUrl} style={{width: 'auto', height, display: 'block'}}/> : ''}	
@@ -94,7 +99,9 @@ class AppToolbar extends React.Component {
 							position: 'relative',
 							top: height,
 							zIndex: zIndex - 1
-						}}>
+						}}
+            className={s.removeShadowTrans}
+          >
 						{this.props.flexibleSpaceElement}
 					</Paper>
           <Paper
@@ -106,7 +113,9 @@ class AppToolbar extends React.Component {
               width: '100%',
 							top: height,
 							zIndex: zIndex - 2
-						}}>
+						}}
+            className={s.removeShadowTrans}
+          >
 						{this.props.tabsElement}
 					</Paper>
 				</div>
@@ -122,4 +131,4 @@ AppToolbar.contextTypes = {
 };
 
 
-export default AppToolbar;
+export default withStyles(s)(AppToolbar);

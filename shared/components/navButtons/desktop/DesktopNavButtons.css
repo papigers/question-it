@@ -1,0 +1,13 @@
+.root{
+  display: flex;
+  align-items: center;
+}
+
+.navBtn{
+	margin-left: 15px !important;
+	margin-right: 15px !important;
+
+	& span{
+		font-weight: 600 !important;
+	}
+}
