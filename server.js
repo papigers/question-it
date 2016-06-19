@@ -1,5 +1,8 @@
 import path 											from 'path';
 import express                    from 'express';
+import schema                     from './data/schema';
+import GraphQLHTTP                from 'express-graphql';
+
 import React                      from 'react';
 import { renderToString }         from 'react-dom/server'
 import { RouterContext, match } 	from 'react-router';
@@ -8,17 +11,23 @@ import createLocation             from 'history/lib/createLocation';
 import routes                     from './shared/routes';
 import Root                    	 	from './shared/root';
 
-export default function(){	
+export default function(){
 	const app = express();
 
 	//app.use(express.static('static'));
 	app.use(express.static('public'));
+
+  app.use('/graphql', GraphQLHTTP({
+    schema: schema,
+    graphiql: true
+  }));
+
 	app.use((req, res) => {
 
 		const location = createLocation(req.url);
 		const css = [];
 		match({ routes, location }, (err, redirectLocation, renderProps) => {
-			if (err) { 
+			if (err) {
 				console.error(err);
 				return res.status(500).end('Internal server error');
 			}
@@ -28,7 +37,7 @@ export default function(){
 			if (!renderProps) return res.status(404).end('Not found.');
 			const userAgent = req.headers['user-agent'];
 			const InitialComponent = (
-				<Root 
+				<Root
 					userAgent={userAgent}
 					onInsertCss={(styles) => css.push(styles._getCss())}
 				>
@@ -59,7 +68,7 @@ export default function(){
 			res.end(HTML);
 		});
 	});
-	
+
 	const PORT = process.env.PORT || 3000;
 	app.listen(PORT, function () {
   	console.log('Server listening on', PORT);

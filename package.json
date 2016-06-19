@@ -38,6 +38,9 @@
   "homepage": "https://github.com/papigers/question-it#readme",
   "dependencies": {
     "express": "^4.13.4",
+    "express-graphql": "^0.5.3",
+    "graphql": "^0.6.0",
+    "graphql-custom-datetype": "^0.3.0",
     "history": "^2.1.1",
     "isomorphic-style-loader": "^1.0.0",
     "material-ui": "^0.15.0",
