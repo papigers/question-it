@@ -117,7 +117,7 @@ class CreatePoll extends React.Component{
       <div className="container">
         <div className="row">
           <div className="center-text col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
-            <Paper className={s.container}>
+            <Paper zDepth={2} className={s.container}>
               <TextField
                 value={title}
                 id="poll-title-input"

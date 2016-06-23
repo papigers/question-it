@@ -1,4 +1,5 @@
 import React from 'react';
+import Relay from 'react-relay';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import Paper from 'material-ui/Paper';
@@ -6,6 +7,8 @@ import { Toolbar, ToolbarTitle, ToolbarGroup } from 'material-ui/Toolbar';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import muiThemeable from 'material-ui/styles/muiThemeable';
+
+import NavButtons from '../navButtons';
 
 import s from './AppToolbar.css';
 
@@ -26,11 +29,15 @@ class AppToolbar extends React.Component {
 		this.state = {};
 		this.listener = this.handleScroll.bind(this);
 	}
+
+  static contextTypes = {
+    muiTheme: React.PropTypes.object.isRequired
+  }
 	
 	static defaultProps = {
     title: '',
-    zDepth: 1,
-  };
+    zDepth: 1
+  }
 
 	handleScroll(){
 		let height = document.getElementById('calcHeight').clientHeight;
@@ -61,8 +68,7 @@ class AppToolbar extends React.Component {
 
 	componentWillReceiveProps(nextProps){
 		this.setState({doDepth: nextProps.flexibleSpaceElement === null});
-	}
-	
+  }
 
 	render(){
 		const zIndex = this.muiTheme.zIndex.toolbar;
@@ -88,7 +94,9 @@ class AppToolbar extends React.Component {
 								{this.props.logoUrl ? <img src={this.props.logoUrl} style={{width: 'auto', height, display: 'block'}}/> : ''}	
 								<ToolbarTitle text={this.props.title} style={{...styles.title, color: textColor, fontWeight: 600}} />
 							</ToolbarGroup>
-							{this.props.children}
+							<ToolbarGroup lastChild={true} float='right'>
+                <NavButtons />
+              </ToolbarGroup>
 						</Toolbar>
 					</Paper>
 					<Paper id="calcHeight"
@@ -125,10 +133,15 @@ class AppToolbar extends React.Component {
 	}
 }
 
-
-AppToolbar.contextTypes = {
-	muiTheme: React.PropTypes.object.isRequired
-};
+//AppToolbar = Relay.createContainer(AppToolbar, {
+//  fragments: {
+//    viewer: () => Relay.QL`
+//      fragment on User {
+//        id
+//      }
+//    `
+//  }
+//});
 
 
 export default withStyles(s)(AppToolbar);

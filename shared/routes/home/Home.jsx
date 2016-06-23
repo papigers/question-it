@@ -1,4 +1,5 @@
 import React from 'react';
+import Relay from 'react-relay';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -11,6 +12,7 @@ import s from './Home.css';
 
 class Home extends React.Component{
 	render(){ 
+    //console.log(JSON.stringify(this.props.store, null, 2));
 		return (
 			<div className="container">
 				<div className="row">
@@ -58,5 +60,27 @@ class Home extends React.Component{
 		);
 	}
 };
+/*
+Home = Relay.createContainer(Home, {
+  fragments: {
+    store: () => Relay.QL`
+      fragment on Store {
+        polls{
+          id,
+          title,
+          options,
+          votes{
+            vote
+          },
+          author{
+            username
+          }
+        }
+      }
+    `
+  }
+});
+*/
+
 
 export default withStyles(s)(Home);

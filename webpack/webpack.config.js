@@ -35,7 +35,7 @@ var config = {
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        loader: 'react-hot!babel'
+        loader: `react-hot!babel?plugins[]=${path.join(__dirname, '..', 'data', 'plugins', 'babelRelayPlugin')}`,
       },
 			{
 				test: /\.css$/,

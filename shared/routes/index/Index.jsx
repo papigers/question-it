@@ -1,4 +1,5 @@
 import React from 'react';
+import Relay from 'react-relay';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import { ToolbarGroup } from 'material-ui/Toolbar';
@@ -8,11 +9,17 @@ import AppToolbar from '../../components/appToolbar';
 import NavButtons from '../../components/navButtons';
 
 class App extends React.Component {
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired
+  };
+
 	onLogoClick(){
 		this.context.router.push('/');
 	}
 	
   render() {
+    let loggedon = this.props.viewer;
+
 		let logo = require('./logo.png');
 		
 		let flexibleSpace = this.context.router.isActive('/', true) ? (
@@ -30,11 +37,15 @@ class App extends React.Component {
     return (
       <div id="app-view">
 				<header>
-					<AppToolbar onLogoClick={this.onLogoClick.bind(this)} zDepth={2} title="QUESTION IT" flexibleSpaceElement={flexibleSpace} logoUrl={logo} tabsElement={tabs}>
-						<ToolbarGroup lastChild={true} float='right'>
-							{<NavButtons />}
-						</ToolbarGroup>
-					</AppToolbar>
+					<AppToolbar
+            onLogoClick={this.onLogoClick.bind(this)}
+            zDepth={2}
+            title="QUESTION IT"
+            flexibleSpaceElement={flexibleSpace}
+            logoUrl={logo}
+            tabsElement={tabs}
+            loggedOn={loggedon}
+          />
 				</header>
 				
 				<main>
@@ -49,8 +60,16 @@ class App extends React.Component {
   }
 }
 
-App.contextTypes = {
-  router: React.PropTypes.object.isRequired
-};
+App = Relay.createContainer(App, {
+  fragments: {
+    viewer: () => Relay.QL`
+      fragment on User {
+        id,
+        _id,
+        username
+      }
+    `
+  }
+});
 
 export default App;

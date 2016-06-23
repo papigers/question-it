@@ -22,6 +22,11 @@ class NavButtons extends React.Component{
     return this.context.router.isActive(path, path !== '/polls');
   }
 
+  static contextTypes = {
+    loggedOn: React.PropTypes.object,
+    router: React.PropTypes.object.isRequired
+  }
+
   handleResize(){
 		let small = window.innerWidth <= 768;
 		if(small !== this.state.small)
@@ -39,17 +44,24 @@ class NavButtons extends React.Component{
 
 
   render(){
+    let loggedOn = this.context.loggedOn;
+    let showPages = pages.filter((page) => {
+      switch(page.label){
+        case 'Login':
+          return !loggedOn;
+        case 'My Profile':
+          return loggedOn;
+        default:
+          return true;
+      }
+    })
     return this.state.small ? (
-      <Mobile pages={pages} isActive={this.isActive} />
+      <Mobile pages={showPages} isActive={this.isActive} />
     ) :
     (
-      <Desktop pages={pages} isActive={this.isActive} />
+      <Desktop pages={showPages} isActive={this.isActive} />
     );
   }
 }
-
-NavButtons.contextTypes = {
-  router: React.PropTypes.object.isRequired
-};
 
 export default NavButtons;

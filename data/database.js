@@ -9,7 +9,7 @@ for (let i = 0; i < 5; i++) {
   user.email = `email${i}@email.com`;
   user.username = `MyUsername${i}`;
   user.password = `1234`;
-  user.id = `${i}`;
+  user._id = `${i}`;
   user.votes = [];
   user.polls = [];
   users.push(user);
@@ -18,7 +18,7 @@ for (let i = 0; i < 5; i++) {
 let polls = [];
 for (let i = 0; i < 8; i++) {
   let poll = new Poll();
-  poll.id = `${i}`;
+  poll._id = `${i}`;
   poll.title = `Poll ${i} Title`;
   let optionsNum = 2 + Math.floor(Math.random() * 3);
   poll.options = [];
@@ -37,13 +37,13 @@ let votes = [];
 for(let i = 0; i < users.length; i++){
   for(let j = 0; j < polls.length; j++){
     let vote = new Vote();
-    vote.id = `${(i+1)*(j+1)-1}`;
+    vote._id = `${(i+1)*(j+1)-1}`;
     let poll = polls[j];
     let user = users[i];
-    user.votes.push(`${vote.id}`);
-    poll.votes.push(`${vote.id}`);
-    vote.user = `${user.id}`;
-    vote.poll = `${poll.id}`;
+    user.votes.push(`${vote._id}`);
+    poll.votes.push(`${vote._id}`);
+    vote.user = `${user._id}`;
+    vote.poll = `${poll._id}`;
     vote.vote = `${Math.floor(Math.random() * poll.options.length)}`;
     vote.timestamp = new Date();
     votes.push(vote);
@@ -64,22 +64,26 @@ for(let i = 0; i < users.length; i++){
 //
 //console.log(JSON.stringify(polls, null, 2));
 
+export function getViewer(){
+  return users[0];
+}
+
 export function getUsers(){
   return users;
 }
 
-export function getPolls(){
-  return polls;
+export function getPolls(orderBy = 1){
+  return orderPolls(polls, orderBy);
 }
 
 export function getVotes(){
   return votes;
 }
 
-export function getUserPolls(id){
-  return users[id].polls.map(pollId => {
+export function getUserPolls(id, orderBy = 1){
+  return orderPolls(users[id].polls.map(pollId => {
     return polls[pollId];
-  });
+  }), orderBy);
 }
 
 export function getUserVotes(id){
@@ -104,4 +108,40 @@ export function getVoteUser(id){
 
 export function getVotePoll(id){
   return polls[votes[id].poll];
+}
+
+function sortByTime(a, b){
+  return a.timestamp >= b.timestamp;
+}
+
+function orderPolls(polls, orderBy){
+  switch(orderBy){
+    case 2:
+      return newPolls(polls);
+    case 3:
+      return topPolls(polls);
+    case 1:
+    default:
+      return trendingPolls(polls);
+  }
+}
+
+function topPolls(polls){
+  return polls.sort((pA, pB) => {
+    return pA.votes.length >= pB.votes.length;
+  });
+}
+
+function newPolls(polls){
+  return polls.sort(sortByTime);
+}
+
+function trendingPolls(polls){
+  return polls.sort((pA, pB) => {
+    let vA = pA.votes,
+        vB = pB.votes;
+    vA.sort(sortByTime);
+    vB.sort(sortByTime);
+    return vA.timestamp >= vB.timestamp;
+  });
 }

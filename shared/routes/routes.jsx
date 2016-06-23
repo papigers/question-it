@@ -1,4 +1,5 @@
 import React from 'react';
+import Relay from 'react-relay';
 import { Route, IndexRoute, IndexRedirect } from 'react-router';
 
 import Index from './index';
@@ -10,9 +11,10 @@ import CreatePoll from './polls/createPoll'
 import Chart from './chart';
 import User from './user';
 
+let query = {viewer: () => Relay.QL`query { viewer }`};
 
 export default (
-    <Route component={Index} path="/">
+    <Route component={Index} path="/" queries={query}>
 			<IndexRoute component={Home} />
       <Route path="polls">
         <IndexRedirect to="trending" />

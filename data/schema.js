@@ -5,112 +5,221 @@ import {
   GraphQLID,
   GraphQLNonNull,
   GraphQLString,
-  GraphQLList
+  GraphQLList,
+  GraphQLEnumType
 } from 'graphql';
 
 import GraphQLDate from 'graphql-custom-datetype';
 
+import {
+  connectionArgs,
+  connectionDefinitions,
+  connectionFromArray,
+  cursorForObjectInConnection,
+  fromGlobalId,
+  globalIdField,
+  mutationWithClientMutationId,
+  nodeDefinitions,
+  toGlobalId,
+} from 'graphql-relay';
+
 import * as db from './database';
 
-let userType, pollType, voteType;
+let {nodeInterface, nodeField} = nodeDefinitions(
+  (globalId) => {
+    var {type, id} = fromGlobalId(globalId);
+    if (type === 'Poll') {
+      return db.getPoll(id);
+    } else if (type === 'User') {
+      return db.getUser(id);
+    } else if (type === 'Vote') {
+      return db.getVote(id);
+    }
+    return null;
+  },
+  (obj) => {
+    if (obj instanceof db.Poll) {
+      return pollType;
+    } else if (obj instanceof db.User) {
+      return userType;
+    } else if (obj instanceof db.Vote) {
+      return voteType;
+    }
+    return null;
+  }
+);
 
-userType = new GraphQLObjectType({
+let pollSortEnum = new GraphQLEnumType({
+  name: 'PollSort',
+  description: 'Sorting parameters for polls',
+  values: {
+    TRENDING: {
+      value: 1,
+      description: 'Trending polls'
+    },
+    NEW: {
+      value: 2,
+      description: 'Newest polls'
+    },
+    TOP: {
+      value: 3,
+      description: 'Most voted polls'
+    }
+  }
+});
+
+let userType = new GraphQLObjectType({
   name: 'User',
   description: 'Registered user',
   fields: (() => ({
-    id: {
+    id: globalIdField('User'),
+    _id: {
       type: new GraphQLNonNull(GraphQLID)
     },
     email: {
-      type: GraphQLString
+      type: new GraphQLNonNull(GraphQLString)
     },
     password: {
-      type: GraphQLString
+      type: new GraphQLNonNull(GraphQLString)
     },
     username: {
-      type: GraphQLString
-    },
-    polls: {
-      type: new GraphQLList(pollType),
-      resolve: user => db.getUserPolls(user.id)
+      type: new GraphQLNonNull(GraphQLString)
     },
     votes: {
-      type: new GraphQLList(voteType),
-      resolve: user => db.getUserVotes(user.id)
+      type: voteConnectionType,
+      args: connectionArgs,
+      resolve: ((user, args) => connectionFromArray(db.getVotes(), args))
+    },
+    polls: {
+      type: pollConnectionType,
+      args: {
+        orderBy: {
+          type: pollSortEnum,
+        },
+        ...connectionArgs
+      },
+      resolve: ((user, {orderBy, ...args}) => connectionFromArray(db.getPolls(orderBy), args))
     }
   })),
-  resolve: id => db.getUsers()[id]
+  interfaces: [nodeInterface]
 });
 
-pollType = new GraphQLObjectType({
+let pollType = new GraphQLObjectType({
   name: 'Poll',
   description: 'Poll which can be voted by registered users',
-  fields: () => ({
-    id: {
+  fields: (() => ({
+    id: globalIdField('Poll'),
+    _id: {
       type: new GraphQLNonNull(GraphQLID)
     },
     title: {
-      type: GraphQLString
+      type: new GraphQLNonNull(GraphQLString)
     },
     options: {
-      type: new GraphQLList(GraphQLString),
+      type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
     },
     votes: {
-      type: new GraphQLList(voteType),
-      resolve: poll => db.getPollVotes(poll.id)
+      type: voteConnectionType,
+      args: connectionArgs,
+      resolve: ((user, args) => connectionFromArray(db.getVotes(), args))
     },
     author: {
-      type: userType,
-      resolve: poll => db.getPollAuthor(poll.id)
+      type: new GraphQLNonNull(userType)
     },
     timestamp: {
-      type: GraphQLDate
+      type: new GraphQLNonNull(GraphQLDate)
     }
-  })
+  })),
+  interfaces: [nodeInterface]
 });
 
-voteType = new GraphQLObjectType({
+let {
+  connectionType: pollConnectionType,
+  edgeType: pollEdgeType
+} = connectionDefinitions({
+  name: 'Poll',
+  nodeType: pollType
+});
+
+
+let voteType = new GraphQLObjectType({
   name: 'Vote',
   description: 'User vote on a poll',
-  fields: () => ({
-    id: {
+  fields: (() => ({
+    id: globalIdField('Vote'),
+    _id: {
       type: new GraphQLNonNull(GraphQLID)
     },
     user: {
+      type: new GraphQLNonNull(userType)
+    },
+    poll: {
+      type: new GraphQLNonNull(pollType)
+    },
+    vote: {
+      type: new GraphQLNonNull(GraphQLInt)
+    },
+    timestamp: {
+      type: new GraphQLNonNull(GraphQLDate)
+    }
+  })),
+  interfaces: [nodeInterface]
+});
+
+let {
+  connectionType: voteConnectionType,
+  edgeType: voteEdgeType
+} = connectionDefinitions({
+  name: 'Vote',
+  nodeType: voteType
+});
+
+let Root = new GraphQLObjectType({
+  name: 'Root',
+  fields: () => ({
+    node: nodeField,
+    viewer: {
       type: userType,
-      resolve: vote => db.getVoteUser(vote.id)
+      resolve: () =>  db.getViewer()
+    },
+    user: {
+      type: userType,
+      args: {
+        id: {
+          type: new GraphQLNonNull(GraphQLID)
+        }
+      },
+      resolve: (root, {id}) => db.getUsers()[id]
     },
     poll: {
       type: pollType,
-      resolve: vote => db.getVotePoll(vote.id)
+      args: {
+        id: {
+          type: new GraphQLNonNull(GraphQLID)
+        }
+      },
+      resolve: (root, {id}) => db.getPolls()[id]
     },
-    vote: {
-      type: GraphQLInt
+    polls: {
+      type: pollConnectionType,
+      args: {
+        orderBy: {
+          type: pollSortEnum,
+        },
+        ...connectionArgs
+      },
+      resolve: ((user, {orderBy, ...args}) => connectionFromArray(db.getPolls(orderBy), args))
     },
-    timestamp: {
-      type: GraphQLDate
+    votes: {
+      type: voteConnectionType,
+      args: connectionArgs,
+      resolve: ((user, args) => connectionFromArray(db.getVotes(), args))
     }
   })
 });
 
 let schema = new GraphQLSchema({
-  query: new GraphQLObjectType({
-    name: 'Query',
-    fields: () => ({
-      users: {
-        type: new GraphQLList(userType),
-        resolve: () => db.getUsers()
-      },
-      polls: {
-        type: new GraphQLList(pollType),
-        resolve: () => db.getPolls()
-      },
-      votes: {
-        type: new GraphQLList(voteType),
-        resolve: () => db.getVotes()
-      }
-    })
-  })
+  query: Root
 });
 
 export default schema;

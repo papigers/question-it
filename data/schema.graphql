@@ -1,0 +1,80 @@
+schema {
+  query: Root
+}
+
+scalar DateTime
+
+interface Node {
+  id: ID!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type Poll implements Node {
+  id: ID!
+  _id: ID!
+  title: String!
+  options: [String]!
+  votes(after: String, first: Int, before: String, last: Int): VoteConnection
+  author: User!
+  timestamp: DateTime!
+}
+
+type PollConnection {
+  pageInfo: PageInfo!
+  edges: [PollEdge]
+}
+
+type PollEdge {
+  node: Poll
+  cursor: String!
+}
+
+enum PollSort {
+  TRENDING
+  NEW
+  TOP
+}
+
+type Root {
+  node(id: ID!): Node
+  viewer: User
+  user(id: ID!): User
+  poll(id: ID!): Poll
+  polls(orderBy: PollSort, after: String, first: Int, before: String, last: Int): PollConnection
+  votes(after: String, first: Int, before: String, last: Int): VoteConnection
+}
+
+type User implements Node {
+  id: ID!
+  _id: ID!
+  email: String!
+  password: String!
+  username: String!
+  votes(after: String, first: Int, before: String, last: Int): VoteConnection
+  polls(orderBy: PollSort, after: String, first: Int, before: String, last: Int): PollConnection
+}
+
+type Vote implements Node {
+  id: ID!
+  _id: ID!
+  user: User!
+  poll: Poll!
+  vote: Int!
+  timestamp: DateTime!
+}
+
+type VoteConnection {
+  pageInfo: PageInfo!
+  edges: [VoteEdge]
+}
+
+type VoteEdge {
+  node: Vote
+  cursor: String!
+}
