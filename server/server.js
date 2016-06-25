@@ -1,5 +1,5 @@
 import express from 'express';
-import schema from './data/schema';
+import schema from '../data/schema';
 import graphQLHTTP from 'express-graphql';
 
 import React from 'react';
@@ -9,8 +9,8 @@ import Relay from 'react-relay';
 import IsomorphicRouter from 'isomorphic-relay-router';
 import createLocation from 'history/lib/createLocation';
 
-import routes from './shared/routes';
-import Root from './shared/root';
+import routes from '../shared/routes';
+import Root from '../shared/root';
 
 const GRAPHQL_URL = 'http://localhost:3000/graphql';
 const networkLayer = new Relay.DefaultNetworkLayer(GRAPHQL_URL);

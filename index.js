@@ -1,4 +1,4 @@
 require('babel-polyfill');
 require('babel-register');
 
-require('./start-server');
+require('./server/start-server');

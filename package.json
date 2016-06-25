@@ -6,25 +6,25 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .js,.jsx",
-    "lint-file": "eslint",
-    "prestart": "npm run prod",
     "start": "npm run prod",
-    "start-server": "node index",
+    "update-schema": "node ./data/utils/updateSchema",
+    "clean": "rimraf ./build/**/*",
+
     "dev": "run-s update-schema dev-prepare dev-start",
     "dev-start": "run-p dev-client dev-server dev-run",
     "dev-prepare": "universal-webpack --settings ./webpack/universal-webpack-settings.js prepare",
     "dev-client": "webpack-dev-server --colors --progress --config ./webpack/webpack.config.client.js --display-error-details -d --port 8080 --host 0.0.0.0 --hot --inline",
     "dev-server": "webpack --watch --colors --progress --config ./webpack/webpack.config.server.js --display-error-details -d",
     "dev-run": "nodemon index --watch ./build/server",
+
     "prod": "run-s update-schema prod-client prod-server prod-run",
     "prod-run": "node index",
     "prod-client": "webpack --progress --colors -p --config ./webpack/webpack.config.client.js",
     "prod-server": "webpack --progress --colors -p --config ./webpack/webpack.config.server.js",
+
     "debug": "run-s update-schema debug-client debug-server prod-run",
     "debug-client": "webpack --progress --colors -d --config ./webpack/webpack.config.client.js",
-    "debug-server": "webpack --progress --colors -d --config ./webpack/webpack.config.server.js",
-    "update-schema": "node ./data/utils/updateSchema",
-    "clean": "rimraf ./build/**/*"
+    "debug-server": "webpack --progress --colors -d --config ./webpack/webpack.config.server.js"
   },
   "repository": {
     "type": "git",
