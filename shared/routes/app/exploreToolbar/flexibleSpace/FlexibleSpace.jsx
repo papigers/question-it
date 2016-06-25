@@ -21,7 +21,7 @@ class FlexibleSpace extends React.Component {
         <RaisedButton
           linkButton
           containerElement={
-            <Link to="/polls/create" />
+            <Link to="/poll/create" />
 					}
           label="Create Poll"
           secondary

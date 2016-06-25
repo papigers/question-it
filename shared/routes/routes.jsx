@@ -21,10 +21,13 @@ export default (
       <Route path="top" tab="top" component={Polls} />
       <Route path="new" tab="new" component={Polls} />
       <Route path="search" tab="search" component={Polls} />
-      <Route path="create" component={CreatePoll} />
-      <Route path="poll/:id" component={Chart} />
     </Route>
-    <Route path="users/:id" component={User} />
+    <Route path="poll">
+      <IndexRedirect to="/polls" />
+      <Route path="create" component={CreatePoll} />
+      <Route path="view" component={Chart} />
+    </Route>
+    <Route path="user" component={User} />
     <Route component={Login} path="login" />
   </Route>
 );

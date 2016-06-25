@@ -27,13 +27,8 @@ class AppToolbar extends React.Component {
     muiTheme: React.PropTypes.object.isRequired,
   }
 
-  static childContextTypes = {
-    loggedOn: React.PropTypes.object,
-  }
-
   static propTypes = {
     title: React.PropTypes.string.isRequired,
-    loggedOn: React.PropTypes.object,
     flexibleSpaceElement: React.PropTypes.element,
     tabsElement: React.PropTypes.element,
     zDepth: React.PropTypes.number,
@@ -50,12 +45,6 @@ class AppToolbar extends React.Component {
     super();
     this.state = {};
     this.listener = this.handleScroll.bind(this);
-  }
-
-  getChildContext() {
-    return {
-      loggedOn: this.props.loggedOn,
-    };
   }
 	
   componentWillMount() {
@@ -178,16 +167,6 @@ class AppToolbar extends React.Component {
 		);
   }
 }
-
-// AppToolbar = Relay.createContainer(AppToolbar, {
-//  fragments: {
-//    viewer: () => Relay.QL`
-//      fragment on User {
-//        id
-//      }
-//    `
-//  }
-// });
 
 
 export default withStyles(s)(AppToolbar);

@@ -12,11 +12,21 @@ class App extends React.Component {
   };
 
   static propTypes = {
-    viewer: React.PropTypes.object.isRequired,
     routes: React.PropTypes.array.isRequired,
     location: React.PropTypes.object.isRequired,
     children: React.PropTypes.element.isRequired,
     params: React.PropTypes.object,
+    viewer: React.PropTypes.object,
+  }
+
+  static childContextTypes = {
+    viewer: React.PropTypes.object,
+  }
+
+  getChildContext() {
+    return {
+      viewer: this.props.viewer,
+    };
   }
 
   onLogoClick = () => {
@@ -24,8 +34,6 @@ class App extends React.Component {
   }
 
   render() {
-    let loggedon = this.props.viewer;
-
     let flexibleSpace = this.context.router.isActive('/', true) ? (
 			React.createElement(
         require('./homeToolbar/flexibleSpace'), // eslint-disable-line global-require
@@ -52,7 +60,6 @@ class App extends React.Component {
             flexibleSpaceElement={flexibleSpace}
             logoUrl={logo}
             tabsElement={tabs}
-            loggedOn={loggedon}
           />
         </header>
 
@@ -72,9 +79,8 @@ App = Relay.createContainer(App, {
   fragments: {
     viewer: () => Relay.QL`
       fragment on User {
-        id,
         _id,
-        username
+        id
       }
     `,
   },

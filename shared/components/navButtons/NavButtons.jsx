@@ -6,16 +6,16 @@ import Desktop from './desktop';
 const pages = [
 	{ label: 'Home', path: '/' },
 	{ label: 'Explore', path: '/polls' },
-	// {label: 'about', path: '/about'},
+  { label: 'Create', path: '/poll/create' },
+  { label: 'My Profile', path: '/user' },
 	{ label: 'Login', path: '/login' },
-  { label: 'My Profile', path: '/users/1' },
 ];
 
 class NavButtons extends React.Component {
 
   static contextTypes = {
-    loggedOn: React.PropTypes.object,
     router: React.PropTypes.object.isRequired,
+    viewer: React.PropTypes.object,
   }
 
   constructor() {
@@ -43,17 +43,19 @@ class NavButtons extends React.Component {
   isActive = (path) => this.context.router.isActive(path, path !== '/polls')
 
   render() {
-    const loggedOn = this.context.loggedOn;
+    const loggedOn = this.context.viewer;
     let showPages = pages.filter((page) => {
       switch (page.label) {
         case 'Login':
           return !loggedOn;
+        case 'Create':
         case 'My Profile':
           return loggedOn;
         default:
           return true;
       }
     });
+
     return this.state.small ? (
       <Mobile pages={showPages} isActive={this.isActive} />
     ) :

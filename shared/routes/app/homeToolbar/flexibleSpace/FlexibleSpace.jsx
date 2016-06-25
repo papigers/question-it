@@ -9,7 +9,7 @@ import s from './FlexibleSpace.css';
 class FlexibleSpace extends React.Component {
   static contextTypes = {
     muiTheme: React.PropTypes.object.isRequired,
-    loggedOn: React.PropTypes.object,
+    viewer: React.PropTypes.object,
   }
 
   static propTypes = {
@@ -17,7 +17,7 @@ class FlexibleSpace extends React.Component {
   }
 
   render() {
-    const { loggedOn, muiTheme } = this.context;
+    const { viewer, muiTheme } = this.context;
     return (
       <div className={`container ${s.root}`}>
         <h1>QUESTION IT</h1>
@@ -30,9 +30,9 @@ class FlexibleSpace extends React.Component {
         <RaisedButton
           linkButton
           containerElement={
-            <Link to={loggedOn ? '/polls/create' : '/login'} />
+            <Link to={viewer ? '/poll/create' : '/login'} />
 					}
-          label={loggedOn ? 'Create Poll' : 'Join Us'}
+          label={viewer ? 'Create Poll' : 'Join Us'}
           secondary
           className={s.joinBtn}
         />
