@@ -12,7 +12,7 @@ class ExploreTabs extends React.Component {
   }
 
   switchTabs = (tab) => {
-    this.context.router.push(`/polls/${tab}`);
+    this.context.router.push(`/explore/${tab}`);
   }
 
   render() {

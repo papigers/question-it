@@ -9,11 +9,9 @@ import s from './SocialButton.css';
 
 class SocialButton extends React.Component {
 
-  static propTypes() {
-    return {
-      type: React.PropTypes.string.isRequired,
-      className: React.PropTypes.string,
-    };
+  static propTypes = {
+    type: React.PropTypes.string.isRequired,
+    className: React.PropTypes.string,
   }
 	
   render() {

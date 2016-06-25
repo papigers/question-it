@@ -1,7 +1,9 @@
-main:local{
-  padding-top: 20px;
-  padding-bottom: 50px;
-  background: color($accent2Color w(80%));
+:local{
+  & main{
+    padding-top: 20px;
+    padding-bottom: 50px;
+    background: color($accent2Color w(80%));
+  }
 }
 
 .header{

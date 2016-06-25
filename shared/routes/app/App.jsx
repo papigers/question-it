@@ -1,7 +1,7 @@
 import React from 'react';
 import Relay from 'react-relay';
 
-import Footer from '../footer';
+import Footer from '../../components/footer';
 import AppToolbar from '../../components/appToolbar';
 
 let logo = require('./logo.png');
@@ -42,7 +42,7 @@ class App extends React.Component {
 		) : null;
 
     let tabs = null;
-    if (this.context.router.isActive('/polls') && !this.props.params.id) {
+    if (this.context.router.isActive('/explore') && !this.props.params.id) {
       const tab = this.props.routes[this.props.routes.length - 1].tab;
       const { Tabs, FlexibleSpace } =
           require('./exploreToolbar'); // eslint-disable-line global-require

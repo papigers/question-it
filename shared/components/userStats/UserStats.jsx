@@ -39,7 +39,7 @@ class UserStats extends React.Component {
             <div className="col-xs-6 col-md-3">
               <Subheader className="subheader">Most Voted Poll:</Subheader>
               <ListItem className="item" disabled>
-                <Link className={s.stat} to="/polls/poll/1">Example Poll Title</Link>
+                <Link className={s.stat} to="/poll?id=1">Example Poll Title</Link>
               </ListItem>
             </div>
 

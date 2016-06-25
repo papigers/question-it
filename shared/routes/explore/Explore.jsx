@@ -5,7 +5,7 @@ import Paper from 'material-ui/Paper';
 
 import PollItem from '../../components/pollItem';
 
-import s from './Polls.css';
+import s from './Explore.css';
 
 const polls = {
   trending: {
@@ -22,7 +22,7 @@ const polls = {
   },
 };
 
-class Polls extends React.Component {
+class Explore extends React.Component {
 
   static propTypes = {
     location: React.PropTypes.object.isRequired,
@@ -35,7 +35,7 @@ class Polls extends React.Component {
 
   componentWillMount() {
 //    if (!this.props.location.query.q) {
-//      this.context.router.push('/polls');
+//      this.context.router.push('/explore');
 //    }
   }
 
@@ -99,4 +99,4 @@ class Polls extends React.Component {
   }
 }
 
-export default withStyles(s)(Polls);
+export default withStyles(s)(Explore);

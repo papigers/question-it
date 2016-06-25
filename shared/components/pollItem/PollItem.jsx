@@ -13,10 +13,6 @@ class PollItem extends React.Component {
     username: React.PropTypes.string.isRequired,
     title: React.PropTypes.string.isRequired,
   }
-
-  static contextTypes = {
-    muiTheme: React.PropTypes.object.isRequired,
-  };
 	
   render() {
     const choices = this.props.choices;

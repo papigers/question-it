@@ -15,7 +15,7 @@ class ExploreTabs extends React.Component {
     this.state = { tab: props.tabs };
   }
   switchTabs = (tab) => {
-    this.context.router.push(`/polls/${tab}`);
+    this.context.router.push(`/explore/${tab}`);
     this.setState({ tab });
   }
 

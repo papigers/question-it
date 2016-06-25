@@ -8,7 +8,6 @@ import s from './FlexibleSpace.css';
 
 class FlexibleSpace extends React.Component {
   static contextTypes = {
-    muiTheme: React.PropTypes.object.isRequired,
     viewer: React.PropTypes.object,
   }
 
@@ -17,12 +16,12 @@ class FlexibleSpace extends React.Component {
   }
 
   render() {
-    const { viewer, muiTheme } = this.context;
+    const { viewer } = this.context;
     return (
       <div className={`container ${s.root}`}>
         <h1>QUESTION IT</h1>
         <img src={this.props.logo} alt="Question It Logo" className={s.logo} />
-        <h2 style={{ color: muiTheme.palette.accent2Color }} >Online Voting Application</h2>
+        <h2 className={s.subheader}>Online Voting Application</h2>
         <p>
           Question It is an online voting application, inspired by a FreeCodeCamp project.<br />
           It is created using React and Material-UI.
@@ -30,7 +29,7 @@ class FlexibleSpace extends React.Component {
         <RaisedButton
           linkButton
           containerElement={
-            <Link to={viewer ? '/poll/create' : '/login'} />
+            <Link to={viewer ? '/poll/new' : '/login'} />
 					}
           label={viewer ? 'Create Poll' : 'Join Us'}
           secondary

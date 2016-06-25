@@ -15,6 +15,11 @@ import Delete from 'material-ui/svg-icons/content/clear';
 import s from './CreatePoll.css';
 
 class CreatePoll extends React.Component {
+  
+  static contextTypes = {
+    muiTheme: React.PropTypes.object.isRequired,
+  }
+  
   constructor() {
     super();
     this.state = {
@@ -180,9 +185,5 @@ class CreatePoll extends React.Component {
     );
   }
 }
-
-CreatePoll.contextTypes = {
-  muiTheme: React.PropTypes.object.isRequired,
-};
 
 export default withStyles(s)(CreatePoll);

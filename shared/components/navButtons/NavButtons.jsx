@@ -5,8 +5,8 @@ import Desktop from './desktop';
 
 const pages = [
 	{ label: 'Home', path: '/' },
-	{ label: 'Explore', path: '/polls' },
-  { label: 'Create', path: '/poll/create' },
+	{ label: 'Explore', path: '/explore' },
+  { label: 'Create', path: '/poll/new' },
   { label: 'My Profile', path: '/user' },
 	{ label: 'Login', path: '/login' },
 ];
@@ -40,7 +40,7 @@ class NavButtons extends React.Component {
     }
   }
 
-  isActive = (path) => this.context.router.isActive(path, path !== '/polls')
+  isActive = (path) => this.context.router.isActive(path, path !== '/explore')
 
   render() {
     const loggedOn = this.context.viewer;

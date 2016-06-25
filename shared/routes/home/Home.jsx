@@ -20,7 +20,7 @@ class Home extends React.Component {
           <RaisedButton
             linkButton
             containerElement={
-              <Link to="/polls" />
+              <Link to="/explore" />
             }
             label="Explore More"
             className={s.exploreBtn}

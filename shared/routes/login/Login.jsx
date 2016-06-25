@@ -9,10 +9,6 @@ import s from './Login.css';
 
 class LoginPage extends React.Component {
 
-  static contextTypes = {
-    muiTheme: React.PropTypes.object.isRequired,
-  }
-
   constructor(props) {
     super(props);
     this.state = { open: false };

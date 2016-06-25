@@ -39,9 +39,9 @@ function getGoogleChartsLoader() {
   return googleLoader;
 }
 
-import s from './ChartPage.css';
+import s from './Poll.css';
 
-class ChartPage extends React.Component {
+class Poll extends React.Component {
   static defaultProps = {
     title: 'Example Title',
     choices: [
@@ -157,4 +157,4 @@ class ChartPage extends React.Component {
   }
 }
 
-export default withStyles(s)(ChartPage);
+export default withStyles(s)(Poll);

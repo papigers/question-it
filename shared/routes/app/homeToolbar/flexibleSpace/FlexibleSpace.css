@@ -1,10 +1,14 @@
 .root{
 	text-align: center;
+}
 
-	& .logo{
-		height: 170px;
-		width: auto;
-	}
+.logo{
+  height: 170px;
+  width: auto;
+}
+
+.subheader{
+  color: $accent2Color;
 }
 
 .joinBtn {

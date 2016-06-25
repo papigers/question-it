@@ -12,6 +12,10 @@ class SearchBar extends React.Component {
     hint: React.PropTypes.string,
     value: React.PropTypes.string,
   }
+  
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired,
+  }
 
   constructor(props) {
     super(props);
@@ -21,9 +25,19 @@ class SearchBar extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.unregister = this.context.router.listenBefore(this.locationHasChanged);
+  }
+
+  componentWillUnmount() {
+    this.unregister();
+  }
+
   onFocus = () => this.setState({ focused: true })
 
-  onBlur = () => this.setState({ focused: false })
+  onBlur = () => this.setState({
+    focused: this.state.value && this.context.router.isActive('/explore/search'),
+  })
 
   onChange = (event) => {
     const value = event.target.value;
@@ -32,20 +46,29 @@ class SearchBar extends React.Component {
       router.goBack();
     }
     else {
-      if (window.location.pathname === '/polls/search') {
+      if (window.location.pathname === '/explore/search') {
         router.replace({
-          pathname: '/polls/search',
+          pathname: '/explore/search',
           query: { q: value },
         });
       }
       else {
         router.push({
-          pathname: '/polls/search',
+          pathname: '/explore/search',
           query: { q: value },
         });
       }
     }
     this.setState({ value });
+  }
+  
+  locationHasChanged = (location) => {
+    if (location.pathname !== '/explore/search') {
+      this.setState({ focused: false, value: '' });
+    }
+    else {
+      this.setState({ focused: this.state.value });
+    }
   }
 
   render() {
@@ -71,9 +94,5 @@ class SearchBar extends React.Component {
     );
   }
 }
-
-SearchBar.contextTypes = {
-  router: React.PropTypes.object.isRequired,
-};
 
 export default withStyles(s)(SearchBar);
