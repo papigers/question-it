@@ -4,49 +4,48 @@ import Mobile from './mobile';
 import Desktop from './desktop';
 
 const pages = [
-	{label: 'Home', path: '/'},
-	{label: 'Explore', path: '/polls'},
-	//{label: 'about', path: '/about'},
-	{label: 'Login', path: '/login'},
-  {label: 'My Profile', path: '/users/1'}
+	{ label: 'Home', path: '/' },
+	{ label: 'Explore', path: '/polls' },
+	// {label: 'about', path: '/about'},
+	{ label: 'Login', path: '/login' },
+  { label: 'My Profile', path: '/users/1' },
 ];
 
-class NavButtons extends React.Component{
-  constructor(){
-		super();
-		this.state = { small: true };
-		this.resizeListener = this.handleResize.bind(this);
-	}
-
-  isActive = (path) => {
-    return this.context.router.isActive(path, path !== '/polls');
-  }
+class NavButtons extends React.Component {
 
   static contextTypes = {
     loggedOn: React.PropTypes.object,
-    router: React.PropTypes.object.isRequired
+    router: React.PropTypes.object.isRequired,
   }
 
-  handleResize(){
-		let small = window.innerWidth <= 768;
-		if(small !== this.state.small)
-			this.setState({small});
-	}
+  constructor() {
+    super();
+    this.state = { small: true };
+    this.resizeListener = this.handleResize.bind(this);
+  }
 
-  componentDidMount(){
-		this.handleResize();
-		window.addEventListener('resize', this.resizeListener);
-	}
+  componentDidMount() {
+    this.handleResize();
+    window.addEventListener('resize', this.resizeListener);
+  }
 
-	componentWillUnmount(){
-		window.removeEventListener('resize', this.resizeListener);
-	}
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.resizeListener);
+  }
 
+  handleResize = () => {
+    const small = window.innerWidth <= 768;
+    if (small !== this.state.small) {
+      this.setState({ small });
+    }
+  }
 
-  render(){
-    let loggedOn = this.context.loggedOn;
+  isActive = (path) => this.context.router.isActive(path, path !== '/polls')
+
+  render() {
+    const loggedOn = this.context.loggedOn;
     let showPages = pages.filter((page) => {
-      switch(page.label){
+      switch (page.label) {
         case 'Login':
           return !loggedOn;
         case 'My Profile':
@@ -54,7 +53,7 @@ class NavButtons extends React.Component{
         default:
           return true;
       }
-    })
+    });
     return this.state.small ? (
       <Mobile pages={showPages} isActive={this.isActive} />
     ) :

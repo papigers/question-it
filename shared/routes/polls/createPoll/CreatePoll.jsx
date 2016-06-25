@@ -8,14 +8,14 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import Divider from 'material-ui/Divider';
-import {List, ListItem} from 'material-ui/List';
+import { List, ListItem } from 'material-ui/List';
 import Add from 'material-ui/svg-icons/content/add';
 import Delete from 'material-ui/svg-icons/content/clear';
 
 import s from './CreatePoll.css';
 
-class CreatePoll extends React.Component{
-  constructor(){
+class CreatePoll extends React.Component {
+  constructor() {
     super();
     this.state = {
       answers: [],
@@ -25,93 +25,93 @@ class CreatePoll extends React.Component{
       error: '',
       titleError: '',
       answerError: '',
-      titleFocus: false
-    }
+      titleFocus: false,
+    };
   }
 
-  addAnswer(event){
-    let {answers, answer} = this.state;
-    if(answer !== ''){
+  addAnswer = () => {
+    const { answers, answer } = this.state;
+    if (answer !== '') {
       answers.push(answer);
-      this.setState({answers, answer: '', error: '', answerError: ''});
+      this.setState({ answers, answer: '', error: '', answerError: '' });
     }
-    else{
-      this.setState({answerError: "Answer can't be empty"});
+    else {
+      this.setState({ answerError: "Answer can't be empty" });
     }
   }
 
-  removeAnswer(event, i){
-    let {answers} = this.state;
-    answers.splice(i,1);
-    this.setState({answers});
+  removeAnswer = (event, i) => {
+    const { answers } = this.state;
+    answers.splice(i, 1);
+    this.setState({ answers });
   }
 
-  changeTitle(event){
-    this.setState({title: event.target.value, titleError: ''});
+  changeTitle = (event) => {
+    this.setState({ title: event.target.value, titleError: '' });
   }
 
-  changeAnswer(event){
-    this.setState({answer: event.target.value, answerError: ''});
+  changeAnswer = (event) => {
+    this.setState({ answer: event.target.value, answerError: '' });
   }
 
-  keyPress(event){
-    if(event.which == 13)
+  keyPress = (event) => {
+    if (event.which === 13) {
       this.addAnswer();
+    }
   }
 
-  multipleCheck(event, isChecked){
-    this.setState({multiple: !this.state.multiple});
+  multipleCheck = () => {
+    this.setState({ multiple: !this.state.multiple });
   }
 
-  submit(event){
-    let error = '',
-        titleError = '';
-    if(this.state.answers.length === 0)
+  submit = () => {
+    let error = '';
+    let titleError = '';
+    if (this.state.answers.length === 0) {
       error = 'Poll must have answers';
-    if(this.state.title === '')
+    }
+    if (this.state.title === '') {
       titleError = 'Poll must have a title';
-    this.setState({error, titleError});
-
+    }
+    this.setState({ error, titleError });
   }
 
-  titleFocus(){
-    this.setState({titleFocus: true});
+  titleFocus = () => {
+    this.setState({ titleFocus: true });
   }
 
-  titleBlur(){
-    this.setState({titleFocus: false});
+  titleBlur = () => {
+    this.setState({ titleFocus: false });
   }
 
-  render(){
-    let {answer,
+  render() {
+    const { answer,
          title,
          answers,
          multiple,
          error,
          titleError,
          answerError,
-         titleFocus} = this.state;
+         titleFocus } = this.state;
 
-    let answerList = answers.map((item, i) => {
-      return (
-        <div>
-          <Divider />
-          <ListItem
-            rightIconButton={
-              <IconButton
-                touch={true}
-                onMouseUp={this.removeAnswer.bind(this,i)}
-              >
-                <Delete />
-              </IconButton>
-            }
-            primaryText={item}
-            key={i}
-          />
-          <Divider />
-        </div>
-      );
-    });
+    let answerList = answers.map((item, i) => (
+      <div>
+        <Divider />
+        <ListItem
+          rightIconButton={
+            <IconButton
+              touch
+              onMouseUp={() => this.removeAnswer(i)}
+            >
+              <Delete />
+            </IconButton>
+          }
+          primaryText={item}
+          key={i}
+        />
+        <Divider />
+      </div>
+    ));
 
     return (
       <div className="container">
@@ -123,12 +123,12 @@ class CreatePoll extends React.Component{
                 id="poll-title-input"
                 floatingLabelText="Poll Title"
                 className={`${s.titleField} ${titleFocus || title ? s.focus : ''}`}
-                floatingLabelStyle={{color: 'black'}}
-                floatingLabelFocusStyle={{color: this.context.muiTheme.palette.accent1Color}}
-                onChange={this.changeTitle.bind(this)}
+                floatingLabelStyle={{ color: 'black' }}
+                floatingLabelFocusStyle={{ color: this.context.muiTheme.palette.accent1Color }}
+                onChange={this.changeTitle}
                 errorText={titleError}
-                onFocus={this.titleFocus.bind(this)}
-                onBlur={this.titleBlur.bind(this)}
+                onFocus={this.titleFocus}
+                onBlur={this.titleBlur}
               />
 
               <List classNmae={s.answers}>
@@ -137,35 +137,40 @@ class CreatePoll extends React.Component{
 
             </Paper>
 
-              <div className={s.addDiv}>
-                <TextField
-                  value={answer}
-                  id="poll-answer-input"
-                  floatingLabelText="Add Answer"
-                  className={s.answerField}
-                  floatingLabelStyle={{color: 'black'}}
-                  floatingLabelFocusStyle={{color: this.context.muiTheme.palette.accent1Color}}
-                  onChange={this.changeAnswer.bind(this)}
-                  onKeyDown={this.keyPress.bind(this)}
-                  errorText={answerError}
-                />
+            <div className={s.addDiv}>
+              <TextField
+                value={answer}
+                id="poll-answer-input"
+                floatingLabelText="Add Answer"
+                className={s.answerField}
+                floatingLabelStyle={{ color: 'black' }}
+                floatingLabelFocusStyle={{ color: this.context.muiTheme.palette.accent1Color }}
+                onChange={this.changeAnswer}
+                onKeyDown={this.keyPress}
+                errorText={answerError}
+              />
 
-                <FloatingActionButton mini={true} secondary={true} className={s.add} onMouseUp={this.addAnswer.bind(this)}>
-                  <Add />
-                </FloatingActionButton>
-              </div>
+              <FloatingActionButton
+                mini
+                secondary
+                className={s.add}
+                onMouseUp={this.addAnswer}
+              >
+                <Add />
+              </FloatingActionButton>
+            </div>
 
             <Checkbox
               label="Enable multiple answers?"
               checked={multiple}
-              onCheck={this.multipleCheck.bind(this)}
+              onCheck={this.multipleCheck}
               className={s.checkbox}
             />
 
             <FlatButton
-              primary={true}
+              primary
               label="Create Poll"
-              onMouseUp={this.submit.bind(this)}
+              onMouseUp={this.submit}
             />
             <span className={s.error}>{error}</span>
           </div>
@@ -176,7 +181,7 @@ class CreatePoll extends React.Component{
 }
 
 CreatePoll.contextTypes = {
-  muiTheme: React.PropTypes.object.isRequired
-}
+  muiTheme: React.PropTypes.object.isRequired,
+};
 
 export default withStyles(s)(CreatePoll);

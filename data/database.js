@@ -1,45 +1,45 @@
-'use strict';
-export class User {};
-export class Poll {};
-export class Vote {};
+/* eslint-disable no-underscore-dangle */
+export class User {}
+export class Poll {}
+export class Vote {}
 
-let users = [];
+const users = [];
 for (let i = 0; i < 5; i++) {
-  let user = new User();
+  const user = new User();
   user.email = `email${i}@email.com`;
   user.username = `MyUsername${i}`;
-  user.password = `1234`;
+  user.password = '1234';
   user._id = `${i}`;
   user.votes = [];
   user.polls = [];
   users.push(user);
 }
 
-let polls = [];
+const polls = [];
 for (let i = 0; i < 8; i++) {
-  let poll = new Poll();
+  const poll = new Poll();
   poll._id = `${i}`;
   poll.title = `Poll ${i} Title`;
-  let optionsNum = 2 + Math.floor(Math.random() * 3);
+  const optionsNum = 2 + Math.floor(Math.random() * 3);
   poll.options = [];
   for (let j = 0; j < optionsNum; j++) {
     poll.options.push(`Poll ${i} Option ${j}`);
   }
   poll.votes = [];
-  let author = Math.floor(Math.random() * users.length);
+  const author = Math.floor(Math.random() * users.length);
   poll.author = `${author}`;
   users[author].polls.push(`${i}`);
   poll.timestamp = new Date();
   polls.push(poll);
 }
 
-let votes = [];
-for(let i = 0; i < users.length; i++){
-  for(let j = 0; j < polls.length; j++){
-    let vote = new Vote();
-    vote._id = `${(i+1)*(j+1)-1}`;
-    let poll = polls[j];
-    let user = users[i];
+const votes = [];
+for (let i = 0; i < users.length; i++) {
+  for (let j = 0; j < polls.length; j++) {
+    const vote = new Vote();
+    vote._id = `${(i + 1) * (j + 1) - 1}`;
+    const poll = polls[j];
+    const user = users[i];
     user.votes.push(`${vote._id}`);
     poll.votes.push(`${vote._id}`);
     vote.user = `${user._id}`;
@@ -50,96 +50,74 @@ for(let i = 0; i < users.length; i++){
   }
 }
 
-//console.log("Printing Mock Database:\n\
-//            ------------------------\n\n\
-//            USERS:\n\
-//            ------------------------\n");
-//
-//console.log(JSON.stringify(users, null, 2));
-//
-//console.log("\n\
-//            ------------------------\n\n\
-//            POLLS:\n\
-//            ------------------------\n");
-//
-//console.log(JSON.stringify(polls, null, 2));
-
-export function getViewer(){
+export function getViewer() {
   return users[0];
 }
 
-export function getUsers(){
+export function getUsers() {
   return users;
 }
 
-export function getPolls(orderBy = 1){
+export function getPolls(orderBy = 1) {
   return orderPolls(polls, orderBy);
 }
 
-export function getVotes(){
+export function getVotes() {
   return votes;
 }
 
-export function getUserPolls(id, orderBy = 1){
-  return orderPolls(users[id].polls.map(pollId => {
-    return polls[pollId];
-  }), orderBy);
+export function getUserPolls(id, orderBy = 1) {
+  return orderPolls(users[id].polls.map(pollId => polls[pollId]), orderBy);
 }
 
-export function getUserVotes(id){
-  return users[id].votes.map(voteId => {
-    return votes[voteId];
-  })
+export function getUserVotes(id) {
+  return users[id].votes.map(voteId => votes[voteId]);
 }
 
-export function getPollAuthor(id){
+export function getPollAuthor(id) {
   return users[polls[id].author];
 }
 
-export function getPollVotes(id){
-  return polls[id].votes.map(voteId => {
-    return votes[voteId];
-  })
+export function getPollVotes(id) {
+  return polls[id].votes.map(voteId => votes[voteId]);
 }
 
-export function getVoteUser(id){
+export function getVoteUser(id) {
   return users[votes[id].user];
 }
 
-export function getVotePoll(id){
+export function getVotePoll(id) {
   return polls[votes[id].poll];
 }
 
-function sortByTime(a, b){
+function sortByTime(a, b) {
   return a.timestamp >= b.timestamp;
 }
 
-function orderPolls(polls, orderBy){
-  switch(orderBy){
+function orderPolls(unordered, orderBy) {
+  switch (orderBy) {
     case 2:
-      return newPolls(polls);
+      return newPolls(unordered);
     case 3:
-      return topPolls(polls);
+      return topPolls(unordered);
     case 1:
     default:
-      return trendingPolls(polls);
+      return trendingPolls(unordered);
   }
 }
 
-function topPolls(polls){
-  return polls.sort((pA, pB) => {
-    return pA.votes.length >= pB.votes.length;
-  });
+function topPolls(unordered) {
+  return unordered.sort((pA, pB) => pA.votes.length >= pB.votes.length);
 }
 
-function newPolls(polls){
-  return polls.sort(sortByTime);
+function newPolls(unordered) {
+  return unordered.sort(sortByTime);
 }
 
-function trendingPolls(polls){
-  return polls.sort((pA, pB) => {
-    let vA = pA.votes,
-        vB = pB.votes;
+function trendingPolls(unordered) {
+  return unordered.sort((pA, pB) => {
+    const vA = pA.votes;
+    const vB = pB.votes;
     vA.sort(sortByTime);
     vB.sort(sortByTime);
     return vA.timestamp >= vB.timestamp;

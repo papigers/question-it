@@ -1,12 +1,11 @@
 import {
   redA700, red900,
   amber700, amber400,
-  grey100, grey300, grey400, grey500,
+  grey300, grey400, grey500,
   white, darkBlack, fullBlack,
 } from 'material-ui/styles/colors';
-import {fade} from 'material-ui/utils/colorManipulator';
+import { fade } from 'material-ui/utils/colorManipulator';
 import spacing from 'material-ui/styles/spacing';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 /**
  *  Light Theme is the default theme used in material-ui. It is guaranteed to
@@ -14,7 +13,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
  *  in a custom theme will default to these values.
  */
 export default {
-  spacing: spacing,
+  spacing,
   fontFamily: 'Roboto, sans-serif',
   palette: {
     primary1Color: redA700,

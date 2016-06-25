@@ -10,39 +10,43 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
 import s from './MobileNavButtons.css';
 
-class MobileNavButtons extends React.Component{
-  render(){
-    let {pages, isActive} = this.props;
+class MobileNavButtons extends React.Component {
+
+  static propTypes = {
+    pages: React.PropTypes.array.isRequired,
+    isActive: React.PropTypes.func.isRequired,
+  }
+
+  render() {
+    const { pages, isActive } = this.props;
     return (
       <IconMenu
-				iconButtonElement={
+        iconButtonElement={
           <IconButton>
             <MoreVertIcon />
           </IconButton>
         }
-				anchorOrigin={{horizontal: 'middle', vertical: 'center'}}
-				targetOrigin={{horizontal: 'right', vertical: 'top'}}
-				className={s.navBtn}
-				//onChange={(event, path) => this.context.router.push(path)}
-			>
+        anchorOrigin={{ horizontal: 'middle', vertical: 'center' }}
+        targetOrigin={{ horizontal: 'right', vertical: 'top' }}
+        className={s.navBtn}
+      >
 				{
-					pages.map((obj, i) => {
-						return (
-							<MenuItem
+					pages.map(
+            (obj, i) => (
+              <MenuItem
                 primaryText={obj.label}
                 linkButton
                 containerElement={
                   <Link to={obj.path} />
                 }
-								key={i}
-								value={obj.path}
+                key={i}
+                value={obj.path}
                 className={`${isActive(obj.path) ? s.active : ''}`}
-							>
-              </MenuItem>
-						);
-					})
+              />
+						)
+					)
 				}
-			</IconMenu>
+      </IconMenu>
     );
   }
 }

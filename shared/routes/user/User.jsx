@@ -1,11 +1,10 @@
 import React from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
-import {List, ListItem} from 'material-ui/List';
-import {Tabs, Tab} from 'material-ui/Tabs';
+import { List, ListItem } from 'material-ui/List';
+import { Tabs, Tab } from 'material-ui/Tabs';
 import Paper from 'material-ui/Paper';
 
-import SocialButton from '../../components/socialButton';
 import UserIntro from '../../components/userIntro';
 import UserStats from '../../components/userStats';
 import UserContact from '../../components/userContact';
@@ -17,62 +16,61 @@ import scrollSpy from '../../utils/scrollspy';
 
 const menu = [
   {
-    label: "Intro",
-    id: "user-intro"
+    label: 'Intro',
+    id: 'user-intro',
   },
   {
-    label: "Stats",
-    id: "user-stats"
+    label: 'Stats',
+    id: 'user-stats',
   },
   {
-    label: "Contact Info",
-    id: "user-contact"
+    label: 'Contact Info',
+    id: 'user-contact',
   },
   {
-    label: "Password",
-    id: "user-password"
-  }
+    label: 'Password',
+    id: 'user-password',
+  },
 ];
 
-class User extends React.Component{
+class User extends React.Component {
 
-  scrollTo(elId){
+  static propTypes = {
+    scrollspy: React.PropTypes.number.isRequired,
+  }
+
+  componentWillMount() {
+    this.scrollSpy = [];
+  }
+
+  componentDidMount() {
+    const SweetScroll = require('sweet-scroll'); // eslint-disable-line global-require
+    this.sweetScroll = new SweetScroll({
+      offset: -85,
+    });
+  }
+
+  setScrollspyRef = (ref) => {
+    this.scrollSpy.push(ref);
+  }
+
+  scrollTo = (elId) => {
     this.sweetScroll.to(`#${elId}`);
   }
 
-  componentDidMount(){
-    let SweetScroll = require('sweet-scroll');
-    this.sweetScroll  = new SweetScroll({
-      offset: -112,
-      completeScroll: () => {
-        this.props.enableScrollSpy(true);
-      },
-      beforeScroll: () => {
-        this.props.enableScrollSpy(false);
-      }
-    });
-
-  }
-
-  componentWillMount(){
-   this.scrollSpy = [];
-  }
-
-  render(){
+  render() {
     return (
       <div>
-        <div className={"hide-sm-up " + s.fixedTabs} >
+        <div className={`hide-sm-up ${s.fixedTabs}`} >
           <Paper zDepth={2}>
             <Tabs
               className={s.tabs}
               value={this.props.scrollspy}
               onChange={(val) => this.scrollTo(menu[val].id)}
             >
-              {menu.map((item, i) => {
-                return (
-                  <Tab label={item.label} key={i} value={i} />
-                );
-              })}
+              {menu.map(
+                (item, i) => <Tab label={item.label} key={i} value={i} />
+              )}
             </Tabs>
           </Paper>
         </div>
@@ -81,36 +79,35 @@ class User extends React.Component{
           <div className="row">
 
             <div className={"hide-sm-down col-sm-3"}>
-              <Paper zDepth={2} className={s.sidemenu + " " + s.fixedMenu}>
+              <Paper zDepth={2} className={`${s.sidemenu} ${s.fixedMenu}`}>
                 <List className={s.menuItems}>
-                  {menu.map((item, i) => {
-                    return (
+                  {menu.map(
+                    (item, i) => (
                       <ListItem
                         primaryText={item.label}
                         className={this.props.scrollspy === i ? s.activeMenuItem : ''}
-                        onTouchTap={this.scrollTo.bind(this, item.id)}
+                        onTouchTap={() => this.scrollTo(item.id)}
                         key={i}
                       />
-                    );
-                  })}
+                  ))}
                 </List>
               </Paper>
             </div>
 
             <div className="col-xs-12 col-sm-9">
-              <div ref={(ref) => this.scrollSpy[0] = ref } id="user-intro">
+              <div ref={this.setScrollspyRef} id="user-intro">
                 <UserIntro />
               </div>
 
-              <div ref={(ref) => this.scrollSpy[1] = ref } id="user-stats">
+              <div ref={this.setScrollspyRef} id="user-stats">
                 <UserStats />
               </div>
 
-              <div ref={(ref) => this.scrollSpy[2] = ref } id="user-contact">
+              <div ref={this.setScrollspyRef} id="user-contact">
                 <UserContact />
               </div>
               
-              <div ref={(ref) => this.scrollSpy[3] = ref } id="user-password">
+              <div ref={this.setScrollspyRef} id="user-password">
                 <UserPassword />
               </div>
             </div>

@@ -1,13 +1,13 @@
 import React from 'react';
-//import withStyles from 'isomorphic-style-loader/lib/withStyles';
+// import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import LoginForm from '../loginForm';
 import LoginSocial from '../loginSocial';
 
-//import s from './LoginSection.css';
+// import s from './LoginSection.css';
 
-class LoginSection extends React.Component{
-  render(){
+class LoginSection extends React.Component {
+  render() {
     return (
       <div>
         <h1 className="center-text">Login</h1>

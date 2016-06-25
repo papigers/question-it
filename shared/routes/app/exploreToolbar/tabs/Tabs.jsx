@@ -4,28 +4,21 @@ import { Tabs, Tab } from 'material-ui/Tabs';
 class ExploreTabs extends React.Component {
 
   static defaultProps = {
-    tabs: 'trending',
+    tab: '',
   }
 
   static propTypes = {
-    tabs: React.PropTypes.string.isRequired,
+    tab: React.PropTypes.string.isRequired,
   }
-  constructor(props) {
-    super(props);
-    this.state = { tab: props.tabs };
-  }
+
   switchTabs = (tab) => {
     this.context.router.push(`/polls/${tab}`);
-    this.setState({ tab });
   }
 
   render() {
-    let tab = this.state.tab;
+    let tab = this.props.tab;
     return (
-      <Tabs
-        value={tab}
-        onChange={this.switchTabs}
-      >
+      <Tabs value={tab} onChange={this.switchTabs}>
         <Tab label="trending" value="trending" />
         <Tab label="top" value="top" />
         <Tab label="new" value="new" />

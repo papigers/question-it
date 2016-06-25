@@ -1,33 +1,30 @@
 import React from 'react';
-import Relay from 'react-relay';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import Paper from 'material-ui/Paper';
-import RaisedButton from 'material-ui/RaisedButton';
-import AppBar from 'material-ui/AppBar';
-
 import Link from 'react-router/lib/Link';
 
+import RaisedButton from 'material-ui/RaisedButton';
+
 import PollItem from '../../components/pollItem';
+
 import s from './Home.css';
 
-class Home extends React.Component{
-	render(){ 
-    //console.log(JSON.stringify(this.props.store, null, 2));
-		return (
-			<div className="container">
-				<div className="row">
-					<h1 className="center-text">
+class Home extends React.Component {
+  render() {
+    return (
+      <div className="container">
+        <div className="row">
+          <h1 className="center-text">
             Trending Polls
           </h1>
 
           <RaisedButton
-            linkButton={true}
+            linkButton
             containerElement={
-              <Link to="/polls"/>
+              <Link to="/polls" />
             }
             label="Explore More"
             className={s.exploreBtn}
-            primary={true}
+            primary
           />
 
           <div>
@@ -39,7 +36,7 @@ class Home extends React.Component{
                 ['Onions', 1],
                 ['Olives', 1],
                 ['Zucchini', 1],
-                ['Pepperoni', 2]
+                ['Pepperoni', 2],
               ]}
             />
 
@@ -51,36 +48,14 @@ class Home extends React.Component{
                 ['Onions', 1],
                 ['Olives', 1],
                 ['Zucchini', 1],
-                ['Pepperoni', 2]
+                ['Pepperoni', 2],
               ]}
             />
           </div>
-				</div>
-			</div>
+        </div>
+      </div>
 		);
-	}
-};
-/*
-Home = Relay.createContainer(Home, {
-  fragments: {
-    store: () => Relay.QL`
-      fragment on Store {
-        polls{
-          id,
-          title,
-          options,
-          votes{
-            vote
-          },
-          author{
-            username
-          }
-        }
-      }
-    `
   }
-});
-*/
-
+}
 
 export default withStyles(s)(Home);

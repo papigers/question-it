@@ -1,7 +1,7 @@
 import React from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
-import {ListItem} from 'material-ui/List';
+import { ListItem } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
@@ -11,12 +11,12 @@ import ProfileAvatar from 'material-ui/svg-icons/social/person';
 
 import s from './UserIntro.css';
 
-class UserIntro extends React.Component{
-  render(){
+class UserIntro extends React.Component {
+  render() {
     return (
       <div>
         <h2 className="categoryHeader">Intro</h2>
-        <Paper zDepth={2} className={s.introRow + " category"}>
+        <Paper zDepth={2} className={`${s.introRow} category`}>
           <div className={s.avatarContainer}>
             <Avatar
               icon={<ProfileAvatar />}
@@ -27,32 +27,32 @@ class UserIntro extends React.Component{
             <IconButton className={s.editAvatar}><EditIcon /></IconButton>
           </div>
           <div className={s.username}>
-              <ListItem className="item" disabled={true}>
-                <h2>Username</h2>
-              </ListItem>
+            <ListItem className="item" disabled>
+              <h2>Username</h2>
+            </ListItem>
           </div>
           <div className={s.fullRow}>
-              <Subheader className="subheader">Name:</Subheader>
-              <ListItem className="item" disabled={true}>
-                Gershon Papi
-                <IconButton className={s.editIcon}><EditIcon /></IconButton>
-              </ListItem>
+            <Subheader className="subheader">Name:</Subheader>
+            <ListItem className="item" disabled>
+              Gershon Papi
+              <IconButton className={s.editIcon}><EditIcon /></IconButton>
+            </ListItem>
           </div>
           <div className={s.fullRow}>
-              <Subheader className="subheader">Age:</Subheader>
-              <ListItem className="item" disabled={true}>
-                23
-                <IconButton className={s.editIcon}><EditIcon /></IconButton>
-              </ListItem>
+            <Subheader className="subheader">Age:</Subheader>
+            <ListItem className="item" disabled>
+              23
+              <IconButton className={s.editIcon}><EditIcon /></IconButton>
+            </ListItem>
           </div>
           <div className={s.fullRow}>
-              <Subheader className="subheader">Bio:</Subheader>
-              <ListItem className="item" disabled={true}>
-                Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio
-                Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio.
-                Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio.
-                <IconButton className={s.editBio}><EditIcon /></IconButton>
-              </ListItem>
+            <Subheader className="subheader">Bio:</Subheader>
+            <ListItem className="item" disabled>
+              Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio
+              Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio.
+              Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio Bio.
+              <IconButton className={s.editBio}><EditIcon /></IconButton>
+            </ListItem>
           </div>
         </Paper>
       </div>

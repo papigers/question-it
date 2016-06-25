@@ -46,7 +46,7 @@ type Root {
   viewer: User
   user(id: ID!): User
   poll(id: ID!): Poll
-  polls(orderBy: PollSort, after: String, first: Int, before: String, last: Int): PollConnection
+  polls(after: String, first: Int, before: String, last: Int, orderBy: PollSort): PollConnection
   votes(after: String, first: Int, before: String, last: Int): VoteConnection
 }
 
@@ -57,7 +57,7 @@ type User implements Node {
   password: String!
   username: String!
   votes(after: String, first: Int, before: String, last: Int): VoteConnection
-  polls(orderBy: PollSort, after: String, first: Int, before: String, last: Int): PollConnection
+  polls(after: String, first: Int, before: String, last: Int, orderBy: PollSort): PollConnection
 }
 
 type Vote implements Node {

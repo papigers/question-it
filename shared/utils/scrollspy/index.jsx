@@ -5,65 +5,80 @@ function getDisplayName(ComposedComponent) {
 }
 
 function debounce(method, delay) {
-    clearTimeout(method._tId);
-    method._tId= setTimeout(function(){
-        method();
-    }, delay);
+  let timeout;
+  return (...args) => {
+    const context = this;
+    const later = () => {
+      timeout = null;
+      method.apply(context, args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, delay);
+  };
 }
 
-function scrollSpy(ComposedComponent){
-  return class ScrollSpy extends React.Component{
-    constructor(props){
+function scrollSpy(ComposedComponent) {
+  return class ScrollSpy extends React.Component {
+    constructor(props) {
       super(props);
       this.state = {
-        onScreen: 0
+        onScreen: 0,
       };
     }
 
     static displayName = `ScrollSpy(${getDisplayName(ComposedComponent)})`;
     static ComposedComponent = ComposedComponent;
 
-    handleScroll(){
-      if(this.enabled){
-        let scrollPosition = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
+    handleScroll = () => {
+      if (this.enabled) {
+        const scrollPosition =
+            window.scrollY ||
+            document.documentElement.scrollTop ||
+            document.body.scrollTop;
         let onScreen = 0;
-        for(let i = this.toSpy.length - 1; i >= 0; i--){
-          let el = this.toSpy[1];
-          if(this.toSpy[i].offsetTop <= scrollPosition){
+        for (let i = this.toSpy.length - 1; i >= 0; i--) {
+          if (this.toSpy[i].offsetTop <= scrollPosition) {
             onScreen = i;
             break;
           }
         }
 
-        if(onScreen !== this.state.onScreen)
-          this.setState({onScreen});
+        if (onScreen !== this.state.onScreen) {
+          this.setState({ onScreen });
+        }
       }
     }
 
-    enableScrollSpy(enable){
+    enableScrollSpy = (enable) => {
       this.enabled = enable;
-      if(this.enabled){
+      if (this.enabled) {
         this.handleScroll();
       }
     }
 
-    componentDidMount(){
+    componentDidMount() {
       this.toSpy = this.refs.composed.scrollSpy;
       this.enabled = true;
       this.handleScroll();
-      this.listener = this.handleScroll.bind(this);
+      this.listener = debounce(this.handleScroll, 75);
       window.addEventListener('scroll', this.listener);
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
       window.removeEventListener('scroll', this.listener);
     }
 
-    render(){
-
-      return <ComposedComponent ref="composed" enableScrollSpy={this.enableScrollSpy.bind(this)} {...this.props} scrollspy={this.state.onScreen} />;
+    render() {
+      return (
+        <ComposedComponent
+          ref="composed"
+          enableScrollSpy={this.enableScrollSpy}
+          {...this.props}
+          scrollspy={this.state.onScreen}
+        />
+      );
     }
-  }
+  };
 }
 
 export default scrollSpy;
