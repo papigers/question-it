@@ -1,8 +1,40 @@
-/* eslint-disable no-underscore-dangle */
-export class User {}
-export class Poll {}
-export class Vote {}
+/* eslint-disable no-restricted-syntax, guard-for-in, prefer-const */
 
+export class User {
+  constructor(obj) {
+    for (let prop in obj) {
+      this[prop] = obj[prop];
+    }
+  }
+}
+
+export class Poll {
+  constructor(obj) {
+    for (let prop in obj) {
+      this[prop] = obj[prop];
+    }
+  }
+}
+
+export class Vote {
+  constructor(obj) {
+    for (let prop in obj) {
+      this[prop] = obj[prop];
+    }
+  }
+}
+
+import data from './data';
+
+let { users, polls, votes } = data;
+
+users = users.map((user) => new User(user));
+
+polls = polls.map((poll) => new Poll(poll));
+
+votes = votes.map((vote) => new Vote(vote));
+
+/*
 const users = [];
 for (let i = 0; i < 5; i++) {
   const user = new User();
@@ -49,17 +81,31 @@ for (let i = 0; i < users.length; i++) {
     votes.push(vote);
   }
 }
+*/
+
 
 export function getViewer() {
   return users[0];
+}
+
+export function getUser(id) {
+  return users[id - 1];
 }
 
 export function getUsers() {
   return users;
 }
 
+export function getPoll(id) {
+  return polls[id - 1];
+}
+
 export function getPolls(orderBy = 1) {
   return orderPolls(polls, orderBy);
+}
+
+export function getVote(id) {
+  return votes[id - 1];
 }
 
 export function getVotes() {
@@ -67,31 +113,31 @@ export function getVotes() {
 }
 
 export function getUserPolls(id, orderBy = 1) {
-  return orderPolls(users[id].polls.map(pollId => polls[pollId]), orderBy);
+  return orderPolls(polls.filter((poll) => poll.author === id), orderBy);
 }
 
 export function getUserVotes(id) {
-  return users[id].votes.map(voteId => votes[voteId]);
+  return votes.filter((vote) => vote.user === id);
 }
 
 export function getPollAuthor(id) {
-  return users[polls[id].author];
+  return users[polls[id - 1].author - 1];
 }
 
 export function getPollVotes(id) {
-  return polls[id].votes.map(voteId => votes[voteId]);
+  return votes.filter((vote) => vote.poll === id);
 }
 
 export function getVoteUser(id) {
-  return users[votes[id].user];
+  return users[votes[id - 1].user - 1];
 }
 
 export function getVotePoll(id) {
-  return polls[votes[id].poll];
+  return polls[votes[id - 1].poll - 1];
 }
 
 function sortByTime(a, b) {
-  return a.timestamp >= b.timestamp;
+  return a.timestamp <= b.timestamp;
 }
 
 function orderPolls(unordered, orderBy) {
@@ -107,7 +153,7 @@ function orderPolls(unordered, orderBy) {
 }
 
 function topPolls(unordered) {
-  return unordered.sort((pA, pB) => pA.votes.length >= pB.votes.length);
+  return unordered.sort((pA, pB) => pA.votes.length <= pB.votes.length);
 }
 
 function newPolls(unordered) {

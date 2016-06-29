@@ -42,8 +42,8 @@ class App extends React.Component {
 		) : null;
 
     let tabs = null;
-    if (this.context.router.isActive('/explore') && !this.props.params.id) {
-      const tab = this.props.routes[this.props.routes.length - 1].tab;
+    if (this.context.router.isActive('/explore')) {
+      const tab = this.props.params.tab;
       const { Tabs, FlexibleSpace } =
           require('./exploreToolbar'); // eslint-disable-line global-require
       tabs = React.createElement(Tabs, { tab });
@@ -79,7 +79,6 @@ App = Relay.createContainer(App, {
   fragments: {
     viewer: () => Relay.QL`
       fragment on User {
-        _id,
         id
       }
     `,

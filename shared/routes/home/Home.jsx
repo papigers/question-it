@@ -1,4 +1,5 @@
 import React from 'react';
+import Relay from 'react-relay';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Link from 'react-router/lib/Link';
 
@@ -9,7 +10,20 @@ import PollItem from '../../components/pollItem';
 import s from './Home.css';
 
 class Home extends React.Component {
+
+  static propTypes = {
+    store: React.PropTypes.object.isRequired,
+  }
+
   render() {
+    const { store } = this.props;
+    const polls = store.polls.edges.map(({ node }) => (
+      <PollItem
+        key={node.id}
+        poll={node}
+      />
+    ));
+
     return (
       <div className="container">
         <div className="row">
@@ -28,29 +42,7 @@ class Home extends React.Component {
           />
 
           <div>
-            <PollItem
-              username="papigers"
-              title="Example Title"
-              choices={[
-                ['Mushrooms', 3],
-                ['Onions', 1],
-                ['Olives', 1],
-                ['Zucchini', 1],
-                ['Pepperoni', 2],
-              ]}
-            />
-
-            <PollItem
-              username="papigers"
-              title="Example Title"
-              choices={[
-                ['Mushrooms', 3],
-                ['Onions', 1],
-                ['Olives', 1],
-                ['Zucchini', 1],
-                ['Pepperoni', 2],
-              ]}
-            />
+            {polls}
           </div>
         </div>
       </div>
@@ -58,4 +50,28 @@ class Home extends React.Component {
   }
 }
 
-export default withStyles(s)(Home);
+Home = withStyles(s)(Home);
+
+Home = Relay.createContainer(Home, {
+
+  initialVariables: {
+    limit: 4,
+  },
+
+  fragments: {
+    store: () => Relay.QL`
+      fragment on Store{
+        polls(orderBy: TRENDING, first: $limit){
+          edges{
+            node{
+              id,
+              ${PollItem.getFragment('poll')}
+            }
+          }
+        }
+      }
+    `,
+  },
+});
+
+export default Home;

@@ -10,7 +10,6 @@ class SearchBar extends React.Component {
 
   static propTypes = {
     hint: React.PropTypes.string,
-    value: React.PropTypes.string,
   }
   
   static contextTypes = {
@@ -20,7 +19,6 @@ class SearchBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: props.value || '',
       focused: false,
     };
   }
@@ -36,7 +34,7 @@ class SearchBar extends React.Component {
   onFocus = () => this.setState({ focused: true })
 
   onBlur = () => this.setState({
-    focused: this.state.value && this.context.router.isActive('/explore/search'),
+    focused: this.refs.searchbar.value && this.context.router.isActive('/explore/search'),
   })
 
   onChange = (event) => {
@@ -59,23 +57,21 @@ class SearchBar extends React.Component {
         });
       }
     }
-    this.setState({ value });
   }
   
   locationHasChanged = (location) => {
     if (location.pathname !== '/explore/search') {
-      this.setState({ focused: false, value: '' });
+      this.setState({ focused: false });
+      this.refs.searchbar.value = '';
     }
     else {
-      this.setState({ focused: this.state.value });
+      this.setState({ focused: this.refs.searchbar.value });
     }
   }
 
   render() {
-    let { focused, value } = this.state;
-    if (!focused) {
-      value = '';
-    }
+    const { focused } = this.state;
+
     return (
       <div>
         <Toolbar className={`${s.toolbar} ${focused ? s.focus : ''}`}>
@@ -84,10 +80,10 @@ class SearchBar extends React.Component {
             type="text"
             onFocus={this.onFocus}
             onBlur={this.onBlur}
-            value={value}
             onChange={this.onChange}
             placeholder={this.props.hint}
             className={s.textField}
+            ref="searchbar"
           />
         </Toolbar>
       </div>
