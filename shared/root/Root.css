@@ -3,11 +3,26 @@
 @custom-media --max-sm (max-width: $screen-sm-max);
 @custom-media --min-sm (min-width: $screen-sm);
 
+$primary3Color: color($primary1Color b(38%));
+
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
   overflow-y: scroll;
   position: relative;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: $primary1Color;
+  border: 1px solid $primary2Color;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $primary3Color;
 }
 
 a {
