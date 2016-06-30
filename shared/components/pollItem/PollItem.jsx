@@ -1,7 +1,9 @@
 import React from 'react';
 import Relay from 'react-relay';
-import Paper from 'material-ui/Paper';
+import { Link } from 'react-router';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
+
+import Paper from 'material-ui/Paper';
 
 import chartColors from './chartColors';
 
@@ -22,7 +24,6 @@ class PollItem extends React.Component {
       }
     ));
     poll.votes.edges.forEach(vote => votes[vote.node.option].votes++);
-    votes.sort((votedOptionA, votedOptionB) => votedOptionA.votes < votedOptionB.votes);
 
     let colorSpread =
         votes.map(
@@ -51,13 +52,18 @@ class PollItem extends React.Component {
           </div>
           <div className={s.content}>
             <h4 className="center-text">
-              <span className={s.user}>{poll.author.username}</span> asked:
+              <Link to={`/user/${poll.author.id}`}>
+                <span className={s.user} onClick={this.routeToUser}>{poll.author.username}</span>
+              </Link>
+              {' asked:'}
             </h4>
-            <h2 className="center-text">{poll.title}</h2>
-            <div className={s.gradinetHide}></div>
+            <Link to={`/poll/${poll.id}`}>
+              <h2 className="center-text">{poll.title}</h2>
+              <div className={s.gradinetHide}></div>
+            </Link>
           </div>
           <div className={s.colorSpreadContainer}>
-						{colorSpread}
+            {colorSpread}
           </div>
         </Paper>
       </div>
@@ -75,6 +81,7 @@ PollItem = Relay.createContainer(PollItem, {
   fragments: {
     poll: (() => Relay.QL`
       fragment on Poll{
+        id,
         title,
         options,
         votes(first: $optionsLimit){

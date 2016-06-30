@@ -1,4 +1,5 @@
 import React from 'react';
+import Relay from 'react-relay';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import { List, ListItem } from 'material-ui/List';
@@ -14,22 +15,30 @@ import s from './User.css';
 
 import scrollSpy from '../../utils/scrollspy';
 
-const menu = [
+const sections = [
   {
     label: 'Intro',
     id: 'user-intro',
+    component: UserIntro,
+    public: true,
   },
   {
     label: 'Stats',
     id: 'user-stats',
+    component: UserStats,
+    public: true,
   },
   {
     label: 'Contact Info',
     id: 'user-contact',
+    component: UserContact,
+    public: true,
   },
   {
     label: 'Password',
     id: 'user-password',
+    component: UserPassword,
+    public: false,
   },
 ];
 
@@ -37,6 +46,11 @@ class User extends React.Component {
 
   static propTypes = {
     scrollspy: React.PropTypes.number.isRequired,
+    node: React.PropTypes.object.isRequired,
+  }
+
+  static contextTypes= {
+    viewer: React.PropTypes.object.isRequired,
   }
 
   componentWillMount() {
@@ -59,6 +73,10 @@ class User extends React.Component {
   }
 
   render() {
+    const { node: user } = this.props;
+    const { viewer } = this.context;
+    const isViewer = viewer.id === user.id;
+
     return (
       <div>
         <div className={`hide-sm-up ${s.fixedTabs}`} >
@@ -66,10 +84,12 @@ class User extends React.Component {
             <Tabs
               className={s.tabs}
               value={this.props.scrollspy}
-              onChange={(val) => this.scrollTo(menu[val].id)}
+              onChange={(val) => this.scrollTo(sections[val].id)}
             >
-              {menu.map(
-                (item, i) => <Tab label={item.label} key={i} value={i} />
+              {sections.map(
+                (section, i) => (section.public || isViewer) ? (
+                  <Tab label={section.label} key={i} value={i} />
+                  ) : null
               )}
             </Tabs>
           </Paper>
@@ -81,35 +101,31 @@ class User extends React.Component {
             <div className={"hide-sm-down col-sm-3"}>
               <Paper zDepth={2} className={`${s.sidemenu} ${s.fixedMenu}`}>
                 <List className={s.menuItems}>
-                  {menu.map(
-                    (item, i) => (
+                  {sections.map(
+                    (section, i) => (section.public || isViewer) ? (
                       <ListItem
-                        primaryText={item.label}
+                        primaryText={section.label}
                         className={this.props.scrollspy === i ? s.activeMenuItem : ''}
-                        onTouchTap={() => this.scrollTo(item.id)}
+                        onTouchTap={() => this.scrollTo(section.id)}
                         key={i}
                       />
-                  ))}
+                  ) : null
+                  )}
                 </List>
               </Paper>
             </div>
 
             <div className="col-xs-12 col-sm-9">
-              <div ref={this.setScrollspyRef} id="user-intro">
-                <UserIntro />
-              </div>
-
-              <div ref={this.setScrollspyRef} id="user-stats">
-                <UserStats />
-              </div>
-
-              <div ref={this.setScrollspyRef} id="user-contact">
-                <UserContact />
-              </div>
-              
-              <div ref={this.setScrollspyRef} id="user-password">
-                <UserPassword />
-              </div>
+              {sections.map(
+                (section, i) => (section.public || isViewer) ? (
+                  <div key={i} ref={this.setScrollspyRef} id={section.id}>
+                    {React.createElement(section.component, {
+                      isViewer,
+                      user,
+                    })}
+                  </div>
+                ) : null
+              )}
             </div>
 
           </div>
@@ -119,4 +135,18 @@ class User extends React.Component {
   }
 }
 
-export default withStyles(s)(scrollSpy(User));
+User = withStyles(s)(scrollSpy(User));
+
+User = Relay.createContainer(User, {
+  fragments: {
+    node: (() => Relay.QL`
+      fragment on User{
+        id,
+        ${UserIntro.getFragment('user')},
+        ${UserStats.getFragment('user')}
+      }
+    `),
+  },
+});
+
+export default User;

@@ -120,6 +120,12 @@ export function getUserVotes(id) {
   return votes.filter((vote) => vote.user === id);
 }
 
+export function getUserRecievedVotes(id) {
+  const userPolls = polls.filter((poll) => poll.author === id);
+  const pollVotesCounter = userPolls.map(poll => getPollVotes(poll.id).length);
+  return pollVotesCounter.reduce((prev, curr) => prev + curr);
+}
+
 export function getPollAuthor(id) {
   return users[polls[id - 1].author - 1];
 }

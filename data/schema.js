@@ -105,7 +105,16 @@ const userType = new GraphQLObjectType({
     votes: {
       type: voteConnectionType,
       args: connectionArgs,
-      resolve: ((user, args) => connectionFromArray(db.getUserVotes(user.id), args)),
+      resolve: ((user, args) =>
+                connectionFromArray(db.getUserVotes(user.id), args)),
+    },
+    voteCount: {
+      type: GraphQLInt,
+      resolve: (user => db.getUserVotes(user.id).length),
+    },
+    recievedVotesCount: {
+      type: GraphQLInt,
+      resolve: (user => db.getUserRecievedVotes(user.id)),
     },
     polls: {
       type: pollConnectionType,
@@ -117,6 +126,10 @@ const userType = new GraphQLObjectType({
       },
       resolve: ((user, { orderBy, ...args }) =>
                 connectionFromArray(db.getUserPolls(user.id, orderBy), args)),
+    },
+    pollCount: {
+      type: GraphQLInt,
+      resolve: (user => db.getUserPolls(user.id).length),
     },
   })),
   interfaces: [nodeInterface],
@@ -136,7 +149,12 @@ const pollType = new GraphQLObjectType({
     votes: {
       type: voteConnectionType,
       args: connectionArgs,
-      resolve: ((poll, args) => connectionFromArray(db.getPollVotes(poll.id), args)),
+      resolve: ((poll, args) =>
+                connectionFromArray(db.getPollVotes(poll.id), args)),
+    },
+    voteCount: {
+      type: GraphQLInt,
+      resolve: (poll => db.getPollVotes(poll.id).length),
     },
     author: {
       type: new GraphQLNonNull(userType),
@@ -201,6 +219,15 @@ const storeType = new GraphQLObjectType({
       },
       resolve: (store, { id }) => db.getUsers()[id],
     },
+    votes: {
+      type: voteConnectionType,
+      args: connectionArgs,
+      resolve: ((store, args) => connectionFromArray(db.getVotes(), args)),
+    },
+    voteCount: {
+      type: GraphQLInt,
+      resolve: (() => db.getVotes().length),
+    },
     poll: {
       type: pollType,
       args: {
@@ -210,6 +237,10 @@ const storeType = new GraphQLObjectType({
       },
       resolve: (store, { id }) => db.getPolls()[id],
     },
+    pollCount: {
+      type: GraphQLInt,
+      resolve: (() => db.getPolls().length),
+    },
     polls: {
       type: pollConnectionType,
       args: {
@@ -218,12 +249,8 @@ const storeType = new GraphQLObjectType({
           type: pollSortEnum,
         },
       },
-      resolve: ((store, { orderBy, ...args }) => connectionFromArray(db.getPolls(orderBy), args)),
-    },
-    votes: {
-      type: voteConnectionType,
-      args: connectionArgs,
-      resolve: ((store, args) => connectionFromArray(db.getVotes(), args)),
+      resolve: ((store, { orderBy, ...args }) =>
+                connectionFromArray(db.getPolls(orderBy), args)),
     },
   })),
   interfaces: [nodeInterface],
@@ -235,11 +262,11 @@ const Root = new GraphQLObjectType({
     node: nodeField,
     viewer: {
       type: userType,
-      resolve: () => db.getViewer(),
+      resolve: ((root, args, { viewerId }) => db.getUser(viewerId)),
     },
     store: {
       type: storeType,
-      resolve: () => store,
+      resolve: (() => store),
     },
   })),
 });

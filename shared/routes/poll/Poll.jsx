@@ -1,4 +1,5 @@
 import React from 'react';
+import Relay from 'react-relay';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import RefreshIndicator from 'material-ui/RefreshIndicator';
@@ -42,36 +43,12 @@ function getGoogleChartsLoader() {
 import s from './Poll.css';
 
 class Poll extends React.Component {
-  static defaultProps = {
-    title: 'Example Title',
-    choices: [
-      ['Mushrooms', 3],
-      ['Onions', 1],
-      ['Olives', 1],
-      ['Zucchini', 1],
-      ['Pepperoni', 2],
-    ],
-    multi: false,
-  }
 
   static propTypes = {
-    title: React.PropTypes.string.isRequired,
-    choices: React.PropTypes.array.isRequired,
-    multi: React.PropTypes.bool,
+    node: React.PropTypes.object.isRequired,
   }
 
-  constructor(props) {
-    super();
-    const { title, choices, multi } = props;
-    this.state = {
-      title,
-      choices,
-      multi,
-    };
-  }
-	
   componentDidMount() {
-		// if ((typeof google === 'undefined') || (typeof google.visualization === 'undefined'))
     this.loadGoogleCharts = getGoogleChartsLoader();
     const self = this;
     if (!this.loadGoogleCharts.loaded) {
@@ -94,10 +71,19 @@ class Poll extends React.Component {
   }
 
   drawChart() {
+    const { node } = this.props;
+    const votes = node.options.map((option) => (
+      [
+        option,
+        0,
+      ]
+    ));
+    node.votes.edges.forEach(vote => votes[vote.node.option][1]++);
+
     const data = new google.visualization.DataTable(); // eslint-disable-line no-undef
-    data.addColumn('string', 'Topping');
+    data.addColumn('string', 'Options');
     data.addColumn('number', 'Votes');
-    data.addRows(this.props.choices);
+    data.addRows(votes);
 
     const col = document.getElementById('chart-col');
     const width = col.clientWidth * 0.9;
@@ -118,6 +104,7 @@ class Poll extends React.Component {
   }
 
   render() {
+    const { node } = this.props;
     return (
       <div className="container ChartPage">
         <div className="row">
@@ -145,9 +132,8 @@ class Poll extends React.Component {
 
           <div className="col-xs-12 col-md-5">
             <VoteArea
-              choices={this.props.choices}
-              multi={this.props.multi}
-              title={this.props.title}
+              choices={node.options}
+              title={node.title}
               onSubmit={this.onSubmitVote}
             />
           </div>
@@ -157,4 +143,29 @@ class Poll extends React.Component {
   }
 }
 
-export default withStyles(s)(Poll);
+Poll = withStyles(s)(Poll);
+
+Poll = Relay.createContainer(Poll, {
+  initialVariables: {
+    optionLimit: 10,
+  },
+
+  fragments: {
+    node: (() => Relay.QL`
+      fragments on Poll{
+        id,
+        title,
+        options,
+        votes(first: $optionLimit){
+          edges{
+            node{
+              option
+            }
+          }
+        }
+      }
+    `),
+  },
+});
+
+export default Poll;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, IndexRoute, IndexRedirect } from 'react-router';
 
-import { storeQuery, viewerQuery } from '../queries';
+import { storeQuery, viewerQuery, nodeQuery } from '../queries';
 
 import App from './app';
 import Home from './home';
@@ -45,19 +45,15 @@ export default (
 
     </Route>
 
-    <Route
-      path="poll"
-      component={Poll}
-      onEnter={function requirePollId(nextState, replace) {
-        if (!nextState.location.query.id) {
-          replace('/explore/trending');
-        }
-      }}
-    />
-
     <Route path="poll/new" component={CreatePoll} />
 
-    <Route path="user" component={User} />
+    <Route path="poll">
+      <Route path=":id" component={Poll} queries={nodeQuery} />
+    </Route>
+
+    <Route path="user">
+      <Route path=":id" component={User} queries={nodeQuery} />
+    </Route>
 
     <Route component={Login} path="login" />
 

@@ -27,6 +27,11 @@ class NavButtons extends React.Component {
   componentDidMount() {
     this.handleResize();
     window.addEventListener('resize', this.resizeListener);
+
+    const loggedOn = this.context.viewer;
+    if (loggedOn) {
+      pages[3].path += `/${loggedOn.id}`;
+    }
   }
 
   componentWillUnmount() {
@@ -44,6 +49,7 @@ class NavButtons extends React.Component {
 
   render() {
     const loggedOn = this.context.viewer;
+
     let showPages = pages.filter((page) => {
       switch (page.label) {
         case 'Login':

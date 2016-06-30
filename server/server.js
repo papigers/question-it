@@ -24,6 +24,9 @@ export default function() {
   app.use('/graphql', graphQLHTTP({
     schema,
     graphiql: true,
+    context: {
+      viewerId: 1,
+    },
   }));
 
   app.use((req, res, next) => {

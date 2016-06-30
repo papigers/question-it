@@ -1,4 +1,5 @@
 import React from 'react';
+import Relay from 'react-relay';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Link from 'react-router/lib/Link';
 
@@ -9,7 +10,15 @@ import { ListItem } from 'material-ui/List';
 import s from './UserStats.css';
 
 class UserStats extends React.Component {
+
+  static propTypes = {
+    user: React.PropTypes.object.isRequired,
+  }
+
   render() {
+    const { user } = this.props;
+    const topPoll = user.polls.edges[0].node;
+
     return (
       <div>
         <h2 className="categoryHeader">Stats</h2>
@@ -18,28 +27,28 @@ class UserStats extends React.Component {
             <div className="col-xs-6 col-md-3">
               <Subheader className="subheader">Polls:</Subheader>
               <ListItem className="item" disabled>
-                <span className={s.stat}>5</span>
+                <span className={s.stat}>{user.pollCount}</span>
               </ListItem>
             </div>
 
             <div className="col-xs-6 col-md-3">
               <Subheader className="subheader">Votes:</Subheader>
               <ListItem className={s.item} disabled>
-                <span className={s.stat}>23</span>
+                <span className={s.stat}>{user.voteCount}</span>
               </ListItem>
             </div>
 
             <div className="col-xs-6 col-md-3">
               <Subheader className="subheader">Votes Recieved:</Subheader>
               <ListItem className="item" disabled>
-                <span className={s.stat}>23</span>
+                <span className={s.stat}>{user.recievedVotesCount}</span>
               </ListItem>
             </div>
 
             <div className="col-xs-6 col-md-3">
               <Subheader className="subheader">Most Voted Poll:</Subheader>
               <ListItem className="item" disabled>
-                <Link className={s.stat} to="/poll?id=1">Example Poll Title</Link>
+                <Link className={s.stat} to={`/poll/${topPoll.id}`}>{topPoll.title}</Link>
               </ListItem>
             </div>
 
@@ -50,4 +59,26 @@ class UserStats extends React.Component {
   }
 }
 
-export default withStyles(s)(UserStats);
+UserStats = withStyles(s)(UserStats);
+
+UserStats = Relay.createContainer(withStyles(s)(UserStats), {
+  fragments: {
+    user: (() => Relay.QL`
+      fragment on User{
+        polls(orderBy: TOP, first: 1){
+          edges{
+            node{
+              id,
+              title,
+            }
+          },
+        },
+        pollCount,
+        voteCount,
+        recievedVotesCount,
+      }
+    `),
+  },
+});
+
+export default UserStats;

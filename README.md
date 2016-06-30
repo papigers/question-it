@@ -21,8 +21,12 @@ The state is kept consisted using [`isomorphic-relay`](https://www.npmjs.com/pac
 I've created this simple application in order to learn react - front to back. Using most the involved technologies, and preferably, only them.
 
 ## TODO:
-* Finish relay bindings to routes.
-* Hooking up mongoose models and connect to GraphQl schema. 
+* ~~Finish relay query bindings to routes~~. Things left:
+  * User: social, more attributes not yet "relayed".
+  * Explore: search.
+* Hooking up mongoose models and connect to GraphQl schema.
+* Authentication, with relay too.
+* Relay mutations.
 * Solve pagination issues.
 * Create React unit tests.
 * Deploy to heroku.

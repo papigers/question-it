@@ -62,7 +62,7 @@ class VoteArea extends React.Component {
       if (this.state.multi) {
         checkbox = (
           <Checkbox
-            label={choice[0]}
+            label={choice}
             key={i}
             value={`${i}`}
             checked={() => this.state.selected[i]}
@@ -73,7 +73,7 @@ class VoteArea extends React.Component {
       else {
         checkbox = (
           <Checkbox
-            label={choice[0]}
+            label={choice}
             key={i}
             value={`${i}`}
             checked={this.state.selected === i}
