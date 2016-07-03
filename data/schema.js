@@ -16,10 +16,10 @@ import {
   connectionArgs,
   connectionDefinitions,
   connectionFromArray,
-  // cursorForObjectInConnection,
+  cursorForObjectInConnection,
   fromGlobalId,
   globalIdField,
-  // mutationWithClientMutationId,
+  mutationWithClientMutationId,
   nodeDefinitions
   // toGlobalId
 } from 'graphql-relay';
@@ -169,7 +169,7 @@ const pollType = new GraphQLObjectType({
 
 const {
   connectionType: pollConnectionType,
-  // edgeType: pollEdgeType,
+  edgeType: pollEdgeType,
 } = connectionDefinitions({
   name: 'Poll',
   nodeType: pollType,
@@ -210,15 +210,6 @@ const storeType = new GraphQLObjectType({
   name: 'Store',
   fields: (() => ({
     id: globalIdField('Store'),
-    user: {
-      type: userType,
-      args: {
-        id: {
-          type: new GraphQLNonNull(GraphQLID),
-        },
-      },
-      resolve: (store, { id }) => db.getUsers()[id],
-    },
     votes: {
       type: voteConnectionType,
       args: connectionArgs,
@@ -227,15 +218,6 @@ const storeType = new GraphQLObjectType({
     voteCount: {
       type: GraphQLInt,
       resolve: (() => db.getVotes().length),
-    },
-    poll: {
-      type: pollType,
-      args: {
-        id: {
-          type: new GraphQLNonNull(GraphQLID),
-        },
-      },
-      resolve: (store, { id }) => db.getPolls()[id],
     },
     pollCount: {
       type: GraphQLInt,
@@ -271,8 +253,59 @@ const Root = new GraphQLObjectType({
   })),
 });
 
+const CreatePollMutation = mutationWithClientMutationId({
+  name: 'CreatePoll',
+
+  inputFields: {
+    title: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    options: {
+      type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
+    },
+    author: {
+      type: new GraphQLNonNull(GraphQLID),
+    },
+  },
+
+  outputFields: {
+    pollEdge: {
+      type: pollEdgeType,
+      resolve: (poll => (
+        {
+          cursor: cursorForObjectInConnection(db.getPolls(), poll),
+          node: poll,
+        }
+      )),
+    },
+    viewer: {
+      type: userType,
+      resolve: ((root, args, { viewerId }) => db.getUser(viewerId)),
+    },
+    store: {
+      type: storeType,
+      resolve: (() => store),
+    },
+  },
+
+  mutateAndGetPayload: ({ title, options, author }) => {
+    const { id: authorId } = fromGlobalId(author);
+    const poll = db.createPoll(title, options, authorId);
+    return poll;
+  },
+
+});
+
+const Mutation = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: {
+    createPoll: CreatePollMutation,
+  },
+});
+
 const schema = new GraphQLSchema({
   query: Root,
+  mutation: Mutation,
 });
 
 export default schema;

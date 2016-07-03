@@ -25,15 +25,18 @@ class PollItem extends React.Component {
     ));
     poll.votes.edges.forEach(vote => votes[vote.node.option].votes++);
 
+    const noVotes = votes.every((vote) => vote.votes === 0);
+
     let colorSpread =
         votes.map(
           (vote, i) => (
             <div
               key={i}
               className={s.colorSpread}
-              style={{ flexGrow: vote.votes, backgroundColor: chartColors[i] }}
+              style={{ flexGrow: (noVotes ? 1 : vote.votes), backgroundColor: chartColors[i] }}
             >
-              {vote.votes ?
+              {(vote.votes || noVotes)
+                  ?
                 <span className={s.tooltip}>
                   {vote.option}: {vote.votes} {vote.votes === 1 ? 'vote' : 'votes'}
                 </span>

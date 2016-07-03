@@ -11,7 +11,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 const environment = new Relay.Environment();
 environment.injectNetworkLayer(new Relay.DefaultNetworkLayer('/graphql'));
 
-const data = JSON.parse(JSON.parse(document.getElementById('preloadedData').textContent));
+const data = JSON.parse(document.getElementById('preloadedData').textContent);
 
 IsomorphicRelay.injectPreparedData(environment, data);
 

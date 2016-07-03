@@ -56,12 +56,13 @@ Home = Relay.createContainer(Home, {
 
   initialVariables: {
     limit: 4,
+    sort: 'TRENDING',
   },
 
   fragments: {
     store: () => Relay.QL`
       fragment on Store{
-        polls(orderBy: TRENDING, first: $limit){
+        polls(orderBy: $sort, first: $limit){
           edges{
             node{
               id,

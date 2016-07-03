@@ -48,6 +48,13 @@ class Poll extends React.Component {
     node: React.PropTypes.object.isRequired,
   }
 
+  constructor() {
+    super();
+    this.state = {
+      noVotes: false,
+    };
+  }
+
   componentDidMount() {
     this.loadGoogleCharts = getGoogleChartsLoader();
     const self = this;
@@ -62,7 +69,7 @@ class Poll extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.loadGoogleCharts.loaded) {
+    if (this.loadGoogleCharts.loaded && !this.state.noVotes) {
       this.drawChart();
     }
   }
@@ -79,6 +86,12 @@ class Poll extends React.Component {
       ]
     ));
     node.votes.edges.forEach(vote => votes[vote.node.option][1]++);
+
+    const noVotes = votes.every(vote => vote[1] === 0);
+    if (noVotes) {
+      this.setState({ noVotes });
+      return;
+    }
 
     const data = new google.visualization.DataTable(); // eslint-disable-line no-undef
     data.addColumn('string', 'Options');
@@ -105,28 +118,38 @@ class Poll extends React.Component {
 
   render() {
     const { node } = this.props;
+    const { noVotes } = this.state;
+
     return (
       <div className="container ChartPage">
         <div className="row">
           <div id="chart-col" className="col-xs-12 col-md-7">
             <div id="chart-div">
-              <div
-                style={{
-                  display: 'flex',
-                  flex: '1',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <div style={{ position: 'relative', alignSelf: 'center' }}>
-                  <RefreshIndicator
-                    size={90}
-                    left={-50}
-                    top={150}
-                    status="loading"
-                  />
+              {(noVotes)
+                ?
+                <div className="center-text" style={{ marginTop: 50 }}>
+                  <h1>No Votes</h1>
+                  <h3>Be the first!</h3>
                 </div>
-              </div>
+                :
+                <div
+                  style={{
+                    display: 'flex',
+                    flex: '1',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <div style={{ position: 'relative', alignSelf: 'center' }}>
+                    <RefreshIndicator
+                      size={90}
+                      left={-50}
+                      top={150}
+                      status="loading"
+                    />
+                  </div>
+                </div>
+              }
             </div>
           </div>
 

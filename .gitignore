@@ -31,3 +31,4 @@ build
 # Debug log from npm
 npm-debug.log
 npm-debug.log.*
+/build/

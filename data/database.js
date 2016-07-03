@@ -3,7 +3,12 @@
 export class User {
   constructor(obj) {
     for (let prop in obj) {
-      this[prop] = obj[prop];
+      if (prop === 'timestamp') {
+        this[prop] = new Date(obj[prop]);
+      }
+      else {
+        this[prop] = obj[prop];
+      }
     }
   }
 }
@@ -11,7 +16,12 @@ export class User {
 export class Poll {
   constructor(obj) {
     for (let prop in obj) {
-      this[prop] = obj[prop];
+      if (prop === 'timestamp') {
+        this[prop] = new Date(obj[prop]);
+      }
+      else {
+        this[prop] = obj[prop];
+      }
     }
   }
 }
@@ -19,7 +29,12 @@ export class Poll {
 export class Vote {
   constructor(obj) {
     for (let prop in obj) {
-      this[prop] = obj[prop];
+      if (prop === 'timestamp') {
+        this[prop] = new Date(obj[prop]);
+      }
+      else {
+        this[prop] = obj[prop];
+      }
     }
   }
 }
@@ -83,13 +98,16 @@ for (let i = 0; i < users.length; i++) {
 }
 */
 
+function findById(item) {
+  return item.id === this;
+}
 
 export function getViewer() {
   return users[0];
 }
 
 export function getUser(id) {
-  return users[id - 1];
+  return users.find(findById, +id);
 }
 
 export function getUsers() {
@@ -97,7 +115,7 @@ export function getUsers() {
 }
 
 export function getPoll(id) {
-  return polls[id - 1];
+  return polls.find(findById, +id);
 }
 
 export function getPolls(orderBy = 1) {
@@ -105,7 +123,7 @@ export function getPolls(orderBy = 1) {
 }
 
 export function getVote(id) {
-  return votes[id - 1];
+  return votes.find(findById, +id);
 }
 
 export function getVotes() {
@@ -127,7 +145,7 @@ export function getUserRecievedVotes(id) {
 }
 
 export function getPollAuthor(id) {
-  return users[polls[id - 1].author - 1];
+  return getUser(getPoll(id).author);
 }
 
 export function getPollVotes(id) {
@@ -135,15 +153,15 @@ export function getPollVotes(id) {
 }
 
 export function getVoteUser(id) {
-  return users[votes[id - 1].user - 1];
+  return getUser(getVote(id).user);
 }
 
 export function getVotePoll(id) {
-  return polls[votes[id - 1].poll - 1];
+  return getPoll(getVote(id).poll);
 }
 
 function sortByTime(a, b) {
-  return a.timestamp <= b.timestamp;
+  return b.timestamp - a.timestamp;
 }
 
 function orderPolls(unordered, orderBy) {
@@ -159,7 +177,7 @@ function orderPolls(unordered, orderBy) {
 }
 
 function topPolls(unordered) {
-  return unordered.sort((pA, pB) => pA.votes.length <= pB.votes.length);
+  return unordered.sort((pA, pB) => getPollVotes(pB.id).length - getPollVotes(pA.id).length);
 }
 
 function newPolls(unordered) {
@@ -168,10 +186,29 @@ function newPolls(unordered) {
 
 function trendingPolls(unordered) {
   return unordered.sort((pA, pB) => {
-    const vA = pA.votes;
-    const vB = pB.votes;
+    const vA = getPollVotes(pA.id);
+    const vB = getPollVotes(pB.id);
     vA.sort(sortByTime);
     vB.sort(sortByTime);
-    return vA.timestamp >= vB.timestamp;
+    if (vA.length === 0) {
+      return true;
+    }
+    if (vB.length === 0) {
+      return false;
+    }
+
+    return sortByTime(vA[0], vB[0]);
   });
+}
+
+export function createPoll(title, options, userId) {
+  const poll = new Poll({
+    id: polls.length + 1,
+    title,
+    options,
+    author: +userId,
+    timestamp: new Date(),
+  });
+  polls.push(poll);
+  return poll;
 }

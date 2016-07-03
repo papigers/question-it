@@ -7,7 +7,6 @@ import { renderToString } from 'react-dom/server';
 import { match } from 'react-router';
 import Relay from 'react-relay';
 import IsomorphicRouter from 'isomorphic-relay-router';
-import createLocation from 'history/lib/createLocation';
 
 import routes from '../shared/routes';
 import Root from '../shared/root';
@@ -30,9 +29,8 @@ export default function() {
   }));
 
   app.use((req, res, next) => {
-    const location = createLocation(req.url);
     const css = [];
-    match({ routes, location }, (err, redirectLocation, renderProps) => {
+    match({ routes, location: req.url }, (err, redirectLocation, renderProps) => {
       if (err) {
         // return res.status(500).end('Internal server error');
         next(err);
@@ -58,8 +56,6 @@ export default function() {
           </Root>
         );
 
-        const preloadedData = JSON.stringify(data);
-
         const componentHTML = renderToString(InitialComponent);
         const HTML = `
         <!DOCTYPE html>
@@ -77,7 +73,7 @@ export default function() {
           <body>
             <div id="react-view">${componentHTML}</div>
             <script id="preloadedData" type="application/json" src="">
-              ${JSON.stringify(preloadedData).replace(/\//g, '\\/')}
+              ${JSON.stringify(data)}
             </script>
           </body>
         </html>

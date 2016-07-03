@@ -1,11 +1,15 @@
 import React from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
+import Relay from 'react-relay';
+import { CreatePollMutation } from '../../mutations';
+
 import TextField from 'material-ui/TextField';
 import Checkbox from 'material-ui/Checkbox';
 import Paper from 'material-ui/Paper';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import FlatButton from 'material-ui/FlatButton';
+import Dialog from 'material-ui/Dialog';
 import IconButton from 'material-ui/IconButton';
 import Divider from 'material-ui/Divider';
 import { List, ListItem } from 'material-ui/List';
@@ -16,8 +20,15 @@ import s from './CreatePoll.css';
 
 class CreatePoll extends React.Component {
   
+  static propTypes = {
+    relay: React.PropTypes.object.isRequired,
+    viewer: React.PropTypes.object.isRequired,
+    store: React.PropTypes.object.isRequired,
+  }
+
   static contextTypes = {
     muiTheme: React.PropTypes.object.isRequired,
+    router: React.PropTypes.object.isRequired,
   }
   
   constructor() {
@@ -31,6 +42,9 @@ class CreatePoll extends React.Component {
       titleError: '',
       answerError: '',
       titleFocus: false,
+      submitDisabled: false,
+      addDisabled: false,
+      failDialog: false,
     };
   }
 
@@ -38,10 +52,10 @@ class CreatePoll extends React.Component {
     const { answers, answer } = this.state;
     if (answer !== '') {
       answers.push(answer);
-      this.setState({ answers, answer: '', error: '', answerError: '' });
+      this.setState({ answers, answer: '', error: '', answerError: '', submitDisabled: false });
     }
     else {
-      this.setState({ answerError: "Answer can't be empty" });
+      this.setState({ answerError: "Answer can't be empty", addDisabled: true });
     }
   }
 
@@ -52,11 +66,11 @@ class CreatePoll extends React.Component {
   }
 
   changeTitle = (event) => {
-    this.setState({ title: event.target.value, titleError: '' });
+    this.setState({ title: event.target.value, titleError: '', submitDisabled: false });
   }
 
   changeAnswer = (event) => {
-    this.setState({ answer: event.target.value, answerError: '' });
+    this.setState({ answer: event.target.value, answerError: '', addDisabled: false });
   }
 
   keyPress = (event) => {
@@ -69,16 +83,40 @@ class CreatePoll extends React.Component {
     this.setState({ multiple: !this.state.multiple });
   }
 
-  submit = () => {
+  validateSubmission = () => {
     let error = '';
     let titleError = '';
-    if (this.state.answers.length === 0) {
-      error = 'Poll must have answers';
+    let submitDisabled = false;
+    if (this.state.answers.length < 2) {
+      error = 'Poll must have at least 2 options';
+      submitDisabled = true;
     }
     if (this.state.title === '') {
       titleError = 'Poll must have a title';
+      submitDisabled = true;
     }
-    this.setState({ error, titleError });
+    this.setState({ error, titleError, submitDisabled });
+    if (!submitDisabled) {
+      this.submit();
+    }
+  }
+
+  submit = () => {
+    const { relay, viewer, store } = this.props;
+    const { title, answers: options } = this.state;
+
+    relay.commitUpdate(
+      new CreatePollMutation({ viewer, store, options, title }),
+      {
+        onSuccess: (res) => {
+          const { node } = res.createPoll.pollEdge;
+          return this.context.router.push(`/poll/${node.id}`);
+        },
+        onFailure() {
+          this.setState({ failDialog: true });
+        },
+      }
+    );
   }
 
   titleFocus = () => {
@@ -97,10 +135,12 @@ class CreatePoll extends React.Component {
          error,
          titleError,
          answerError,
-         titleFocus } = this.state;
+         titleFocus,
+         submitDisabled,
+         addDisabled } = this.state;
 
     let answerList = answers.map((item, i) => (
-      <div>
+      <div key={i}>
         <Divider />
         <ListItem
           rightIconButton={
@@ -112,7 +152,6 @@ class CreatePoll extends React.Component {
             </IconButton>
           }
           primaryText={item}
-          key={i}
         />
         <Divider />
       </div>
@@ -120,6 +159,21 @@ class CreatePoll extends React.Component {
 
     return (
       <div className="container">
+        <Dialog
+          title="Poll Creation Failed"
+          actions={
+            <FlatButton
+              label="OK"
+              primary
+              onTouchTap={() => this.setState({ failDialog: false })}
+            />
+          }
+          modal
+          open={this.state.failDialog}
+        >
+          Oops, Maybe try again later!
+        </Dialog>
+
         <div className="row">
           <h1 className="center-text">Create Poll</h1>
           <div className="center-text col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
@@ -161,6 +215,7 @@ class CreatePoll extends React.Component {
                 secondary
                 className={s.add}
                 onMouseUp={this.addAnswer}
+                disabled={addDisabled || answers.length === 10}
               >
                 <Add />
               </FloatingActionButton>
@@ -176,7 +231,8 @@ class CreatePoll extends React.Component {
             <FlatButton
               primary
               label="Create Poll"
-              onMouseUp={this.submit}
+              onMouseUp={this.validateSubmission}
+              disabled={submitDisabled}
             />
             <span className={s.error}>{error}</span>
           </div>
@@ -186,4 +242,22 @@ class CreatePoll extends React.Component {
   }
 }
 
-export default withStyles(s)(CreatePoll);
+CreatePoll = withStyles(s)(CreatePoll);
+
+CreatePoll = Relay.createContainer(CreatePoll, {
+
+  fragments: {
+    viewer: (() => Relay.QL`
+      fragment on User{
+        ${CreatePollMutation.getFragment('viewer')}
+      }
+    `),
+    store: (() => Relay.QL`
+      fragment on Store {
+        ${CreatePollMutation.getFragment('store')},
+      },
+    `),
+  },
+});
+
+export default CreatePoll;
