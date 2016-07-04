@@ -32,6 +32,9 @@ export class Vote {
       if (prop === 'timestamp') {
         this[prop] = new Date(obj[prop]);
       }
+      else if (prop === 'option') {
+        this.options = [obj[prop]];
+      }
       else {
         this[prop] = obj[prop];
       }
@@ -201,11 +204,12 @@ function trendingPolls(unordered) {
   });
 }
 
-export function createPoll(title, options, userId) {
+export function createPoll(title, options, userId, multi) {
   const poll = new Poll({
     id: polls.length + 1,
     title,
     options,
+    multi,
     author: +userId,
     timestamp: new Date(),
   });

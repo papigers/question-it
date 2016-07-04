@@ -85,7 +85,7 @@ class Poll extends React.Component {
         0,
       ]
     ));
-    node.votes.edges.forEach(vote => votes[vote.node.option][1]++);
+    node.votes.edges.forEach(vote => vote.node.options.forEach(option => votes[option][1]++));
 
     const noVotes = votes.every(vote => vote[1] === 0);
     if (noVotes) {
@@ -157,6 +157,7 @@ class Poll extends React.Component {
             <VoteArea
               choices={node.options}
               title={node.title}
+              multi={node.multi}
               onSubmit={this.onSubmitVote}
             />
           </div>
@@ -178,11 +179,12 @@ Poll = Relay.createContainer(Poll, {
       fragments on Poll{
         id,
         title,
+        multi,
         options,
         votes(first: $optionLimit){
           edges{
             node{
-              option
+              options
             }
           }
         }

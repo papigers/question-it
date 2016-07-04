@@ -65,7 +65,7 @@ class VoteArea extends React.Component {
             label={choice}
             key={i}
             value={`${i}`}
-            checked={() => this.state.selected[i]}
+            checked={this.state.selected[i]}
             onCheckFunc={() => this.onChangeCheckbox(i)}
           />
         );

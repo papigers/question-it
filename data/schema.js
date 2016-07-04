@@ -5,6 +5,7 @@ import {
   GraphQLInt,
   GraphQLID,
   GraphQLNonNull,
+  GraphQLBoolean,
   GraphQLString,
   GraphQLList,
   GraphQLEnumType
@@ -72,11 +73,11 @@ const pollSortEnum = new GraphQLEnumType({
   values: {
     TRENDING: {
       value: 1,
-      description: 'Trending polls',
+      description: 'Trending polls: polls with the most recent votes.',
     },
-    NEW: {
+    RECENT: {
       value: 2,
-      description: 'Newest polls',
+      description: 'Newest polls: polls that were recently created.',
     },
     TOP: {
       value: 3,
@@ -146,6 +147,9 @@ const pollType = new GraphQLObjectType({
     options: {
       type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
     },
+    multi: {
+      type: GraphQLBoolean,
+    },
     votes: {
       type: voteConnectionType,
       args: connectionArgs,
@@ -188,8 +192,8 @@ const voteType = new GraphQLObjectType({
       type: new GraphQLNonNull(pollType),
       resolve: ((vote) => db.getVotePoll(vote.id)),
     },
-    option: {
-      type: new GraphQLNonNull(GraphQLInt),
+    options: {
+      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLInt))),
     },
     timestamp: {
       type: new GraphQLNonNull(GraphQLDate),
@@ -260,6 +264,9 @@ const CreatePollMutation = mutationWithClientMutationId({
     title: {
       type: new GraphQLNonNull(GraphQLString),
     },
+    multi: {
+      type: GraphQLBoolean,
+    },
     options: {
       type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
     },
@@ -288,9 +295,9 @@ const CreatePollMutation = mutationWithClientMutationId({
     },
   },
 
-  mutateAndGetPayload: ({ title, options, author }) => {
+  mutateAndGetPayload: ({ title, multi, options, author }) => {
     const { id: authorId } = fromGlobalId(author);
-    const poll = db.createPoll(title, options, authorId);
+    const poll = db.createPoll(title, options, authorId, multi);
     return poll;
   },
 

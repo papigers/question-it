@@ -23,7 +23,7 @@ class PollItem extends React.Component {
         votes: 0,
       }
     ));
-    poll.votes.edges.forEach(vote => votes[vote.node.option].votes++);
+    poll.votes.edges.forEach(vote => vote.node.options.forEach(option => votes[option].votes++));
 
     const noVotes = votes.every((vote) => vote.votes === 0);
 
@@ -90,7 +90,7 @@ PollItem = Relay.createContainer(PollItem, {
         votes(first: $optionsLimit){
           edges{
             node{
-              option
+              options
             }
           }
         },

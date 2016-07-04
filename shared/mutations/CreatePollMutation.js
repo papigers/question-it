@@ -9,6 +9,7 @@ export default class CreatePollMutation extends Relay.Mutation {
   getVariables() {
     return {
       title: this.props.title,
+      multi: this.props.multi,
       options: this.props.options,
       author: this.props.viewer.id,
     };
@@ -61,7 +62,7 @@ export default class CreatePollMutation extends Relay.Mutation {
   }
 
   getOptimisticResponse() {
-    const { viewer, store, title, options } = this.props;
+    const { viewer, store, title, options, multi } = this.props;
 
     return {
       store: {
@@ -76,6 +77,7 @@ export default class CreatePollMutation extends Relay.Mutation {
         node: {
           title,
           options,
+          multi,
           author: viewer,
           timestamp: new Date(),
         },

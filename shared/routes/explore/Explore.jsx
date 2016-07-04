@@ -17,9 +17,9 @@ const explore = {
     header: 'Top',
     sort: 'TOP',
   },
-  new: {
-    header: 'New',
-    sort: 'NEW',
+  recent: {
+    header: 'Recent',
+    sort: 'RECENT',
   },
   search: {
     header: 'Search',

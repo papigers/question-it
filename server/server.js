@@ -61,7 +61,8 @@ export default function() {
         <!DOCTYPE html>
         <html>
           <head>
-            <meta charset="utf-8">
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+            <meta http-equiv="Content-Style-Type" content="text/css">
             <meta name="theme-color" content="#950000">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Question It - Online Polls</title>

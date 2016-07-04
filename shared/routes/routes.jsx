@@ -37,7 +37,7 @@ export default (
           const { pathname } = nextState.location;
           let tab = /^\/explore\/(\w*)/.exec(pathname)[1];
           tab = tab.toLowerCase();
-          if (['trending', 'top', 'new', 'search'].indexOf(tab) < 0) {
+          if (['trending', 'top', 'recent', 'search'].indexOf(tab) < 0) {
             replace('/explore/trending');
           }
         }}

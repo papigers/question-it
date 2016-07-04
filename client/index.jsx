@@ -8,21 +8,31 @@ import IsomorphicRouter from 'isomorphic-relay-router';
 import IsomorphicRelay from 'isomorphic-relay';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
-const environment = new Relay.Environment();
-environment.injectNetworkLayer(new Relay.DefaultNetworkLayer('/graphql'));
+const loadedStates = ['complete', 'loaded', 'interactive'];
+if (loadedStates.includes(document.readyState) && document.body) {
+  run();
+}
+else {
+  window.addEventListener('DOMContentLoaded', run, false);
+}
 
-const data = JSON.parse(document.getElementById('preloadedData').textContent);
+function run() {
+  const environment = new Relay.Environment();
+  environment.injectNetworkLayer(new Relay.DefaultNetworkLayer('/graphql'));
 
-IsomorphicRelay.injectPreparedData(environment, data);
+  const data = JSON.parse(document.getElementById('preloadedData').textContent);
 
-injectTapEventPlugin();
+  IsomorphicRelay.injectPreparedData(environment, data);
 
-match({ routes, history: browserHistory }, (error, redirectLocation, renderProps) => {
-  IsomorphicRouter.prepareInitialRender(environment, renderProps).then(props => {
-    render(
-      <Root onInsertCss={(styles) => styles._insertCss()}>
-        <Router {...props} onUpdate={() => window.scrollTo(0, 0)} />
-      </Root>,
-      document.getElementById('react-view'));
+  injectTapEventPlugin();
+
+  match({ routes, history: browserHistory }, (error, redirectLocation, renderProps) => {
+    IsomorphicRouter.prepareInitialRender(environment, renderProps).then(props => {
+      render(
+        <Root onInsertCss={(styles) => styles._insertCss()}>
+          <Router {...props} onUpdate={() => window.scrollTo(0, 0)} />
+        </Root>,
+        document.getElementById('react-view'));
+    });
   });
-});
+}

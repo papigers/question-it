@@ -21,7 +21,7 @@ class ExploreTabs extends React.Component {
       <Tabs value={tab} onChange={this.switchTabs}>
         <Tab label="trending" value="trending" />
         <Tab label="top" value="top" />
-        <Tab label="new" value="new" />
+        <Tab label="recent" value="recent" />
       </Tabs>
     );
   }

@@ -37,7 +37,7 @@ class CreatePoll extends React.Component {
       answers: [],
       title: '',
       answer: '',
-      multiple: false,
+      multi: false,
       error: '',
       titleError: '',
       answerError: '',
@@ -80,7 +80,7 @@ class CreatePoll extends React.Component {
   }
 
   multipleCheck = () => {
-    this.setState({ multiple: !this.state.multiple });
+    this.setState({ multi: !this.state.multi });
   }
 
   validateSubmission = () => {
@@ -103,18 +103,16 @@ class CreatePoll extends React.Component {
 
   submit = () => {
     const { relay, viewer, store } = this.props;
-    const { title, answers: options } = this.state;
+    const { title, answers: options, multi } = this.state;
 
     relay.commitUpdate(
-      new CreatePollMutation({ viewer, store, options, title }),
+      new CreatePollMutation({ viewer, store, options, title, multi }),
       {
         onSuccess: (res) => {
           const { node } = res.createPoll.pollEdge;
           return this.context.router.push(`/poll/${node.id}`);
         },
-        onFailure() {
-          this.setState({ failDialog: true });
-        },
+        onFailure: () => this.setState({ failDialog: true }),
       }
     );
   }
@@ -131,7 +129,7 @@ class CreatePoll extends React.Component {
     const { answer,
          title,
          answers,
-         multiple,
+         multi,
          error,
          titleError,
          answerError,
@@ -223,7 +221,7 @@ class CreatePoll extends React.Component {
 
             <Checkbox
               label="Enable multiple answers?"
-              checked={multiple}
+              checked={multi}
               onCheck={this.multipleCheck}
               className={s.checkbox}
             />
