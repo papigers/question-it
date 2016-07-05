@@ -48,7 +48,11 @@ export default (
     <Route path="poll/new" component={CreatePoll} queries={{ ...storeQuery, ...viewerQuery }} />
 
     <Route path="poll">
-      <Route path=":id" component={Poll} queries={nodeQuery} />
+      <Route
+        path=":id"
+        component={Poll}
+        queries={{ ...nodeQuery, ...viewerQuery, ...storeQuery }}
+      />
     </Route>
 
     <Route path="user">

@@ -216,3 +216,15 @@ export function createPoll(title, options, userId, multi) {
   polls.push(poll);
   return poll;
 }
+
+export function createVote(user, poll, options) {
+  const vote = new Vote({
+    id: votes.length + 1,
+    user: +user,
+    poll: +poll,
+    options,
+    timestamp: new Date(),
+  });
+  votes.push(vote);
+  return vote;
+}

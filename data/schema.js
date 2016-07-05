@@ -186,7 +186,7 @@ const voteType = new GraphQLObjectType({
     id: globalIdField('Vote'),
     user: {
       type: new GraphQLNonNull(userType),
-      resolve: ((vote) => db.getVote(vote.id)),
+      resolve: ((vote) => db.getVoteUser(vote.id)),
     },
     poll: {
       type: new GraphQLNonNull(pollType),
@@ -204,7 +204,7 @@ const voteType = new GraphQLObjectType({
 
 const {
   connectionType: voteConnectionType,
-  // edgeType: voteEdgeType,
+  edgeType: voteEdgeType,
 } = connectionDefinitions({
   name: 'Vote',
   nodeType: voteType,
@@ -303,10 +303,63 @@ const CreatePollMutation = mutationWithClientMutationId({
 
 });
 
+const CreateVoteMutation = mutationWithClientMutationId({
+  name: 'VotePoll',
+  
+  inputFields: {
+    poll: {
+      type: new GraphQLNonNull(GraphQLID),
+    },
+    user: {
+      type: new GraphQLNonNull(GraphQLID),
+    },
+    options: {
+      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLInt))),
+    },
+  },
+  
+  outputFields: {
+    voteEdge: {
+      type: voteEdgeType,
+      resolve: (({ voteId }) => {
+        const vote = db.getVote(voteId);
+        return {
+          cursor: cursorForObjectInConnection(db.getVotes(), vote),
+          node: vote,
+        };
+      }),
+    },
+    viewer: {
+      type: userType,
+      resolve: ((root, args, { viewerId }) => db.getUser(viewerId)),
+    },
+    store: {
+      type: storeType,
+      resolve: (() => store),
+    },
+    poll: {
+      type: pollType,
+      resolve: (({ pollId }) => db.getPoll(pollId)),
+    },
+  },
+  
+  mutateAndGetPayload: ({ poll, user, options }) => {
+    const { id: pollId } = fromGlobalId(poll);
+    const { id: userId } = fromGlobalId(user);
+    const vote = db.createVote(userId, pollId, options);
+    return {
+      voteId: vote.id,
+      pollId,
+    };
+  },
+  
+});
+
 const Mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
     createPoll: CreatePollMutation,
+    votePoll: CreateVoteMutation,
   },
 });
 

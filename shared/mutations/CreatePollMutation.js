@@ -21,8 +21,8 @@ export default class CreatePollMutation extends Relay.Mutation {
         pollEdge,
         viewer{
           pollCount,
-          polls
-        },
+          polls,
+        }
         store{
           pollCount,
           polls,
@@ -44,6 +44,14 @@ export default class CreatePollMutation extends Relay.Mutation {
         type: 'RANGE_ADD',
         parentName: 'store',
         parentID: this.props.store.id,
+        connectionName: 'polls',
+        edgeName: 'pollEdge',
+        rangeBehaviors: (() => 'append'),
+      },
+      {
+        type: 'RANGE_ADD',
+        parentName: 'viewer',
+        parentID: this.props.viewer.id,
         connectionName: 'polls',
         edgeName: 'pollEdge',
         rangeBehaviors: (() => 'append'),

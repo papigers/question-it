@@ -21,7 +21,7 @@ const AUTOPREFIXER_BROWSERS = [
 
 const config = {
   context: path.resolve(__dirname, '..'),
-  entry: ['babel-polyfill', path.resolve(__dirname, '../client/index.jsx')],
+  entry: [path.resolve(__dirname, '../client/index.jsx')],
   resolve: {
     modulesDirectories: ['node_modules', 'shared'],
     extensions: ['', '.js', '.jsx'],

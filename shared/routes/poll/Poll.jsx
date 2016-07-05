@@ -46,8 +46,10 @@ class Poll extends React.Component {
 
   static propTypes = {
     node: React.PropTypes.object.isRequired,
+    store: React.PropTypes.object.isRequired,
+    viewer: React.PropTypes.object.isRequired,
   }
-
+  
   constructor() {
     super();
     this.state = {
@@ -55,7 +57,7 @@ class Poll extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     this.loadGoogleCharts = getGoogleChartsLoader();
     const self = this;
     if (!this.loadGoogleCharts.loaded) {
@@ -68,16 +70,13 @@ class Poll extends React.Component {
     }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate = () => {
     if (this.loadGoogleCharts.loaded && !this.state.noVotes) {
       this.drawChart();
     }
   }
 
-  onSubmitVote = () => {
-  }
-
-  drawChart() {
+  drawChart = () => {
     const { node } = this.props;
     const votes = node.options.map((option) => (
       [
@@ -88,8 +87,12 @@ class Poll extends React.Component {
     node.votes.edges.forEach(vote => vote.node.options.forEach(option => votes[option][1]++));
 
     const noVotes = votes.every(vote => vote[1] === 0);
-    if (noVotes) {
+    
+    if (noVotes !== this.state.noVotes) {
       this.setState({ noVotes });
+    }
+
+    if (noVotes) {
       return;
     }
 
@@ -116,8 +119,9 @@ class Poll extends React.Component {
     chart.draw(data, options);
   }
 
-  render() {
-    const { node } = this.props;
+
+  render = () => {
+    const { node, store, viewer } = this.props;
     const { noVotes } = this.state;
 
     return (
@@ -155,10 +159,10 @@ class Poll extends React.Component {
 
           <div className="col-xs-12 col-md-5">
             <VoteArea
-              choices={node.options}
-              title={node.title}
-              multi={node.multi}
-              onSubmit={this.onSubmitVote}
+              poll={node}
+              viewer={viewer}
+              store={store}
+              onSubmit={this.drawChart}
             />
           </div>
         </div>
@@ -171,23 +175,31 @@ Poll = withStyles(s)(Poll);
 
 Poll = Relay.createContainer(Poll, {
   initialVariables: {
-    optionLimit: 10,
+    votesPage: 10,
   },
 
   fragments: {
     node: (() => Relay.QL`
       fragments on Poll{
-        id,
-        title,
-        multi,
         options,
-        votes(first: $optionLimit){
+        votes(first: $votesPage){
           edges{
             node{
               options
             }
           }
-        }
+        },
+        ${VoteArea.getFragment('poll')}
+      }
+    `),
+    viewer: (() => Relay.QL`
+      fragment on User{
+        ${VoteArea.getFragment('viewer')}
+      }
+    `),
+    store: (() => Relay.QL`
+      fragment on Store{
+        ${VoteArea.getFragment('store')}
       }
     `),
   },
