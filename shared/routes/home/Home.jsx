@@ -55,7 +55,7 @@ Home = withStyles(s)(Home);
 Home = Relay.createContainer(Home, {
 
   initialVariables: {
-    limit: 4,
+    limit: 8,
     sort: 'TRENDING',
   },
 

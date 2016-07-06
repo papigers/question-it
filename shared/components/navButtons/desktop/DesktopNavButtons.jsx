@@ -15,7 +15,7 @@ class DesktopNavButtons extends React.Component {
   render() {
     const { pages, isActive } = this.props;
     return (
-      <div className={s.root}>
+      <div className={`hide-sm-down ${s.root}`}>
         {
           pages.map(
             (obj, i) => (
@@ -27,6 +27,7 @@ class DesktopNavButtons extends React.Component {
                 label={obj.label}
                 secondary={isActive(obj.path)}
                 className={s.navBtn}
+                style={{ whiteSpace: 'nowrap' }}
                 key={i}
               />
             )

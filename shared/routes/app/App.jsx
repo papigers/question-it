@@ -14,9 +14,11 @@ class App extends React.Component {
   static propTypes = {
     routes: React.PropTypes.array.isRequired,
     location: React.PropTypes.object.isRequired,
-    children: React.PropTypes.element.isRequired,
+    main: React.PropTypes.element.isRequired,
     params: React.PropTypes.object,
     viewer: React.PropTypes.object,
+    tabs: React.PropTypes.element,
+    flexibleSpace: React.PropTypes.element,
   }
 
   static childContextTypes = {
@@ -34,21 +36,7 @@ class App extends React.Component {
   }
 
   render() {
-    let flexibleSpace = this.context.router.isActive('/', true) ? (
-			React.createElement(
-        require('./homeToolbar/flexibleSpace'), // eslint-disable-line global-require
-        { logo }
-      )
-		) : null;
-
-    let tabs = null;
-    if (this.context.router.isActive('/explore')) {
-      const tab = this.props.params.tab;
-      const { Tabs, FlexibleSpace } =
-          require('./exploreToolbar'); // eslint-disable-line global-require
-      tabs = React.createElement(Tabs, { tab });
-      flexibleSpace = React.createElement(FlexibleSpace, { query: this.props.location.query.q });
-    }
+    const { main, flexibleSpace, tabs } = this.props;
 
     return (
       <div id="app-view">
@@ -57,14 +45,17 @@ class App extends React.Component {
             onLogoClick={this.onLogoClick}
             zDepth={2}
             title="QUESTION IT"
-            flexibleSpaceElement={flexibleSpace}
+            flexibleSpaceElement={
+              flexibleSpace ?
+                React.cloneElement(flexibleSpace, { logo }) : null
+            }
             logoUrl={logo}
             tabsElement={tabs}
           />
         </header>
 
         <main>
-					{this.props.children}
+					{main}
         </main>
 
         <footer>

@@ -103,25 +103,25 @@ footer {
 
   & .hide-md-down {
     @media(--max-md) {
-      display: none;
+      display: none !important;
     }
   }
 
   & .hide-md-up {
     @media(--min-md) {
-      display: none;
+      display: none !important;
     }
   }
 
   & .hide-sm-down {
     @media(--max-sm) {
-      display: none;
+      display: none !important;
     }
   }
 
   & .hide-sm-up {
     @media(--min-sm) {
-      display: none;
+      display: none !important;
     }
   }
 }

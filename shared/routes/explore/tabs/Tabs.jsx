@@ -8,7 +8,7 @@ class ExploreTabs extends React.Component {
   }
 
   static propTypes = {
-    tab: React.PropTypes.string.isRequired,
+    params: React.PropTypes.object.isRequired,
   }
 
   switchTabs = (tab) => {
@@ -16,7 +16,7 @@ class ExploreTabs extends React.Component {
   }
 
   render() {
-    let tab = this.props.tab;
+    let tab = this.props.params.tab;
     return (
       <Tabs value={tab} onChange={this.switchTabs}>
         <Tab label="trending" value="trending" />

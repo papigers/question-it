@@ -28,7 +28,7 @@ class MobileNavButtons extends React.Component {
         }
         anchorOrigin={{ horizontal: 'middle', vertical: 'center' }}
         targetOrigin={{ horizontal: 'right', vertical: 'top' }}
-        className={s.navBtn}
+        className={`hide-sm-up ${s.navBtn}`}
       >
 				{
 					pages.map(

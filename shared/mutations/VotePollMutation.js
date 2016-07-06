@@ -21,10 +21,12 @@ export default class VotePollMutation extends Relay.Mutation {
         store{
           voteCount,
           votes,
+          polls
         },
         viewer{
           voteCount,
           votes,
+          polls
         }
         poll{
           voteCount,

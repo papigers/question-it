@@ -4,9 +4,9 @@ import { Route, IndexRoute, IndexRedirect } from 'react-router';
 import { storeQuery, viewerQuery, nodeQuery } from '../queries';
 
 import App from './app';
-import Home from './home';
+import Home, { HomeFlexibleSpace } from './home';
 import Login from './login';
-import Explore from './explore';
+import Explore, { ExploreTabs, ExploreFlexibleSpace } from './explore';
 import CreatePoll from './createPoll';
 import Poll from './poll';
 import User from './user';
@@ -14,15 +14,18 @@ import User from './user';
 export default (
   <Route component={App} path="/" queries={viewerQuery}>
 
-    <IndexRoute component={Home} queries={storeQuery} />
+    <IndexRoute
+      components={{ main: Home, flexibleSpace: HomeFlexibleSpace }}
+      queries={{ main: storeQuery }}
+    />
 
     <Route path="explore">
 
       <IndexRedirect to="trending" />
       <Route
         path=":tab"
-        component={Explore}
-        queries={storeQuery}
+        components={{ main: Explore, flexibleSpace: ExploreFlexibleSpace, tabs: ExploreTabs }}
+        queries={{ main: storeQuery }}
         prepareParams={
           function prepareTabParams(params) {
             let { tab } = params;
@@ -45,21 +48,25 @@ export default (
 
     </Route>
 
-    <Route path="poll/new" component={CreatePoll} queries={{ ...storeQuery, ...viewerQuery }} />
+    <Route
+      path="poll/new"
+      components={{ main: CreatePoll }}
+      queries={{ main: { ...storeQuery, ...viewerQuery } }}
+    />
 
     <Route path="poll">
       <Route
         path=":id"
-        component={Poll}
-        queries={{ ...nodeQuery, ...viewerQuery, ...storeQuery }}
+        components={{ main: Poll }}
+        queries={{ main: { ...nodeQuery, ...viewerQuery, ...storeQuery } }}
       />
     </Route>
 
     <Route path="user">
-      <Route path=":id" component={User} queries={nodeQuery} />
+      <Route path=":id" components={{ main: User }} queries={{ main: nodeQuery }} />
     </Route>
 
-    <Route component={Login} path="login" />
+    <Route components={{ main: Login }} path="login" />
 
   </Route>
 );

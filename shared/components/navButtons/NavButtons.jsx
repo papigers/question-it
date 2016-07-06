@@ -1,7 +1,10 @@
 import React from 'react';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import Mobile from './mobile';
 import Desktop from './desktop';
+
+import s from './NavButtons.css';
 
 const pages = [
 	{ label: 'Home', path: '/' },
@@ -18,30 +21,10 @@ class NavButtons extends React.Component {
     viewer: React.PropTypes.object,
   }
 
-  constructor() {
-    super();
-    this.state = { small: true };
-    this.resizeListener = this.handleResize.bind(this);
-  }
-
   componentDidMount() {
-    this.handleResize();
-    window.addEventListener('resize', this.resizeListener);
-
     const loggedOn = this.context.viewer;
     if (loggedOn) {
       pages[3].path += `/${loggedOn.id}`;
-    }
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.resizeListener);
-  }
-
-  handleResize = () => {
-    const small = window.innerWidth <= 768;
-    if (small !== this.state.small) {
-      this.setState({ small });
     }
   }
 
@@ -62,13 +45,13 @@ class NavButtons extends React.Component {
       }
     });
 
-    return this.state.small ? (
-      <Mobile pages={showPages} isActive={this.isActive} />
-    ) :
-    (
-      <Desktop pages={showPages} isActive={this.isActive} />
+    return (
+      <div className={s.root}>
+        <Mobile className="hide-sm-up" pages={showPages} isActive={this.isActive} />
+        <Desktop className="hide-sm-down" pages={showPages} isActive={this.isActive} />
+      </div>
     );
   }
 }
 
-export default NavButtons;
+export default withStyles(s)(NavButtons);

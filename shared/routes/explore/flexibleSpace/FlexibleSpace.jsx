@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 
 import RaisedButton from 'material-ui/RaisedButton';
 
-import SearchBar from '../../../../components/searchBar';
+import SearchBar from '../../../components/searchBar';
 
 import s from './FlexibleSpace.css';
 
