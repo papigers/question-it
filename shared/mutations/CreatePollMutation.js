@@ -70,17 +70,9 @@ export default class CreatePollMutation extends Relay.Mutation {
   }
 
   getOptimisticResponse() {
-    const { viewer, store, title, options, multi } = this.props;
+    const { viewer, title, options, multi } = this.props;
 
     return {
-      store: {
-        id: store.id,
-        pollCount: store.pollCount + 1,
-      },
-      viewer: {
-        id: viewer.id,
-        pollCount: viewer.pollCount + 1,
-      },
       pollEdge: {
         node: {
           title,
@@ -97,13 +89,11 @@ export default class CreatePollMutation extends Relay.Mutation {
     store: (() => Relay.QL`
       fragment on Store {
         id,
-        pollCount,
       }
     `),
     viewer: (() => Relay.QL`
       fragment on User {
         id,
-        pollCount,
       }
     `),
   };

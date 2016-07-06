@@ -13,6 +13,26 @@ class PollItem extends React.Component {
 
   static propTypes = {
     poll: React.PropTypes.object.isRequired,
+    relay: React.PropTypes.object.isRequired,
+  }
+
+  componentDidMount = () => {
+    this.loadPage();
+  }
+
+  loadPage = () => {
+    const { relay, poll } = this.props;
+    const { votesPageSize } = relay.variables;
+
+    relay.setVariables({
+      votesPageSize: votesPageSize + 30,
+    }, ({ ready, done }) => {
+      if (ready && done) {
+        if (poll.votes.pageInfo.hasNextPage) {
+          this.loadPage();
+        }
+      }
+    });
   }
 	
   render() {
@@ -63,6 +83,9 @@ class PollItem extends React.Component {
             <Link to={`/poll/${poll.id}`}>
               <h2 className="center-text">{poll.title}</h2>
               <div className={s.gradinetHide}></div>
+              <div className={s.loadingVotes}>
+                {poll.votes.pageInfo.hasNextPage ? <h5>Loading Votes...</h5> : null}
+              </div>
             </Link>
           </div>
           <div className={s.colorSpreadContainer}>
@@ -78,7 +101,7 @@ PollItem = withStyles(s)(PollItem);
 
 PollItem = Relay.createContainer(PollItem, {
   initialVariables: {
-    optionsLimit: 10,
+    votesPageSize: 30,
   },
 
   fragments: {
@@ -87,11 +110,14 @@ PollItem = Relay.createContainer(PollItem, {
         id,
         title,
         options,
-        votes(first: $optionsLimit){
+        votes(first: $votesPageSize){
           edges{
             node{
               options
             }
+          },
+          pageInfo{
+            hasNextPage
           }
         },
         author{

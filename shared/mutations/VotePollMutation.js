@@ -85,11 +85,9 @@ export default class VotePollMutation extends Relay.Mutation {
       },
       viewer: {
         id: viewer.id,
-        voteCount: viewer.voteCount + 1,
       },
       store: {
         id: store.id,
-        voteCount: store.voteCount + 1,
       },
       poll: {
         id: poll.id,
@@ -108,13 +106,11 @@ export default class VotePollMutation extends Relay.Mutation {
     viewer: (() => Relay.QL`
       fragment on User{
         id,
-        voteCount,
       }
     `),
     store: (() => Relay.QL`
       fragment on Store{
         id,
-        voteCount,
       }
     `),
   };

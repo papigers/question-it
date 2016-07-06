@@ -33,6 +33,14 @@ a {
 	width: 100%;
 }
 
+.loadingVotes{
+  color: #656565;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+}
+
 .colorSpreadContainer {
 	display: flex;
 	width: 100%;

@@ -48,31 +48,78 @@ class Poll extends React.Component {
     node: React.PropTypes.object.isRequired,
     store: React.PropTypes.object.isRequired,
     viewer: React.PropTypes.object.isRequired,
+    relay: React.PropTypes.object.isRequired,
   }
   
   constructor() {
     super();
     this.state = {
+      loading: false,
       noVotes: false,
     };
   }
 
   componentDidMount = () => {
     this.loadGoogleCharts = getGoogleChartsLoader();
-    const self = this;
     if (!this.loadGoogleCharts.loaded) {
       this.loadGoogleCharts.load().then(() => {
-        self.drawChart();
+        this.drawChart();
       });
     }
     else {
-      self.drawChart();
+      this.drawChart();
     }
   }
 
   componentDidUpdate = () => {
     if (this.loadGoogleCharts.loaded && !this.state.noVotes) {
       this.drawChart();
+    }
+  }
+
+  getViewerVote = () => {
+    if (!this.state.loading) {
+      const { viewer } = this.props;
+      const { votes } = this.props.node;
+
+      let votedOptions = null;
+      votes.edges.some(({ node: vote }) => {
+        if (vote.user.id === viewer.id) {
+          votedOptions = vote.options;
+          return true;
+        }
+        return false;
+      });
+
+      return votedOptions;
+    }
+    return null;
+  }
+
+  loadPage = () => {
+    const { relay, node } = this.props;
+    const { votesPageSize } = relay.variables;
+
+    relay.setVariables({
+      votesPageSize: votesPageSize + 30,
+    }, ({ ready, done }) => {
+      if (ready && done) {
+        if (node.votes.pageInfo.hasNextPage) {
+          this.loadPage();
+        }
+        else {
+          this.setState({ loading: false }, this.drawChart);
+        }
+      }
+    });
+  }
+
+  loadVotes = () => {
+    if (!this.state.loading) {
+      this.setState(
+        { loading: true },
+        this.loadPage
+      );
     }
   }
 
@@ -117,8 +164,11 @@ class Poll extends React.Component {
       document.getElementById('chart-div')
     );
     chart.draw(data, options);
-  }
 
+    if (node.votes.pageInfo.hasNextPage && !this.state.loading) {
+      this.loadVotes();
+    }
+  }
 
   render = () => {
     const { node, store, viewer } = this.props;
@@ -162,7 +212,9 @@ class Poll extends React.Component {
               poll={node}
               viewer={viewer}
               store={store}
-              onSubmit={this.drawChart}
+              loading={this.state.loading}
+              selected={this.getViewerVote()}
+              onSubmit={this.loadVotes}
             />
           </div>
         </div>
@@ -175,18 +227,24 @@ Poll = withStyles(s)(Poll);
 
 Poll = Relay.createContainer(Poll, {
   initialVariables: {
-    votesPage: 10,
+    votesPageSize: 30,
   },
 
   fragments: {
     node: (() => Relay.QL`
       fragments on Poll{
         options,
-        votes(first: $votesPage){
+        votes(first: $votesPageSize){
           edges{
             node{
+              user{
+                id,
+              }
               options
             }
+          },
+          pageInfo{
+            hasNextPage,
           }
         },
         ${VoteArea.getFragment('poll')}
@@ -194,6 +252,7 @@ Poll = Relay.createContainer(Poll, {
     `),
     viewer: (() => Relay.QL`
       fragment on User{
+        id,
         ${VoteArea.getFragment('viewer')}
       }
     `),

@@ -20,26 +20,32 @@ class VoteArea extends React.Component {
     store: React.PropTypes.object.isRequired,
     relay: React.PropTypes.object.isRequired,
     onSubmit: React.PropTypes.func.isRequired,
+    loading: React.PropTypes.bool,
   };
-
-  static contextTypes = {
-    viewer: React.PropTypes.object.isRequired,
-  }
 
   constructor(props) {
     super();
     const { options, multi } = props.poll;
+    let { selected } = props;
+
+    let canVote = true;
+    let error = '';
+
+    if (!selected) {
+      selected = [0];
+    }
+    else {
+      canVote = false;
+      error = 'You already voted for this poll';
+    }
+
     this.state = {
       options,
-      selected: [0],
+      selected,
       multi,
-      canVote: true,
-      error: '',
+      canVote,
+      error,
     };
-  }
-
-  componentWillMount = () => {
-    this.canViewerVote();
   }
 	
   onChangeRadio = (val) => {
@@ -88,32 +94,10 @@ class VoteArea extends React.Component {
       }),
     });
   }
-  
-  canViewerVote = () => {
-    const { viewer } = this.context;
-    const { votes } = this.props.poll;
-    
-    let votedOptions = [0];
-    const canVote = !votes.edges.some(({ node: vote }) => {
-      if (vote.user.id === viewer.id) {
-        votedOptions = vote.options;
-        return true;
-      }
-      return false;
-    });
-    
-    let { error } = this.state;
-    if (!canVote) {
-      error = 'You already voted for this poll.';
-    }
-    
-    const selected = votedOptions;
-    
-    this.setState({ selected, canVote, error });
-  }
 	
   render() {
     const { canVote } = this.state;
+    const { loading } = this.props;
     
     let options = this.state.options.map((option, i) => {
       let checkbox;
@@ -146,7 +130,7 @@ class VoteArea extends React.Component {
           {i !== 0 ? (<Divider key={`divider'${i}`} />) : ''}
           <ListItem
             key={`item${i}`}
-            disabled={!canVote}
+            disabled={!canVote || loading}
             onTouchTap={checkbox.props.onCheckFunc}
           >
             {checkbox}
@@ -163,10 +147,10 @@ class VoteArea extends React.Component {
           {options}
         </List>
         <RaisedButton
-          label="submit"
+          label={loading ? 'Loading Votes...' : 'submit'}
           secondary
           className={s.submitBtn}
-          disabled={!canVote}
+          disabled={!canVote || loading}
           onMouseUp={this.checkSubmit}
         />
         <p className={s.error}>{this.state.error}</p>
@@ -178,9 +162,6 @@ class VoteArea extends React.Component {
 VoteArea = withStyles(s)(VoteArea);
 
 VoteArea = Relay.createContainer(VoteArea, {
-  initialVariables: {
-    votesPage: 10,
-  },
   
   fragments: {
     poll: (() => Relay.QL`
@@ -191,16 +172,6 @@ VoteArea = Relay.createContainer(VoteArea, {
         multi,
         options,
         voteCount,
-        votes(first: $votesPage){
-          edges{
-            node{
-              user{
-                id,
-              },
-              options,
-            }
-          }
-        }
       }
     `),
     viewer: (() => Relay.QL`
