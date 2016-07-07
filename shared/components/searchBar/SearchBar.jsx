@@ -4,6 +4,8 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import IconButton from 'material-ui/IconButton';
 import Toolbar from 'material-ui/Toolbar';
 
+import debounce from '../../utils/debounce';
+
 import s from './SearchBar.css';
 
 class SearchBar extends React.Component {
@@ -21,6 +23,8 @@ class SearchBar extends React.Component {
     this.state = {
       focused: false,
     };
+
+    this.changeQuery = debounce(this.changeQuery, 250);
   }
 
   componentDidMount() {
@@ -40,6 +44,10 @@ class SearchBar extends React.Component {
   onChange = (event) => {
     const value = event.target.value;
     const router = this.context.router;
+    this.changeQuery(value, router);
+  }
+
+  changeQuery(value, router) {
     if (value === '') {
       router.goBack();
     }

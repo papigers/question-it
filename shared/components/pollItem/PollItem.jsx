@@ -83,9 +83,9 @@ class PollItem extends React.Component {
             <Link to={`/poll/${poll.id}`}>
               <h2 className="center-text">{poll.title}</h2>
               <div className={s.gradinetHide}></div>
-              <div className={s.loadingVotes}>
-                {poll.votes.pageInfo.hasNextPage ? <h5>Loading Votes...</h5> : null}
-              </div>
+              <h5 className={s.loadingVotes}>
+                {poll.votes.pageInfo.hasNextPage ? 'Loading Votes...' : `${poll.voteCount} Votes`}
+              </h5>
             </Link>
           </div>
           <div className={s.colorSpreadContainer}>
@@ -110,6 +110,7 @@ PollItem = Relay.createContainer(PollItem, {
         id,
         title,
         options,
+        voteCount,
         votes(first: $votesPageSize){
           edges{
             node{

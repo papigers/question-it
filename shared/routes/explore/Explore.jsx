@@ -46,28 +46,7 @@ class Explore extends React.Component {
     if (!explore[tab]) {
       this.context.router.replace('/explore/trending');
     }
-//    if (!this.props.location.query.q) {
-//      this.context.router.push('/explore');
-//    }
   }
-
-//  componentDidMount() {
-//    this.unregister = this.context.router.listen(this.locationHasChanged);
-//    console.log(this.unregister);
-//  }
-//
-//  componentWillUnmount() {
-//    this.unregister();
-//  }
-//
-//  locationHasChanged = (location) => {
-//    console.log(this.context.router);
-//    const { tab } = this.props.params;
-//    console.log(tab, location);
-//    this.props.relay.setVariables({
-//      sort: explore[tab].sort,
-//    });
-//  }
 
   render() {
     const { tab } = this.props.params;
@@ -104,12 +83,13 @@ Explore = Relay.createContainer(Explore, {
   initialVariables: {
     limit: 12,
     sort: 'TRENDING',
+    query: '',
   },
 
   fragments: {
     store: () => Relay.QL`
       fragment on Store{
-        polls(orderBy: $sort, first: $limit){
+        polls(orderBy: $sort, first: $limit, query: $query){
           edges{
             node{
               id,

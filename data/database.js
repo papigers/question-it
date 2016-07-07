@@ -121,8 +121,10 @@ export function getPoll(id) {
   return polls.find(findById, +id);
 }
 
-export function getPolls(orderBy = 1) {
-  return orderPolls(polls, orderBy);
+export function getPolls(orderBy = 1, query = '') {
+  const filteredPolls =
+        polls.filter((poll) => poll.title.search(new RegExp(query, 'i')) !== -1);
+  return orderPolls(filteredPolls, orderBy);
 }
 
 export function getVote(id) {

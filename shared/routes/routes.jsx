@@ -27,11 +27,18 @@ export default (
         components={{ main: Explore, flexibleSpace: ExploreFlexibleSpace, tabs: ExploreTabs }}
         queries={{ main: storeQuery }}
         prepareParams={
-          function prepareTabParams(params) {
+          function prepareExploreParams(params, { location }) {
             let { tab } = params;
-            tab = (tab === 'search' ? 'top' : tab);
+            let query = '';
+
+            if (tab === 'search') {
+              tab = 'top';
+              query = location.query.q;
+            }
+
             return {
               ...params,
+              query,
               sort: tab.toUpperCase(),
             };
           }

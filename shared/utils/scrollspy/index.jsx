@@ -1,20 +1,8 @@
 import React from 'react';
+import debounce from '../debounce';
 
 function getDisplayName(ComposedComponent) {
   return ComposedComponent.displayName || ComposedComponent.name || 'Component';
-}
-
-function debounce(method, delay) {
-  let timeout;
-  return (...args) => {
-    const context = this;
-    const later = () => {
-      timeout = null;
-      method.apply(context, args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, delay);
-  };
 }
 
 function scrollSpy(ComposedComponent) {

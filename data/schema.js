@@ -234,9 +234,12 @@ const storeType = new GraphQLObjectType({
         orderBy: {
           type: pollSortEnum,
         },
+        query: {
+          type: GraphQLString,
+        },
       },
-      resolve: ((store, { orderBy, ...args }) =>
-                connectionFromArray(db.getPolls(orderBy), args)),
+      resolve: ((store, { orderBy, query, ...args }) =>
+                connectionFromArray(db.getPolls(orderBy, query), args)),
     },
   })),
   interfaces: [nodeInterface],
