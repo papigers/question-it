@@ -3,8 +3,11 @@ import Relay from 'react-relay';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import Paper from 'material-ui/Paper';
+import CircularProgress from 'material-ui/CircularProgress';
 
 import PollItem from '../../components/pollItem';
+
+import debounce from '../../utils/debounce';
 
 import s from './Explore.css';
 
@@ -41,10 +44,48 @@ class Explore extends React.Component {
     router: React.PropTypes.object.isRequired,
   }
 
+  constructor() {
+    super();
+    this.state = { done: false, loading: false };
+    this.handleScroll = debounce(this.handleScroll, 250);
+  }
+
   componentWillMount() {
     const { tab } = this.props.params;
     if (!explore[tab]) {
       this.context.router.replace('/explore/trending');
+    }
+  }
+
+  componentDidMount() {
+    window.addEventListener('scroll', this.handleScroll);
+    NProgress.done();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+  }
+
+  handleScroll = () => {
+    const { relay, store } = this.props;
+    const elm = this.refs.polls;
+    if (elm.clientHeight <= window.scrollY + 112 + elm.offsetTop && !this.state.loading) {
+      if (store.polls.pageInfo.hasNextPage) {
+        this.setState({ loading: true });
+
+        relay.setVariables({
+          pageSize: relay.variables.pageSize + 20,
+        }, ({ done }) => {
+          if (done) {
+            this.setState({ loading: false });
+          }
+        });
+      }
+      else {
+        if (!this.state.done) {
+          this.setState({ done: true });
+        }
+      }
     }
   }
 
@@ -69,7 +110,21 @@ class Explore extends React.Component {
         <Paper zDepth={2} className="container center-text">
           {header}
           <div className={`${s.content}`}>
-            {polls}
+            <div className="row" ref="polls">
+              {polls}
+            </div>
+            <div className="row">
+              {this.state.loading ?
+                <div className="loadmore">
+                  <CircularProgress size={1.5} />
+                </div> : ''
+              }
+              {this.state.done ?
+                <div className="loadmore-done">
+                  <p>No more polls to load</p>
+                </div> : ''
+              }
+            </div>
           </div>
         </Paper>
       </div>
@@ -81,7 +136,7 @@ Explore = withStyles(s)(Explore);
 
 Explore = Relay.createContainer(Explore, {
   initialVariables: {
-    limit: 12,
+    pageSize: 20,
     sort: 'TRENDING',
     query: '',
   },
@@ -89,7 +144,10 @@ Explore = Relay.createContainer(Explore, {
   fragments: {
     store: () => Relay.QL`
       fragment on Store{
-        polls(orderBy: $sort, first: $limit, query: $query){
+        polls(orderBy: $sort, first: $pageSize, query: $query){
+          pageInfo{
+            hasNextPage
+          },
           edges{
             node{
               id,

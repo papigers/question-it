@@ -14,6 +14,7 @@ class PollItem extends React.Component {
   static propTypes = {
     poll: React.PropTypes.object.isRequired,
     relay: React.PropTypes.object.isRequired,
+    grid: React.PropTypes.bool,
   }
 
   componentDidMount = () => {
@@ -68,7 +69,12 @@ class PollItem extends React.Component {
         );
 		
     return (
-      <div className={`col-xs-12 col-sm-6 col-md-3 ${s.root}`}>
+      <div
+        className={
+          `${s.root} col-xs-12 ${this.props.grid ?
+            'col-sm-6 col-md-4' : 'col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6'}`
+        }
+      >
         <Paper zDepth={2}>
           <div className={`${s.colorSpreadContainer} ${s.top}`}>
             {colorSpread}

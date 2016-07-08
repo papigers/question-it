@@ -5,6 +5,9 @@
     "browser": true,
     "node": true
   },
+  "globals": {
+    "NProgress": true
+  },
   "rules": {
     //because no hot-reload
     "react/prefer-stateless-function": 0,

@@ -44,7 +44,9 @@ class StylesRoot extends React.Component {
   }
 
   getChildContext() {
-    return { insertCss: this.props.onInsertCss };
+    return {
+      insertCss: this.props.onInsertCss,
+    };
   }
 
   render() {

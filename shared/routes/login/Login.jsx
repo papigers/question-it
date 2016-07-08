@@ -14,6 +14,10 @@ class LoginPage extends React.Component {
     this.state = { open: false };
   }
   
+  componentDidMount() {
+    NProgress.done();
+  }
+
   handleClose = () => {
     this.setState({ open: !this.state.open });
   }

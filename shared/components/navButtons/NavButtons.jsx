@@ -21,10 +21,10 @@ class NavButtons extends React.Component {
     viewer: React.PropTypes.object,
   }
 
-  componentDidMount() {
+  componentWillMount() {
     const loggedOn = this.context.viewer;
     if (loggedOn) {
-      pages[3].path += `/${loggedOn.id}`;
+      pages[3].path = `/user/${loggedOn.id}`;
     }
   }
 

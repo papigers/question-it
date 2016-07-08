@@ -69,9 +69,9 @@ export default (
       />
     </Route>
 
-    <Route path="user">
-      <Route path=":id" components={{ main: User }} queries={{ main: nodeQuery }} />
-    </Route>
+
+    <Route path="user/:id" components={{ main: User }} queries={{ main: nodeQuery }} />
+
 
     <Route components={{ main: Login }} path="login" />
 

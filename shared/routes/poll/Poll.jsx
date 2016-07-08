@@ -60,6 +60,8 @@ class Poll extends React.Component {
   }
 
   componentDidMount = () => {
+    NProgress.done();
+
     this.loadGoogleCharts = getGoogleChartsLoader();
     if (!this.loadGoogleCharts.loaded) {
       this.loadGoogleCharts.load().then(() => {

@@ -48,6 +48,10 @@ class CreatePoll extends React.Component {
     };
   }
 
+  componentDidMount() {
+    NProgress.done();
+  }
+
   addAnswer = () => {
     const { answers, answer } = this.state;
     if (answer !== '') {

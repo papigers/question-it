@@ -19,6 +19,7 @@ const app = express();
 
 export default function() {
   app.use('/public', express.static('build'));
+  app.use('/', express.static('statics'));
 
   app.use('/graphql', graphQLHTTP({
     schema,
@@ -68,11 +69,16 @@ export default function() {
             <title>Question It - Online Polls</title>
             <script async type="application/javascript" src="/public/bundle.js"></script>
             <style type="text/css">${css.join('')}</style>
-            <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+            <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
             <link href="https://file.myfontastic.com/m6D5EwwEfBU4hxAfLHHbdR/icons.css" rel="stylesheet">
           </head>
           <body>
             <div id="react-view">${componentHTML}</div>
+            <link rel="stylesheet" href="/nprogress/nprogress.css"></script>
+            <script type="application/javascript" src="/nprogress/nprogress.js"></script>
+            <script type="application/javascript">
+              NProgress.start();
+            </script>
             <script id="preloadedData" type="application/json" src="">
               ${JSON.stringify(data)}
             </script>

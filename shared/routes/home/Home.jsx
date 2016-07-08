@@ -15,10 +15,15 @@ class Home extends React.Component {
     store: React.PropTypes.object.isRequired,
   }
 
+  componentDidMount = () => {
+    NProgress.done();
+  }
+
   render() {
     const { store } = this.props;
     const polls = store.polls.edges.map(({ node }) => (
       <PollItem
+        grid
         key={node.id}
         poll={node}
       />
@@ -41,7 +46,7 @@ class Home extends React.Component {
             primary
           />
 
-          <div>
+          <div style={{ marginTop: 60 }}>
             {polls}
           </div>
         </div>
@@ -55,14 +60,13 @@ Home = withStyles(s)(Home);
 Home = Relay.createContainer(Home, {
 
   initialVariables: {
-    limit: 8,
     sort: 'TRENDING',
   },
 
   fragments: {
     store: () => Relay.QL`
       fragment on Store{
-        polls(orderBy: $sort, first: $limit){
+        polls(orderBy: $sort, first: 6){
           edges{
             node{
               id,

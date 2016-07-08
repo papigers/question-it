@@ -31,6 +31,10 @@ class App extends React.Component {
     };
   }
 
+  componentDidMount() {
+    NProgress.done(true);
+  }
+
   onLogoClick = () => {
     this.context.router.push('/');
   }
@@ -54,7 +58,7 @@ class App extends React.Component {
           />
         </header>
 
-        <main>
+        <main id="main">
 					{main}
         </main>
 

@@ -246,6 +246,20 @@ export default {
       ],
       timestamp: 1466604149056,
     },
+    {
+      id: 11,
+      title: 'Poll11',
+      options: [
+        'Poll11 option1',
+        'Poll11 option2',
+        'Poll11 option3',
+        'Poll11 option4',
+        'Poll11 option5',
+      ],
+      author: 5,
+      votes: [],
+      timestamp: 1466604149056,
+    },
   ],
 
   votes: [

@@ -58,6 +58,7 @@ class User extends React.Component {
   }
 
   componentDidMount() {
+    NProgress.done();
     const SweetScroll = require('sweet-scroll'); // eslint-disable-line global-require
     this.sweetScroll = new SweetScroll({
       offset: -85,
