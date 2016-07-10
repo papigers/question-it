@@ -8,8 +8,18 @@ import IsomorphicRouter from 'isomorphic-relay-router';
 import IsomorphicRelay from 'isomorphic-relay';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
+let prevLocation = {};
 
-let firstRender = true;
+browserHistory.listen(location => {
+  const pathChanged = prevLocation.pathname !== location.pathname;
+  const hashChanged = prevLocation.hash !== location.hash;
+  if (pathChanged || hashChanged) {
+    if (Object.keys(prevLocation).length !== 0) {
+      NProgress.start();
+    }
+  }
+  prevLocation = location;
+});
 
 const loadedStates = ['complete', 'loaded', 'interactive'];
 if (loadedStates.includes(document.readyState) && document.body) {
@@ -38,18 +48,7 @@ function run() {
     IsomorphicRouter.prepareInitialRender(environment, renderProps).then(props => {
       render(
         <Root onInsertCss={(styles) => styles._insertCss()}>
-          <Router
-            {...props}
-            onUpdate={() => {
-              if (firstRender) {
-                firstRender = false;
-              }
-              else {
-                NProgress.start();
-              }
-              window.scrollTo(0, 0);
-            }}
-          />
+          <Router {...props} />
         </Root>,
         document.getElementById('react-view'));
     });

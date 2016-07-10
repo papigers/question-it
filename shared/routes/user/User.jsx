@@ -50,7 +50,7 @@ class User extends React.Component {
   }
 
   static contextTypes= {
-    viewer: React.PropTypes.object.isRequired,
+    viewer: React.PropTypes.object,
   }
 
   componentWillMount() {
@@ -59,10 +59,15 @@ class User extends React.Component {
 
   componentDidMount() {
     NProgress.done();
+    window.scrollTo(0, 0);
     const SweetScroll = require('sweet-scroll'); // eslint-disable-line global-require
     this.sweetScroll = new SweetScroll({
       offset: -85,
     });
+  }
+
+  componentDidUpdate() {
+    NProgress.done();
   }
 
   setScrollspyRef = (ref) => {
@@ -76,7 +81,7 @@ class User extends React.Component {
   render() {
     const { node: user } = this.props;
     const { viewer } = this.context;
-    const isViewer = viewer.id === user.id;
+    const isViewer = viewer !== null && viewer.id === user.id;
 
     return (
       <div>

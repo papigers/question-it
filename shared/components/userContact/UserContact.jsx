@@ -11,7 +11,14 @@ import SocialButton from '../../components/socialButton';
 import s from './UserContact.css';
 
 class UserContact extends React.Component {
+
+  static propTypes = {
+    isViewer: React.PropTypes.bool.isRequired,
+  }
+
   render() {
+    const { isViewer } = this.props;
+
     return (
       <div>
         <h2 className="categoryHeader">Contact Info</h2>
@@ -22,11 +29,14 @@ class UserContact extends React.Component {
               <ListItem className="item" disabled>
                 <SocialButton className={s.social} type="envelope" />
               </ListItem>
-              <Checkbox
-                defaultChecked
-                label="private"
-                className={s.privateCheckbox}
-              />
+              {isViewer ?
+                <Checkbox
+                  defaultChecked
+                  label="private"
+                  className={s.privateCheckbox}
+                />
+                : null
+              }
             </div>
 
             <div className="col-xs-4">
@@ -34,23 +44,25 @@ class UserContact extends React.Component {
               <ListItem className="item" disabled>
                 <SocialButton className={s.social} type="facebook" />
               </ListItem>
-              <Checkbox
-                defaultChecked
-                label="private"
-                className={s.privateCheckbox}
-              />
+              {isViewer ?
+                <Checkbox
+                  defaultChecked
+                  label="private"
+                  className={s.privateCheckbox}
+                />
+                : null
+              }
             </div>
 
             <div className="col-xs-4">
               <Subheader className="subheader">Twitter:</Subheader>
               <ListItem className="item" disabled>
-                <SocialButton className={s.social} type="add" />
+                <SocialButton className={s.social} type="twitter" disabled isViewer={isViewer} />
               </ListItem>
-              <Checkbox
-                defaultChecked
-                label="private"
-                className={s.privateCheckbox}
-              />
+              {isViewer ?
+                <Subheader className="subheader center-text">Click to link account</Subheader>
+                : null
+              }
             </div>
           </div>
         </Paper>

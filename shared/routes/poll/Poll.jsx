@@ -47,8 +47,8 @@ class Poll extends React.Component {
   static propTypes = {
     node: React.PropTypes.object.isRequired,
     store: React.PropTypes.object.isRequired,
-    viewer: React.PropTypes.object.isRequired,
     relay: React.PropTypes.object.isRequired,
+    viewer: React.PropTypes.object,
   }
   
   constructor() {
@@ -60,6 +60,7 @@ class Poll extends React.Component {
   }
 
   componentDidMount = () => {
+    window.scrollTo(0, 0);
     NProgress.done();
 
     this.loadGoogleCharts = getGoogleChartsLoader();
@@ -83,6 +84,10 @@ class Poll extends React.Component {
     if (!this.state.loading) {
       const { viewer } = this.props;
       const { votes } = this.props.node;
+
+      if (!viewer) {
+        return null;
+      }
 
       let votedOptions = null;
       votes.edges.some(({ node: vote }) => {

@@ -1,7 +1,7 @@
 
 footer{
-	background-color: #854332;
-	color: #e8e8d8;
+	background-color: rgb(158, 0, 0);
+	color: white;
 	width: 100%;
 	overflow: hidden;
 	z-index: 1100;
@@ -14,7 +14,7 @@ footer{
 
 		&:hover{
 			text-shadow: 1px 1px 15px white;
-      color: color($accent1Color w(50%)) !important;
+      color: white !important;
 		}
 	}
 	

@@ -22,8 +22,8 @@ class CreatePoll extends React.Component {
   
   static propTypes = {
     relay: React.PropTypes.object.isRequired,
-    viewer: React.PropTypes.object.isRequired,
     store: React.PropTypes.object.isRequired,
+    viewer: React.PropTypes.object,
   }
 
   static contextTypes = {
@@ -48,7 +48,14 @@ class CreatePoll extends React.Component {
     };
   }
 
+  componentWillMount() {
+    if (!this.props.viewer) {
+      this.context.router.replace('/login');
+    }
+  }
+
   componentDidMount() {
+    window.scrollTo(0, 0);
     NProgress.done();
   }
 

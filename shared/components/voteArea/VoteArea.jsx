@@ -3,6 +3,8 @@ import Relay from 'react-relay';
 import { VotePollMutation } from '../../mutations';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
+import { Link } from 'react-router';
+
 import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Checkbox from 'material-ui/Checkbox';
@@ -16,11 +18,11 @@ class VoteArea extends React.Component {
 
   static propTypes = {
     poll: React.PropTypes.object.isRequired,
-    viewer: React.PropTypes.object.isRequired,
     store: React.PropTypes.object.isRequired,
     relay: React.PropTypes.object.isRequired,
     onSubmit: React.PropTypes.func.isRequired,
     loading: React.PropTypes.bool,
+    viewer: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -97,7 +99,15 @@ class VoteArea extends React.Component {
 	
   render() {
     const { canVote } = this.state;
-    const { loading } = this.props;
+    const { loading, viewer, poll } = this.props;
+
+    let submitLabel = 'Submit';
+    if (loading) {
+      submitLabel = 'Loading Votes...';
+    }
+    if (!viewer) {
+      submitLabel = 'Login to Vote';
+    }
     
     let options = this.state.options.map((option, i) => {
       let checkbox;
@@ -142,15 +152,16 @@ class VoteArea extends React.Component {
     return (
       <div>
         <h1>Vote:</h1>
-        <h2>{this.props.poll.title}</h2>
+        <h2>{poll.title}</h2>
+        <h4><Link to={`/user/${poll.author.id}`}>{poll.author.username}</Link></h4>
         <List>
           {options}
         </List>
         <RaisedButton
-          label={loading ? 'Loading Votes...' : 'submit'}
+          label={submitLabel}
           secondary
           className={s.submitBtn}
-          disabled={!canVote || loading}
+          disabled={!canVote || loading || !viewer}
           onMouseUp={this.checkSubmit}
         />
         <p className={s.error}>{this.state.error}</p>
@@ -172,6 +183,10 @@ VoteArea = Relay.createContainer(VoteArea, {
         multi,
         options,
         voteCount,
+        author{
+          id,
+          username
+        }
       }
     `),
     viewer: (() => Relay.QL`

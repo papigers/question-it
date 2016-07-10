@@ -60,6 +60,11 @@ class Explore extends React.Component {
   componentDidMount() {
     window.addEventListener('scroll', this.handleScroll);
     NProgress.done();
+    window.scrollTo(0, 0);
+  }
+
+  componentDidUpdate() {
+    NProgress.done();
   }
 
   componentWillUnmount() {
@@ -69,9 +74,10 @@ class Explore extends React.Component {
   handleScroll = () => {
     const { relay, store } = this.props;
     const elm = this.refs.polls;
-    if (elm.clientHeight <= window.scrollY + 112 + elm.offsetTop && !this.state.loading) {
+    if (elm.clientHeight <= window.scrollY + 112 + elm.offsetTop + 500 && !this.state.loading) {
       if (store.polls.pageInfo.hasNextPage) {
         this.setState({ loading: true });
+        NProgress.start();
 
         relay.setVariables({
           pageSize: relay.variables.pageSize + 20,
@@ -114,7 +120,7 @@ class Explore extends React.Component {
               {polls}
             </div>
             <div className="row">
-              {this.state.loading ?
+              {this.state.loading || store.polls.pageInfo.hasNextPage ?
                 <div className="loadmore">
                   <CircularProgress size={1.5} />
                 </div> : ''
