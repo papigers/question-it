@@ -27,7 +27,7 @@ class UserContact extends React.Component {
             <div className="col-xs-4">
               <Subheader className="subheader">Email:</Subheader>
               <ListItem className="item" disabled>
-                <SocialButton className={s.social} type="envelope" />
+                <SocialButton className={s.social} type="envelope" isViewer={isViewer} />
               </ListItem>
               {isViewer ?
                 <Checkbox
@@ -42,7 +42,7 @@ class UserContact extends React.Component {
             <div className="col-xs-4">
               <Subheader className="subheader">Facebook:</Subheader>
               <ListItem className="item" disabled>
-                <SocialButton className={s.social} type="facebook" />
+                <SocialButton className={s.social} type="facebook" isViewer={isViewer} />
               </ListItem>
               {isViewer ?
                 <Checkbox

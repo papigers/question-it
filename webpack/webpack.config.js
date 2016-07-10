@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const config = require('../config');
 
 function contains(arr, val) {
   return arr.indexOf(val) > -1;
@@ -19,7 +20,7 @@ const AUTOPREFIXER_BROWSERS = [
 ];
 
 
-const config = {
+const webpackConfig = {
   context: path.resolve(__dirname, '..'),
   entry: [path.resolve(__dirname, '../client/index.jsx')],
   resolve: {
@@ -27,7 +28,7 @@ const config = {
     extensions: ['', '.js', '.jsx'],
   },
   output: {
-    path: path.join(__dirname, '..', 'build'),
+    path: config.buildLocation,
     filename: 'bundle.js',
     publicPath: '/public/',
   },
@@ -154,4 +155,4 @@ const config = {
 };
 
 
-module.exports = config;
+module.exports = webpackConfig;

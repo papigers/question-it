@@ -26,9 +26,8 @@ build/Release
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git-
 node_modules
 public/bower_components
-build
 
 # Debug log from npm
 npm-debug.log
 npm-debug.log.*
-/build/
+statics/build/

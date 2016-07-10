@@ -16,7 +16,6 @@ class Home extends React.Component {
   }
 
   componentDidMount = () => {
-    window.scrollTo(0, 0);
     NProgress.done();
   }
 

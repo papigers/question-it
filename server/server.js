@@ -11,15 +11,17 @@ import IsomorphicRouter from 'isomorphic-relay-router';
 import routes from '../shared/routes';
 import Root from '../shared/root';
 
-const GRAPHQL_URL = 'http://localhost:3000/graphql';
+import config from '../config';
+
+const GRAPHQL_URL = `http://${config.hostname}:${config.port}/graphql`;
 const networkLayer = new Relay.DefaultNetworkLayer(GRAPHQL_URL);
 
 
 const app = express();
 
 export default function() {
-  app.use('/public', express.static('build'));
-  app.use('/', express.static('statics'));
+  app.use(express.static('statics'));
+  app.use('/public', express.static(config.buildLocation));
 
   app.use('/graphql', graphQLHTTP({
     schema,
@@ -91,12 +93,11 @@ export default function() {
     });
   });
 
-  const PORT = process.env.PORT || 3000;
+  const PORT = process.env.PORT || config.port;
   app.listen(PORT, () => {
     /* eslint-disable no-console */
     console.log('\x1b[1m\x1b[32m');
-    console.log('Server listening on', PORT);
-    console.log('\x1b[39m');
+    console.log('Server listening on:\x1b[39m', `http://${config.hostname}:${PORT}`);
     /* eslint-enable no-console */
   });
 }

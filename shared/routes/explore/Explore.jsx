@@ -60,7 +60,6 @@ class Explore extends React.Component {
   componentDidMount() {
     window.addEventListener('scroll', this.handleScroll);
     NProgress.done();
-    window.scrollTo(0, 0);
   }
 
   componentDidUpdate() {
@@ -125,7 +124,7 @@ class Explore extends React.Component {
                   <CircularProgress size={1.5} />
                 </div> : ''
               }
-              {this.state.done ?
+              {this.state.done || !store.polls.pageInfo.hasNextPage ?
                 <div className="loadmore-done">
                   <p>No more polls to load</p>
                 </div> : ''

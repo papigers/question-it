@@ -10,6 +10,16 @@ import Explore, { ExploreTabs, ExploreFlexibleSpace } from './explore';
 import CreatePoll from './createPoll';
 import Poll from './poll';
 import User from './user';
+import Loading from '../components/loading';
+
+/* eslint-disable react/prop-types */
+
+function renderLoading({ props, routerProps, element }) {
+  if (!props) {
+    return <Loading {...routerProps} />;
+  }
+  return React.cloneElement(element, props);
+}
 
 export default (
   <Route component={App} path="/" queries={viewerQuery}>
@@ -17,6 +27,7 @@ export default (
     <IndexRoute
       components={{ main: Home, flexibleSpace: HomeFlexibleSpace }}
       queries={{ main: storeQuery }}
+      render={{ main: renderLoading }}
     />
 
     <Route path="explore">
@@ -26,6 +37,7 @@ export default (
         path=":tab"
         components={{ main: Explore, flexibleSpace: ExploreFlexibleSpace, tabs: ExploreTabs }}
         queries={{ main: storeQuery }}
+        render={{ main: renderLoading }}
         prepareParams={
           function prepareExploreParams(params, { location }) {
             let { tab } = params;
@@ -58,7 +70,8 @@ export default (
     <Route
       path="poll/new"
       components={{ main: CreatePoll }}
-      queries={{ main: { ...storeQuery, ...viewerQuery } }}
+      queries={{ main: { ...viewerQuery, ...storeQuery } }}
+      render={{ main: renderLoading }}
     />
 
     <Route path="poll">
@@ -66,11 +79,17 @@ export default (
         path=":id"
         components={{ main: Poll }}
         queries={{ main: { ...nodeQuery, ...viewerQuery, ...storeQuery } }}
+        render={{ main: renderLoading }}
       />
     </Route>
 
 
-    <Route path="user/:id" components={{ main: User }} queries={{ main: nodeQuery }} />
+    <Route
+      path="user/:id"
+      components={{ main: User }}
+      queries={{ main: nodeQuery }}
+      render={{ main: renderLoading }}
+    />
 
 
     <Route components={{ main: Login }} path="login" />

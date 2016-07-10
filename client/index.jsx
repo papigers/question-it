@@ -17,6 +17,7 @@ browserHistory.listen(location => {
     if (Object.keys(prevLocation).length !== 0) {
       NProgress.start();
     }
+    window.scrollTo(0, 0);
   }
   prevLocation = location;
 });

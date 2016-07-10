@@ -8,8 +8,8 @@ const regex = {
 class ValidTextField extends React.Component {
 
   static propTypes = {
-    required: React.PropTypes.boolean,
-    email: React.PropTypes.boolean,
+    required: React.PropTypes.bool,
+    email: React.PropTypes.bool,
     label: React.PropTypes.string,
     style: React.PropTypes.object,
     muiId: React.PropTypes.string,

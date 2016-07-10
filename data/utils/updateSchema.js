@@ -6,8 +6,9 @@ const Schema = require('../schema');
 const graphql = require('graphql').graphql;
 const introspectionQuery = require('graphql/utilities').introspectionQuery;
 const printSchema = require('graphql/utilities').printSchema;
+const config = require('../../config');
 
-const buildLocation = path.join(__dirname, '..', '..', 'build');
+const buildLocation = config.buildLocation;
 
 if (!fs.existsSync(buildLocation)) {
   fs.mkdirSync(buildLocation);
