@@ -1,4 +1,5 @@
 import express from 'express';
+import favicon from 'express-favicon';
 import schema from '../data/schema';
 import graphQLHTTP from 'express-graphql';
 
@@ -20,6 +21,8 @@ const networkLayer = new Relay.DefaultNetworkLayer(GRAPHQL_URL);
 const app = express();
 
 export default function() {
+  app.use(favicon(config.favicon));
+
   app.use(express.static('statics'));
   app.use('/public', express.static(config.buildLocation));
 
@@ -66,8 +69,15 @@ export default function() {
           <head>
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
             <meta http-equiv="Content-Style-Type" content="text/css">
-            <meta name="theme-color" content="#950000">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="apple-touch-icon" sizes="180x180" href="/statics/favicon/apple-touch-icon.png">
+            <link rel="icon" type="image/png" href="/statics/favicon/favicon-32x32.png" sizes="32x32">
+            <link rel="icon" type="image/png" href="/statics/favicon/favicon-16x16.png" sizes="16x16">
+            <link rel="manifest" href="/statics/favicon/manifest.json">
+            <link rel="mask-icon" href="/statics/favicon/safari-pinned-tab.svg" color="#d50000">
+            <link rel="shortcut icon" href="/statics/favicon/favicon.ico">
+            <meta name="msapplication-config" content="/statics/favicon/browserconfig.xml">
+            <meta name="theme-color" content="#a50000">
             <title>Question It - Online Polls</title>
             <script async type="application/javascript" src="/public/bundle.js"></script>
             <style type="text/css">${css.join('')}</style>

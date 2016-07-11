@@ -183,7 +183,7 @@ class Poll extends React.Component {
     return (
       <div className="container ChartPage">
         <div className="row">
-          <div id="chart-col" className="col-xs-12 col-md-7">
+          <div id="chart-col" className="col-xs-12 col-md-7 col-md-push-5">
             <div id="chart-div">
               {(noVotes)
                 ?
@@ -213,7 +213,7 @@ class Poll extends React.Component {
             </div>
           </div>
 
-          <div className="col-xs-12 col-md-5">
+          <div className="col-xs-12 col-md-5 col-md-pull-7">
             <VoteArea
               poll={node}
               viewer={viewer}

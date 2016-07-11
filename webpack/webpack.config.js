@@ -32,6 +32,9 @@ const webpackConfig = {
     filename: 'bundle.js',
     publicPath: '/public/',
   },
+  node: {
+    __dirname: true,
+  },
   module: {
     loaders: [
       {

@@ -2,11 +2,11 @@ require('babel-register');
 
 const fs = require('fs');
 const path = require('path');
-const Schema = require('../schema');
+const Schema = require('../data/schema');
 const graphql = require('graphql').graphql;
 const introspectionQuery = require('graphql/utilities').introspectionQuery;
 const printSchema = require('graphql/utilities').printSchema;
-const config = require('../../config');
+const config = require('../config');
 
 const buildLocation = config.buildLocation;
 

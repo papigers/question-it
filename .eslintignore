@@ -1,2 +1,3 @@
 statics/build/**/*
 statics/nprogress
+scripts/relay-patch-files/**/*

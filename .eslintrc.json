@@ -11,6 +11,7 @@
   "rules": {
     //because no hot-reload
     "react/prefer-stateless-function": 0,
+    "max-len": ["error", 120],
     "no-confusing-arrow": 0,
     "no-console": [2, { "allow": ["warn", "error"] }],
     "brace-style": [2, "stroustrup"],
