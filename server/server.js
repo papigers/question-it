@@ -26,7 +26,8 @@ export default function() {
   app.use(express.static('statics'));
   app.use('/public', express.static(config.buildLocation));
 
-  mongoose.connect('mongodb://localhost/question-it');
+  const MONGODB_URI = process.env.MONGODB_URI || config.mongoUrl;
+  mongoose.connect(MONGODB_URI);
 
   app.use('/graphql', graphQLHTTP({
     schema,
