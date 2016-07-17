@@ -69,8 +69,7 @@ const { nodeInterface, nodeField } = nodeDefinitions(
 );
 
 function privateFieldType(field, type) {
-  const name = field;
-  name[0] = name[0].toUpperCase();
+  const name = field[0].toUpperCase() + field.substr(1);
   return {
     type: new GraphQLObjectType({
       name,
