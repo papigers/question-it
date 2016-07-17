@@ -32,7 +32,7 @@ export default function() {
     schema,
     graphiql: true,
     context: {
-      viewerId: '578a98aa39e33aac17856178',
+      viewerId: '578bcc490cdd6928110989eb',
     },
   }));
 

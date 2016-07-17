@@ -69,7 +69,7 @@ db.once('open', () => {
     const i = votes.length;
     const v = data.votes[i];
     v.user = users[v.user - 1].id;
-    v.poll = polls[v.poll - 1].id;
+    const poll = polls[v.poll - 1];
 
     const vote = new Vote(v);
     vote.save((err, savedVote) => {
@@ -81,13 +81,24 @@ db.once('open', () => {
       }
 
       votes[i] = savedVote;
+      poll.votes.push(savedVote);
 
-      if (i === data.votes.length - 1) {
-        cb();
-      }
-      else {
-        saveVotes(cb);
-      }
+      poll.save((errPoll, savedPoll) => {
+        if (errPoll) {
+          console.error(err);
+          mongoose.connection.close();
+          process.exit(1);
+        }
+
+        polls[v.poll - 1] = savedPoll;
+
+        if (i === data.votes.length - 1) {
+          cb();
+        }
+        else {
+          saveVotes(cb);
+        }
+      });
     });
   }
 

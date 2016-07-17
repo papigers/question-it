@@ -247,7 +247,6 @@ export default {
       poll: 5,
       user: 3,
       options: [0],
-      timestamp: 1467254149056,
     },
     {
       poll: 5,

@@ -190,7 +190,7 @@ const pollType = new GraphQLObjectType({
     },
     author: {
       type: new GraphQLNonNull(userType),
-      resolve: ((poll) => db.getPollAuthor(poll.id)),
+      resolve: ((poll) => db.getPollAuthor(poll._id)),
     },
     votes: {
       type: voteConnectionType,
