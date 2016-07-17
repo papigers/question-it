@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "postinstall": "node --use_strict scripts/patchRelay && npm run prod-client && npm run prod-server",
+    "postinstall": "node --use_strict scripts/patchRelay && npm run update-schema && npm run prod-client && npm run prod-server",
     "test": "mocha \"{data,shared,server}/**/__tests__/*.js\" --compilers js:babel-register",
     "lint": "eslint . --ext .js,.jsx",
     "prestart": "npm run update-schema",
