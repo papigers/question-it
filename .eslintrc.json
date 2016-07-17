@@ -16,6 +16,7 @@
     "no-console": [2, { "allow": ["warn", "error"] }],
     "brace-style": [2, "stroustrup"],
     "indent": [2, 2, { "SwitchCase": 1}],
+    "new-cap": [2, { "properties": false }],
     "consistent-return": 0,
     "prefer-const": ["error", {
         "destructuring": "all"
@@ -29,7 +30,8 @@
       {
         "allow": [
           "_getCss",
-          "_insertCss"
+          "_insertCss",
+          "_id"
         ]
       }
     ],

@@ -1,232 +1,222 @@
-/* eslint-disable no-restricted-syntax, guard-for-in, prefer-const */
-
-export class User {
-  constructor(obj) {
-    for (let prop in obj) {
-      if (prop === 'timestamp') {
-        this[prop] = new Date(obj[prop]);
-      }
-      else {
-        this[prop] = obj[prop];
-      }
-    }
-  }
-}
-
-export class Poll {
-  constructor(obj) {
-    for (let prop in obj) {
-      if (prop === 'timestamp') {
-        this[prop] = new Date(obj[prop]);
-      }
-      else {
-        this[prop] = obj[prop];
-      }
-    }
-  }
-}
-
-export class Vote {
-  constructor(obj) {
-    for (let prop in obj) {
-      if (prop === 'timestamp') {
-        this[prop] = new Date(obj[prop]);
-      }
-      else if (prop === 'option') {
-        this.options = [obj[prop]];
-      }
-      else {
-        this[prop] = obj[prop];
-      }
-    }
-  }
-}
-
-import data from './data';
-
-let { users, polls, votes } = data;
-
-users = users.map((user) => new User(user));
-
-polls = polls.map((poll) => new Poll(poll));
-
-votes = votes.map((vote) => new Vote(vote));
-
-/*
-const users = [];
-for (let i = 0; i < 5; i++) {
-  const user = new User();
-  user.email = `email${i}@email.com`;
-  user.username = `MyUsername${i}`;
-  user.password = '1234';
-  user._id = `${i}`;
-  user.votes = [];
-  user.polls = [];
-  users.push(user);
-}
-
-const polls = [];
-for (let i = 0; i < 8; i++) {
-  const poll = new Poll();
-  poll._id = `${i}`;
-  poll.title = `Poll ${i} Title`;
-  const optionsNum = 2 + Math.floor(Math.random() * 3);
-  poll.options = [];
-  for (let j = 0; j < optionsNum; j++) {
-    poll.options.push(`Poll ${i} Option ${j}`);
-  }
-  poll.votes = [];
-  const author = Math.floor(Math.random() * users.length);
-  poll.author = `${author}`;
-  users[author].polls.push(`${i}`);
-  poll.timestamp = new Date();
-  polls.push(poll);
-}
-
-const votes = [];
-for (let i = 0; i < users.length; i++) {
-  for (let j = 0; j < polls.length; j++) {
-    const vote = new Vote();
-    vote._id = `${(i + 1) * (j + 1) - 1}`;
-    const poll = polls[j];
-    const user = users[i];
-    user.votes.push(`${vote._id}`);
-    poll.votes.push(`${vote._id}`);
-    vote.user = `${user._id}`;
-    vote.poll = `${poll._id}`;
-    vote.vote = `${Math.floor(Math.random() * poll.options.length)}`;
-    vote.timestamp = new Date();
-    votes.push(vote);
-  }
-}
-*/
-
-function findById(item) {
-  return item.id === this;
-}
+import mongoose from 'mongoose';
+mongoose.Promise = global.Promise;
+import { User, Poll, Vote } from './models';
 
 export function getViewer() {
-  return users[0];
+  return new Promise((resolve, reject) => {
+    User.findOne({})
+      .exec((err, res) => err ? reject(err) : resolve(res));
+  });
 }
 
 export function getUser(id) {
-  return users.find(findById, +id);
+  return new Promise((resolve, reject) => {
+    User.findById(id)
+      .exec((err, res) => err ? reject(err) : resolve(res));
+  });
 }
 
 export function getUsers() {
-  return users;
+  return new Promise((resolve, reject) => {
+    User.find({})
+      .exec((err, res) => err ? reject(err) : resolve(res));
+  });
 }
 
 export function getPoll(id) {
-  return polls.find(findById, +id);
+  return new Promise((resolve, reject) => {
+    Poll.findById(id)
+      .exec((err, res) => err ? reject(err) : resolve(res));
+  });
 }
 
-export function getPolls(orderBy = 1, query = '') {
-  const filteredPolls =
-        polls.filter((poll) => poll.title.search(new RegExp(query, 'i')) !== -1);
-  return orderPolls(filteredPolls, orderBy);
+export function countPolls(query = {}) {
+  return new Promise((resolve, reject) => {
+    Poll.count(query)
+      .exec((err, res) => err ? reject(err) : resolve(res));
+  });
 }
 
 export function getVote(id) {
-  return votes.find(findById, +id);
+  return new Promise((resolve, reject) => {
+    Vote.findById(id)
+      .exec((err, res) => err ? reject(err) : resolve(res));
+  });
 }
 
-export function getVotes() {
-  return votes;
+export function getVotes(query = {}) {
+  return new Promise((resolve, reject) => {
+    Vote.find(query)
+      .exec((err, res) => err ? reject(err) : resolve(res));
+  });
+}
+
+export function countVotes(query = {}) {
+  return new Promise((resolve, reject) => {
+    Vote.count(query)
+      .exec((err, res) => err ? reject(err) : resolve(res));
+  });
 }
 
 export function getUserPolls(id, orderBy = 1) {
-  return orderPolls(polls.filter((poll) => poll.author === id), orderBy);
+  return getPolls({ author: id }, orderBy);
+}
+
+export function countUserPolls(id) {
+  return countPolls({ author: id });
 }
 
 export function getUserVotes(id) {
-  return votes.filter((vote) => vote.user === id);
+  return getVotes({ user: id });
+}
+
+export function countUserVotes(id) {
+  return countVotes({ user: id });
 }
 
 export function getUserRecievedVotes(id) {
-  const userPolls = polls.filter((poll) => poll.author === id);
-  const pollVotesCounter = userPolls.map(poll => getPollVotes(poll.id).length);
-  return pollVotesCounter.reduce((prev, curr) => prev + curr);
+  return new Promise((resolve, reject) => {
+    getUserPolls(id).then(polls => {
+      Vote.find({
+        poll: { $in: polls },
+      })
+        .exec((err, res) => err ? reject(err) : resolve(res));
+    });
+  });
+}
+
+export function countUserRecievedVotes(id) {
+  return new Promise((resolve, reject) => {
+    getUserPolls(id).then(polls => {
+      Vote.count({
+        poll: { $in: polls },
+      })
+        .exec((err, res) => err ? reject(err) : resolve(res));
+    });
+  });
 }
 
 export function getPollAuthor(id) {
-  return getUser(getPoll(id).author);
+  return new Promise((resolve, reject) => {
+    Poll
+      .findById(id)
+      .populate({
+        path: 'author',
+      })
+      .exec((error, poll) => {
+        if (error) {
+          reject(error);
+        }
+        else {
+          resolve(poll.author);
+        }
+      });
+  });
 }
 
 export function getPollVotes(id) {
-  return votes.filter((vote) => vote.poll === id);
+  return getVotes({ poll: id });
+}
+
+export function countPollVotes(id) {
+  return countVotes({ poll: id });
 }
 
 export function getVoteUser(id) {
-  return getUser(getVote(id).user);
+  return new Promise((resolve, reject) => {
+    Vote
+      .findById(id)
+      .populate({
+        path: 'user',
+      })
+      .exec((err, res) => err ? reject(err) : resolve(res.user));
+  });
 }
 
 export function getVotePoll(id) {
-  return getPoll(getVote(id).poll);
+  return new Promise((resolve, reject) => {
+    Vote
+      .findById(id)
+      .populate({
+        path: 'poll',
+      })
+      .exec((err, res) => err ? reject(err) : resolve(res.poll));
+  });
 }
 
-function sortByTime(a, b) {
-  return b.timestamp - a.timestamp;
-}
-
-function orderPolls(unordered, orderBy) {
+export function getPolls(query = {}, orderBy = 1) {
   switch (orderBy) {
     case 2:
-      return newPolls(unordered);
+      return newPolls(query);
     case 3:
-      return topPolls(unordered);
+      return topPolls(query);
     case 1:
     default:
-      return trendingPolls(unordered);
+      return trendingPolls(query);
   }
 }
 
-function topPolls(unordered) {
-  return unordered.sort((pA, pB) => getPollVotes(pB.id).length - getPollVotes(pA.id).length);
+function topPolls(query) {
+  const newQuery = {};
+  Object.keys(query).forEach(key => {
+    newQuery[`poll.0.${key}`] = query[key];
+  });
+  return new Promise((resolve, reject) => {
+    Vote.aggregate([
+      { $group: { _id: '$poll', votes: { $sum: 1 } } },
+      { $sort: { votes: -1 } },
+      { $lookup: { from: 'polls', localField: '_id', foreignField: '_id', as: 'poll' } },
+      { $match: newQuery },
+    ]).then(aggr => {
+      const polls = aggr.map(v => v.poll[0]);
+      Poll.find(Object.assign(query, { _id: { $nin: polls.map(poll => poll._id) } }))
+        .exec((err, res) => err ? reject(err) : resolve(polls.concat(res)));
+    });
+  });
 }
 
-function newPolls(unordered) {
-  return unordered.sort(sortByTime);
+function newPolls(query) {
+  return new Promise((resolve, reject) => {
+    Poll.find(query).sort({ createdAt: -1 })
+      .exec((err, res) => err ? reject(err) : resolve(res));
+  });
 }
 
-function trendingPolls(unordered) {
-  return unordered.sort((pA, pB) => {
-    const vA = getPollVotes(pA.id);
-    const vB = getPollVotes(pB.id);
-    vA.sort(sortByTime);
-    vB.sort(sortByTime);
-    if (vA.length === 0) {
-      return true;
-    }
-    if (vB.length === 0) {
-      return false;
-    }
+function trendingPolls(query) {
+  const newQuery = {};
+  Object.keys(query).forEach(key => {
+    newQuery[`poll.0.${key}`] = query[key];
+  });
 
-    return sortByTime(vA[0], vB[0]);
+  return new Promise((resolve, reject) => {
+    Vote.aggregate([
+      { $group: { _id: '$poll', mostRecentVote: { $max: '$createdAt' } } },
+      { $sort: { mostRecentVote: -1 } },
+      { $lookup: { from: 'polls', localField: '_id', foreignField: '_id', as: 'poll' } },
+      { $match: newQuery },
+    ])
+      .exec((err, res) => {
+        const polls = res.map(r => r.poll[0]);
+        return err ? reject(err) : resolve(polls);
+      });
   });
 }
 
 export function createPoll(title, options, userId, multi) {
   const poll = new Poll({
-    id: polls.length + 1,
     title,
     options,
     multi,
-    author: +userId,
-    timestamp: new Date(),
+    author: userId,
   });
-  polls.push(poll);
-  return poll;
+  return poll.save();
 }
 
 export function createVote(user, poll, options) {
   const vote = new Vote({
-    id: votes.length + 1,
-    user: +user,
-    poll: +poll,
+    user,
+    poll,
     options,
-    timestamp: new Date(),
   });
-  votes.push(vote);
-  return vote;
+  return vote.save();
 }

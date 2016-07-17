@@ -16,7 +16,7 @@ import GraphQLDate from 'graphql-custom-datetype';
 import {
   connectionArgs,
   connectionDefinitions,
-  connectionFromPromisedArray,
+  connectionFromArray,
   cursorForObjectInConnection,
   fromGlobalId,
   globalIdField,
@@ -51,14 +51,13 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     return null;
   },
   (obj) => {
-    const type = obj.constructor.modelName;
-    if (type === 'Poll') {
+    if (obj instanceof db.Poll) {
       return pollType;
     }
-    else if (type === 'User') {
+    else if (obj instanceof db.User) {
       return userType;
     }
-    else if (type === 'Vote') {
+    else if (obj instanceof db.Vote) {
       return voteType;
     }
     else if (obj instanceof Store) {
@@ -67,32 +66,6 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     return null;
   }
 );
-
-function privateFieldType(field, type) {
-  const name = field;
-  name[0] = name[0].toUpperCase();
-  return {
-    type: new GraphQLObjectType({
-      name,
-      fields: (() => ({
-        value: {
-          type,
-        },
-        public: {
-          type: GraphQLBoolean,
-        },
-      })),
-    }),
-    resolve: ((user, args, { viewerId }) => {
-      const isPublic = user[field].public;
-      const value = isPublic || viewerId === user._id ? user[field].value : null;
-      return {
-        value,
-        public: isPublic,
-      };
-    }),
-  };
-}
 
 const pollSortEnum = new GraphQLEnumType({
   name: 'PollSort',
@@ -117,37 +90,32 @@ const userType = new GraphQLObjectType({
   name: 'User',
   description: 'Registered user',
   fields: (() => ({
-    id: globalIdField('User', user => user._id),
-    username: {
-      type: new GraphQLNonNull(GraphQLString),
-    },
+    id: globalIdField('User'),
     email: {
       type: new GraphQLNonNull(GraphQLString),
     },
     password: {
       type: new GraphQLNonNull(GraphQLString),
     },
-    avatar: {
-      type: GraphQLString,
+    username: {
+      type: new GraphQLNonNull(GraphQLString),
     },
     bio: {
       type: GraphQLString,
     },
-    birthDate: privateFieldType('birthDate', GraphQLDate),
-    name: privateFieldType('name', GraphQLString),
     votes: {
       type: voteConnectionType,
       args: connectionArgs,
       resolve: ((user, args) =>
-                connectionFromPromisedArray(db.getUserVotes(user._id), args)),
+                connectionFromArray(db.getUserVotes(user.id), args)),
     },
     voteCount: {
       type: GraphQLInt,
-      resolve: (user => db.countUserVotes(user.id)),
+      resolve: (user => db.getUserVotes(user.id).length),
     },
     recievedVotesCount: {
       type: GraphQLInt,
-      resolve: (user => db.countUserRecievedVotes(user._id)),
+      resolve: (user => db.getUserRecievedVotes(user.id)),
     },
     polls: {
       type: pollConnectionType,
@@ -158,17 +126,11 @@ const userType = new GraphQLObjectType({
         ...connectionArgs,
       },
       resolve: ((user, { orderBy, ...args }) =>
-                connectionFromPromisedArray(db.getUserPolls(user._id, orderBy), args)),
+                connectionFromArray(db.getUserPolls(user.id, orderBy), args)),
     },
     pollCount: {
       type: GraphQLInt,
-      resolve: (user => db.countUserPolls(user._id)),
-    },
-    createdAt: {
-      type: new GraphQLNonNull(GraphQLDate),
-    },
-    updatedAt: {
-      type: new GraphQLNonNull(GraphQLDate),
+      resolve: (user => db.getUserPolls(user.id).length),
     },
   })),
   interfaces: [nodeInterface],
@@ -178,34 +140,31 @@ const pollType = new GraphQLObjectType({
   name: 'Poll',
   description: 'Poll which can be voted by registered users',
   fields: (() => ({
-    id: globalIdField('Poll', poll => poll._id),
+    id: globalIdField('Poll'),
     title: {
       type: new GraphQLNonNull(GraphQLString),
-    },
-    multi: {
-      type: GraphQLBoolean,
     },
     options: {
       type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
     },
-    author: {
-      type: new GraphQLNonNull(userType),
-      resolve: ((poll) => db.getPollAuthor(poll.id)),
+    multi: {
+      type: GraphQLBoolean,
     },
     votes: {
       type: voteConnectionType,
       args: connectionArgs,
       resolve: ((poll, args) =>
-                connectionFromPromisedArray(db.getPollVotes(poll._id), args)),
+                connectionFromArray(db.getPollVotes(poll.id), args)),
     },
     voteCount: {
       type: GraphQLInt,
-      resolve: (poll => db.countPollVotes(poll._id)),
+      resolve: (poll => db.getPollVotes(poll.id).length),
     },
-    createdAt: {
-      type: new GraphQLNonNull(GraphQLDate),
+    author: {
+      type: new GraphQLNonNull(userType),
+      resolve: ((poll) => db.getPollAuthor(poll.id)),
     },
-    updatedAt: {
+    timestamp: {
       type: new GraphQLNonNull(GraphQLDate),
     },
   })),
@@ -224,22 +183,19 @@ const voteType = new GraphQLObjectType({
   name: 'Vote',
   description: 'User vote on a poll',
   fields: (() => ({
-    id: globalIdField('Vote', vote => vote._id),
+    id: globalIdField('Vote'),
     user: {
       type: new GraphQLNonNull(userType),
-      resolve: ((vote) => db.getVoteUser(vote._id)),
+      resolve: ((vote) => db.getVoteUser(vote.id)),
     },
     poll: {
       type: new GraphQLNonNull(pollType),
-      resolve: ((vote) => db.getVotePoll(vote._id)),
+      resolve: ((vote) => db.getVotePoll(vote.id)),
     },
     options: {
       type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLInt))),
     },
-    createdAt: {
-      type: new GraphQLNonNull(GraphQLDate),
-    },
-    updatedAt: {
+    timestamp: {
       type: new GraphQLNonNull(GraphQLDate),
     },
   })),
@@ -261,15 +217,15 @@ const storeType = new GraphQLObjectType({
     votes: {
       type: voteConnectionType,
       args: connectionArgs,
-      resolve: ((store, args) => connectionFromPromisedArray(db.getVotes(), args)),
+      resolve: ((store, args) => connectionFromArray(db.getVotes(), args)),
     },
     voteCount: {
       type: GraphQLInt,
-      resolve: (() => db.countVotes()),
+      resolve: (() => db.getVotes().length),
     },
     pollCount: {
       type: GraphQLInt,
-      resolve: (() => db.countPolls()),
+      resolve: (() => db.getPolls().length),
     },
     polls: {
       type: pollConnectionType,
@@ -282,10 +238,8 @@ const storeType = new GraphQLObjectType({
           type: GraphQLString,
         },
       },
-      resolve: ((store, { orderBy, query, ...args }) => {
-        const q = query ? { title: new RegExp(query, 'i') } : {};
-        return connectionFromPromisedArray(db.getPolls(q, orderBy), args);
-      }),
+      resolve: ((store, { orderBy, query, ...args }) =>
+                connectionFromArray(db.getPolls(orderBy, query), args)),
     },
   })),
   interfaces: [nodeInterface],
@@ -354,7 +308,7 @@ const CreatePollMutation = mutationWithClientMutationId({
 
 const CreateVoteMutation = mutationWithClientMutationId({
   name: 'VotePoll',
-  
+
   inputFields: {
     poll: {
       type: new GraphQLNonNull(GraphQLID),
@@ -366,7 +320,7 @@ const CreateVoteMutation = mutationWithClientMutationId({
       type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLInt))),
     },
   },
-  
+
   outputFields: {
     voteEdge: {
       type: voteEdgeType,
@@ -391,7 +345,7 @@ const CreateVoteMutation = mutationWithClientMutationId({
       resolve: (({ pollId }) => db.getPoll(pollId)),
     },
   },
-  
+
   mutateAndGetPayload: ({ poll, user, options }) => {
     const { id: pollId } = fromGlobalId(poll);
     const { id: userId } = fromGlobalId(user);
@@ -401,7 +355,7 @@ const CreateVoteMutation = mutationWithClientMutationId({
       pollId,
     };
   },
-  
+
 });
 
 const Mutation = new GraphQLObjectType({

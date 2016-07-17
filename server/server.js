@@ -1,4 +1,5 @@
 import express from 'express';
+import mongoose from 'mongoose';
 import favicon from 'express-favicon';
 import schema from '../data/schema';
 import graphQLHTTP from 'express-graphql';
@@ -17,7 +18,6 @@ import config from '../config';
 const GRAPHQL_URL = `http://${config.hostname}:${config.port}/graphql`;
 const networkLayer = new Relay.DefaultNetworkLayer(GRAPHQL_URL);
 
-
 const app = express();
 
 export default function() {
@@ -26,11 +26,13 @@ export default function() {
   app.use(express.static('statics'));
   app.use('/public', express.static(config.buildLocation));
 
+  mongoose.connect('mongodb://localhost/question-it');
+
   app.use('/graphql', graphQLHTTP({
     schema,
     graphiql: true,
     context: {
-      viewerId: 1,
+      viewerId: '578a98aa39e33aac17856178',
     },
   }));
 

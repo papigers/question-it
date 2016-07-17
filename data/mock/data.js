@@ -6,17 +6,6 @@ export default {
       email: 'user1@email.com',
       password: 'abc123',
       bio: 'bio1 biooooo',
-      votes: [
-        3,
-        6,
-        9,
-        18,
-      ],
-      polls: [
-        1,
-        2,
-        8,
-      ],
     },
     {
       id: 2,
@@ -24,15 +13,6 @@ export default {
       email: 'user2@email.com',
       password: 'abc123',
       bio: 'bio2 biooooo',
-      votes: [
-        4,
-        7,
-        12,
-        16,
-      ],
-      polls: [
-
-      ],
     },
     {
       id: 3,
@@ -40,15 +20,6 @@ export default {
       email: 'user3@email.com',
       password: 'abc123',
       bio: 'bio3 biooooo',
-      votes: [
-        2,
-        10,
-        13,
-      ],
-      polls: [
-        3,
-        7,
-      ],
     },
     {
       id: 4,
@@ -56,15 +27,6 @@ export default {
       email: 'user4@email.com',
       password: 'abc123',
       bio: 'bio4 biooooo',
-      votes: [
-        8,
-        11,
-        15,
-      ],
-      polls: [
-        4,
-        10,
-      ],
     },
     {
       id: 5,
@@ -72,15 +34,6 @@ export default {
       email: 'user5@email.com',
       password: 'abc123',
       bio: 'bio5 biooooo',
-      votes: [
-        1,
-        5,
-        17,
-      ],
-      polls: [
-        5,
-        9,
-      ],
     },
   ],
 
@@ -95,12 +48,6 @@ export default {
         'Poll1 option4',
       ],
       author: 1,
-      votes: [
-        1,
-        6,
-        15,
-      ],
-      timestamp: 1467054149056,
     },
     {
       id: 2,
@@ -110,10 +57,6 @@ export default {
         'Poll2 option2',
       ],
       author: 1,
-      votes: [
-        12,
-      ],
-      timestamp: 1467034149056,
     },
     {
       id: 3,
@@ -126,11 +69,6 @@ export default {
         'Poll3 option5',
       ],
       author: 3,
-      votes: [
-        9,
-        16,
-      ],
-      timestamp: 1467024149056,
     },
     {
       id: 4,
@@ -144,11 +82,6 @@ export default {
         'Poll4 option6',
       ],
       author: 4,
-      votes: [
-        2,
-        8,
-      ],
-      timestamp: 1466954149056,
     },
     {
       id: 5,
@@ -159,12 +92,6 @@ export default {
         'Poll5 option3',
       ],
       author: 5,
-      votes: [
-        5,
-        13,
-        14,
-      ],
-      timestamp: 1466904149056,
     },
     {
       id: 6,
@@ -176,11 +103,6 @@ export default {
         'Poll6 option4',
       ],
       author: 5,
-      votes: [
-        7,
-        17,
-      ],
-      timestamp: 1466854149056,
     },
     {
       id: 7,
@@ -192,10 +114,6 @@ export default {
         'Poll7 option4',
       ],
       author: 3,
-      votes: [
-        10,
-      ],
-      timestamp: 1466824149056,
     },
     {
       id: 8,
@@ -207,10 +125,6 @@ export default {
         'Poll8 option4',
       ],
       author: 1,
-      votes: [
-        11,
-      ],
-      timestamp: 1466724149056,
     },
     {
       id: 9,
@@ -225,10 +139,6 @@ export default {
         'Poll9 option7',
       ],
       author: 5,
-      votes: [
-        3,
-      ],
-      timestamp: 1466704149056,
     },
     {
       id: 10,
@@ -240,11 +150,6 @@ export default {
         'Poll10 option4',
       ],
       author: 4,
-      votes: [
-        4,
-        18,
-      ],
-      timestamp: 1466604149056,
     },
     {
       id: 11,
@@ -257,8 +162,6 @@ export default {
         'Poll11 option5',
       ],
       author: 5,
-      votes: [],
-      timestamp: 1466604149056,
     },
   ],
 
@@ -268,126 +171,108 @@ export default {
       poll: 1,
       user: 5,
       option: 2,
-      timestamp: 1467254149056,
     },
     {
       id: 2,
       poll: 4,
       user: 3,
       option: 0,
-      timestamp: 1467254149056,
     },
     {
       id: 3,
       poll: 9,
       user: 1,
       option: 1,
-      timestamp: 1467254149056,
     },
     {
       id: 4,
       poll: 10,
       user: 2,
       option: 3,
-      timestamp: 1467254149056,
     },
     {
       id: 5,
       poll: 5,
       user: 5,
       option: 2,
-      timestamp: 1467254149056,
     },
     {
       id: 6,
       poll: 1,
       user: 1,
       option: 0,
-      timestamp: 1467254149056,
     },
     {
       id: 7,
       poll: 6,
       user: 2,
       option: 1,
-      timestamp: 1467254149056,
     },
     {
       id: 8,
       poll: 4,
       user: 4,
       option: 5,
-      timestamp: 1467254149056,
     },
     {
       id: 9,
       poll: 3,
       user: 1,
       option: 2,
-      timestamp: 1467254149056,
     },
     {
       id: 10,
       poll: 7,
       user: 3,
       option: 3,
-      timestamp: 1467254149056,
     },
     {
       id: 11,
       poll: 8,
       user: 4,
       option: 3,
-      timestamp: 1467254149056,
     },
     {
       id: 12,
       poll: 2,
       user: 2,
       option: 0,
-      timestamp: 1467254149056,
     },
     {
       id: 13,
       poll: 5,
       user: 3,
       option: 0,
-      timestamp: 1467254149056,
     },
     {
       id: 14,
       poll: 5,
       user: 2,
       option: 1,
-      timestamp: 1467254149056,
     },
     {
       id: 15,
       poll: 1,
       user: 4,
       option: 0,
-      timestamp: 1467254149056,
     },
     {
       id: 16,
       poll: 3,
       user: 2,
       option: 3,
-      timestamp: 1467254149056,
     },
     {
       id: 17,
       poll: 6,
       user: 5,
       option: 1,
-      timestamp: 1467254149056,
     },
     {
       id: 18,
       poll: 10,
       user: 1,
       option: 1,
-      timestamp: 1467254149056,
     },
   ],
 };
