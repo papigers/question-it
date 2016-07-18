@@ -71,10 +71,7 @@ class VoteArea extends React.Component {
   }
 	
   checkSubmit = () => {
-    const numSelected = this.state.selected.reduce(
-      (counter, value) => value ? counter + 1 : counter
-    );
-    if (numSelected === 0) {
+    if (!this.state.selected.length) {
       this.setState({ error: 'You have to choose an option.' });
       return;
     }

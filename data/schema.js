@@ -17,7 +17,7 @@ import {
   connectionArgs,
   connectionDefinitions,
   connectionFromPromisedArray,
-  cursorForObjectInConnection,
+  // cursorForObjectInConnection,
   fromGlobalId,
   globalIdField,
   mutationWithClientMutationId,
@@ -328,7 +328,7 @@ const CreatePollMutation = mutationWithClientMutationId({
       type: pollEdgeType,
       resolve: (poll => (
         {
-          cursor: cursorForObjectInConnection(db.getPolls(), poll),
+          cursor: 0,
           node: poll,
         }
       )),
@@ -345,8 +345,7 @@ const CreatePollMutation = mutationWithClientMutationId({
 
   mutateAndGetPayload: ({ title, multi, options, author }) => {
     const { id: authorId } = fromGlobalId(author);
-    const poll = db.createPoll(title, options, authorId, multi);
-    return poll;
+    return db.createPoll(title, options, authorId, multi);
   },
 
 });
@@ -372,7 +371,7 @@ const CreateVoteMutation = mutationWithClientMutationId({
       resolve: (({ voteId }) => {
         const vote = db.getVote(voteId);
         return {
-          cursor: cursorForObjectInConnection(db.getVotes(), vote),
+          cursor: 0,
           node: vote,
         };
       }),
@@ -394,11 +393,12 @@ const CreateVoteMutation = mutationWithClientMutationId({
   mutateAndGetPayload: ({ poll, user, options }) => {
     const { id: pollId } = fromGlobalId(poll);
     const { id: userId } = fromGlobalId(user);
-    const vote = db.createVote(userId, pollId, options);
-    return {
-      voteId: vote.id,
-      pollId,
-    };
+    return new Promise((resolve, reject) => {
+      db.createVote(userId, pollId, options).then(vote => resolve({
+        voteId: vote.id,
+        pollId,
+      })).catch(reject);
+    });
   },
   
 });

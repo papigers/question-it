@@ -203,12 +203,17 @@ export function createPoll(title, options, userId, multi) {
 export function createVote(user, poll, options) {
   const vote = new Vote({
     user,
-    poll,
     options,
   });
   return new Promise((resolve, reject) => {
-    vote.save((err, res) =>
-      err ? reject(err) : resolve(res)
-    );
+    vote.save((err, res) => {
+      if (err) {
+        reject(err);
+      }
+      else {
+        Poll.findByIdAndUpdate(poll, { $push: { votes: res._id } })
+          .exec((updErr) => updErr ? reject(updErr) : resolve(res));
+      }
+    });
   });
 }

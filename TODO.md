@@ -5,7 +5,8 @@
 * ~~Relay mutations.~~ TODO:
   * User: edit attributes mutation and views.
 * ~~Poll pagination on scroll.~~
-* Hooking up mongoose models and connect to GraphQl schema.
+* ~~Hooking up mongoose models and connect to GraphQl schema.~~
+  * Mongoose connection: pagination etc...
 * Authentication, with relay too,
 * Create React unit tests.
 * Deploy to heroku.

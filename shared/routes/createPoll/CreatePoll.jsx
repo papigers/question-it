@@ -122,7 +122,9 @@ class CreatePoll extends React.Component {
           const { node } = res.createPoll.pollEdge;
           return this.context.router.push(`/poll/${node.id}`);
         },
-        onFailure: () => this.setState({ failDialog: true }),
+        onFailure: () => {
+          this.setState({ failDialog: true });
+        },
       }
     );
   }
