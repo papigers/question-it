@@ -2,188 +2,274 @@ import mongoose from 'mongoose';
 mongoose.Promise = global.Promise;
 import { User, Poll, Vote } from './models';
 
-export function getViewer() {
-  return new Promise((resolve, reject) => {
-    User.findOne({})
-      .exec((err, res) => err ? reject(err) : resolve(res));
-  });
+export function getViewer(promise = true) {
+  const query = User.findOne({});
+  if (promise) {
+    return new Promise((resolve, reject) => {
+      query.exec((err, res) => err ? reject(err) : resolve(res));
+    });
+  }
+  return {
+    query,
+  };
 }
 
-export function getUser(id) {
-  return new Promise((resolve, reject) => {
-    User.findById(id)
-      .exec((err, res) => err ? reject(err) : resolve(res));
-  });
+export function getUser(id, promise = true) {
+  const query = User.findById(id);
+  if (promise) {
+    return new Promise((resolve, reject) => {
+      query.exec((err, res) => err ? reject(err) : resolve(res));
+    });
+  }
+  return {
+    query,
+  };
 }
 
-export function getUsers() {
-  return new Promise((resolve, reject) => {
-    User.find({})
-      .exec((err, res) => err ? reject(err) : resolve(res));
-  });
+export function getUsers(promise = true) {
+  const query = User.find({});
+  if (promise) {
+    return new Promise((resolve, reject) => {
+      query.exec((err, res) => err ? reject(err) : resolve(res));
+    });
+  }
+  return {
+    query,
+  };
 }
 
-export function getPoll(id) {
-  return new Promise((resolve, reject) => {
-    Poll.findById(id)
-      .exec((err, res) => err ? reject(err) : resolve(res));
-  });
+export function getPoll(id, promise = true) {
+  const query = Poll.findById(id);
+  if (promise) {
+    return new Promise((resolve, reject) => {
+      query.exec((err, res) => err ? reject(err) : resolve(res));
+    });
+  }
+  return {
+    query,
+  };
 }
 
-export function countPolls(query = {}) {
-  return new Promise((resolve, reject) => {
-    Poll.count(query)
-      .exec((err, res) => err ? reject(err) : resolve(res));
-  });
+export function countPolls(query = {}, promise = true) {
+  const q = Poll.count(query);
+  if (promise) {
+    return new Promise((resolve, reject) => {
+      q.exec((err, res) => err ? reject(err) : resolve(res));
+    });
+  }
+  return {
+    query: q,
+  };
 }
 
-export function getVote(id) {
-  return new Promise((resolve, reject) => {
-    Vote.findById(id)
-      .exec((err, res) => err ? reject(err) : resolve(res));
-  });
+export function getVote(id, promise = true) {
+  const query = Vote.findById(id);
+  if (promise) {
+    return new Promise((resolve, reject) => {
+      query.exec((err, res) => err ? reject(err) : resolve(res));
+    });
+  }
+  return {
+    query,
+  };
 }
 
-export function getVotes(query = {}) {
-  return new Promise((resolve, reject) => {
-    Vote.find(query)
-      .exec((err, res) => err ? reject(err) : resolve(res));
-  });
+export function getVotes(query = {}, promise = true) {
+  const q = Vote.find(query);
+  if (promise) {
+    return new Promise((resolve, reject) => {
+      q.exec((err, res) => err ? reject(err) : resolve(res));
+    });
+  }
+  return {
+    query: q,
+  };
 }
 
-export function countVotes(query = {}) {
-  return new Promise((resolve, reject) => {
-    Vote.count(query)
-      .exec((err, res) => err ? reject(err) : resolve(res));
-  });
+export function countVotes(query = {}, promise = true) {
+  const q = Vote.count(query);
+  if (promise) {
+    return new Promise((resolve, reject) => {
+      q.exec((err, res) => err ? reject(err) : resolve(res));
+    });
+  }
+  return {
+    query: q,
+  };
 }
 
-export function getUserPolls(id, orderBy = 1) {
-  return getPolls({ author: id }, orderBy);
+export function getUserPolls(id, orderBy = 1, promise = true) {
+  return getPolls({ author: id }, orderBy, promise);
 }
 
-export function countUserPolls(id) {
-  return countPolls({ author: id });
+export function countUserPolls(id, promise = true) {
+  return countPolls({ author: id }, promise);
 }
 
-export function getUserVotes(id) {
-  return getVotes({ user: id });
+export function getUserVotes(id, promise = true) {
+  return getVotes({ user: id }, promise);
 }
 
-export function countUserVotes(id) {
-  return countVotes({ user: id });
+export function countUserVotes(id, promise = true) {
+  return countVotes({ user: id }, promise);
 }
 
-export function getUserRecievedVotes(id) {
-  return new Promise((resolve, reject) => {
-    Poll.aggregate([
-      { $match: { author: id } },
-      { $unwind: '$votes' },
-      { $group: { _id: null, vts: { $push: '$votes' } } },
-      { $project: { _id: 0, votes: '$vts' } },
-    ])
-      .exec((err, res) => err ? reject(err) : resolve(res));
-  });
+export function getUserRecievedVotes(id, promise = true) {
+  const aggregate = Poll.aggregate([
+    { $match: { author: id } },
+    { $unwind: '$votes' },
+    { $group: { _id: null, vts: { $push: '$votes' } } },
+    { $project: { _id: 0, votes: '$vts' } },
+    { $unwind: '$votes' },
+    { $lookup: { from: 'votes', localField: 'votes', foreignField: '_id', as: 'votes' } },
+  ]);
+  if (promise) {
+    return new Promise((resolve, reject) => {
+      aggregate.exec((err, res) => err ? reject(err) : resolve(res.votes));
+    });
+  }
+  return {
+    aggregate,
+    map: (res) => res.votes,
+  };
 }
 
-export function countUserRecievedVotes(id) {
-  return new Promise((resolve, reject) => {
-    Poll.aggregate([
-      { $match: { author: id } },
-      { $unwind: '$votes' },
-      { $group: { _id: null, vts: { $push: '$votes' } } },
-      { $project: { _id: 0, voteCount: { $size: '$vts' } } },
-    ])
-      .exec((err, [{ voteCount }]) => err ? reject(err) : resolve(voteCount));
-  });
+export function countUserRecievedVotes(id, promise = true) {
+  const aggregate = Poll.aggregate([
+    { $match: { author: id } },
+    { $unwind: '$votes' },
+    { $group: { _id: null, vts: { $push: '$votes' } } },
+    { $project: { _id: 0, voteCount: { $size: '$vts' } } },
+  ]);
+  if (promise) {
+    return new Promise((resolve, reject) => {
+      aggregate.exec((err, [{ voteCount }]) => err ? reject(err) : resolve(voteCount));
+    });
+  }
+  return {
+    aggregate,
+    map: ([{ voteCount }]) => voteCount,
+  };
 }
 
-export function getPollAuthor(id) {
-  return new Promise((resolve, reject) => {
-    Poll
-      .findById(id)
-      .populate({
-        path: 'author',
-      })
-      .exec((err, res) => err ? reject(err) : resolve(res.author));
-  });
+export function getPollAuthor(id, promise = true) {
+  const query = Poll.findById(id).populate({ path: 'author' });
+  if (promise) {
+    return new Promise((resolve, reject) => {
+      query.exec((err, res) => err ? reject(err) : resolve(res.author));
+    });
+  }
+  return {
+    query,
+    transform: (res) => res.author,
+  };
 }
 
-export function getPollVotes(id) {
-  return new Promise((resolve, reject) => {
-    Poll
-      .findById(id)
-      .populate({
-        path: 'votes',
-      })
-      .exec((err, res) => err ? reject(err) : resolve(res.votes));
-  });
+export function getPollVotes(id, promise = true) {
+  const query = Poll.findById(id).populate({ path: 'votes' });
+  if (promise) {
+    return new Promise((resolve, reject) => {
+      query.exec((err, res) => err ? reject(err) : resolve(res.votes));
+    });
+  }
+  return {
+    query,
+    transform: (res) => res.votes,
+  };
 }
 
-export function countPollVotes(id) {
-  return new Promise((resolve, reject) => {
-    Poll.aggregate([
-      { $match: { _id: id } },
-      { $project: { voteCount: { $size: '$votes' } } },
-    ])
-      .exec((err, [{ voteCount }]) => err ? reject(err) : resolve(voteCount));
-  });
+export function countPollVotes(id, promise = true) {
+  const aggregate = Poll.aggregate([
+    { $match: { _id: id } },
+    { $project: { voteCount: { $size: '$votes' } } },
+  ]);
+  if (promise) {
+    return new Promise((resolve, reject) => {
+      aggregate.exec((err, [{ voteCount }]) => err ? reject(err) : resolve(voteCount));
+    });
+  }
+  return {
+    aggregate,
+    map: ([{ voteCount }]) => voteCount,
+  };
 }
 
-export function getVoteUser(id) {
-  return new Promise((resolve, reject) => {
-    Vote
-      .findById(id)
-      .populate({
-        path: 'user',
-      })
-      .exec((err, res) => err ? reject(err) : resolve(res.user));
-  });
+export function getVoteUser(id, promise = true) {
+  const query = Vote.findById(id).populate({ path: 'user' });
+  if (promise) {
+    return new Promise((resolve, reject) => {
+      query.exec((err, res) => err ? reject(err) : resolve(res.user));
+    });
+  }
+  return {
+    query,
+    transform: (res) => res.user,
+  };
 }
 
-export function getVotePoll(id) {
-  return new Promise((resolve, reject) => {
-    Poll
-      .findOne({ votes: id })
-      .exec((err, res) => err ? reject(err) : resolve(res));
-  });
+export function getVotePoll(id, promise = true) {
+  const query = Poll.findOne({ votes: id });
+  if (promise) {
+    return new Promise((resolve, reject) => {
+      query.exec((err, res) => err ? reject(err) : resolve(res));
+    });
+  }
+  return {
+    query,
+  };
 }
 
-export function getPolls(query = {}, orderBy = 1) {
+export function getPolls(query = {}, orderBy = 1, promise = true) {
   switch (orderBy) {
     case 2:
-      return newPolls(query);
+      return newPolls(query, promise);
     case 3:
-      return topPolls(query);
+      return topPolls(query, promise);
     case 1:
     default:
-      return trendingPolls(query);
+      return trendingPolls(query, promise);
   }
 }
 
-function topPolls(query) {
-  return new Promise((resolve, reject) => {
-    Poll.aggregate([
-      { $match: query },
-      { $project: { voteCount: { $size: '$votes' }, document: '$$ROOT' } },
-      { $sort: { voteCount: -1 } },
-    ])
-      .exec((err, res) => err ? reject(err) : resolve(res.map(r => r.document)));
-  });
+function topPolls(query, promise = true) {
+  const aggregate = Poll.aggregate([
+    { $match: query },
+    { $project: { voteCount: { $size: '$votes' }, document: '$$ROOT' } },
+    { $sort: { voteCount: -1 } },
+  ]);
+  if (promise) {
+    return new Promise((resolve, reject) => {
+      aggregate.exec((err, res) => err ? reject(err) : resolve(res.map(r => r.document)));
+    });
+  }
+  return {
+    aggregate,
+    map: (res) => res.map(r => r.document),
+  };
 }
 
-function newPolls(query) {
-  return new Promise((resolve, reject) => {
-    Poll.find(query).sort({ createdAt: -1 })
-      .exec((err, res) => err ? reject(err) : resolve(res));
-  });
+function newPolls(query, promise = true) {
+  const q = Poll.find(query).sort({ createdAt: -1 });
+  if (promise) {
+    return new Promise((resolve, reject) => {
+      q.exec((err, res) => err ? reject(err) : resolve(res));
+    });
+  }
+  return {
+    query: q,
+  };
 }
 
-function trendingPolls(query) {
-  return new Promise((resolve, reject) => {
-    Poll.find(query).sort('-updatedAt')
-      .exec((err, res) => err ? reject(err) : resolve(res));
-  });
+function trendingPolls(query, promise = true) {
+  const q = Poll.find(query).sort('-updatedAt');
+  if (promise) {
+    return new Promise((resolve, reject) => {
+      q.exec((err, res) => err ? reject(err) : resolve(res));
+    });
+  }
+  return {
+    query: q,
+  };
 }
 
 export function createPoll(title, options, userId, multi) {
