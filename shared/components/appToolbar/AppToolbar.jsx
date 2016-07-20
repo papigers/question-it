@@ -8,8 +8,6 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 import NavButtons from '../navButtons';
 
-import debounce from '../../utils/debounce';
-
 import s from './AppToolbar.css';
 
 const styles = {
@@ -46,7 +44,7 @@ class AppToolbar extends React.Component {
   constructor() {
     super();
     this.state = {};
-    this.listener = debounce(this.handleScroll, 250);
+    this.listener = this.handleScroll;
   }
 	
   componentWillMount() {
