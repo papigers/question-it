@@ -118,10 +118,8 @@ export function getUserRecievedVotes(id, promise = true) {
   const aggregate = Poll.aggregate([
     { $match: { author: id } },
     { $unwind: '$votes' },
-    { $group: { _id: null, vts: { $push: '$votes' } } },
-    { $project: { _id: 0, votes: '$vts' } },
-    { $unwind: '$votes' },
     { $lookup: { from: 'votes', localField: 'votes', foreignField: '_id', as: 'votes' } },
+    { $unwind: '$votes' },
   ]);
   if (promise) {
     return new Promise((resolve, reject) => {
@@ -161,20 +159,26 @@ export function getPollAuthor(id, promise = true) {
   }
   return {
     query,
-    transform: (res) => res.author,
+    map: (res) => res.author,
   };
 }
 
 export function getPollVotes(id, promise = true) {
   const query = Poll.findById(id).populate({ path: 'votes' });
+  const aggregate = Poll.aggregate([
+    { $match: { _id: id } },
+    { $unwind: '$votes' },
+    { $lookup: { from: 'votes', localField: 'votes', foreignField: '_id', as: 'votes' } },
+    { $unwind: '$votes' },
+  ]);
   if (promise) {
     return new Promise((resolve, reject) => {
       query.exec((err, res) => err ? reject(err) : resolve(res.votes));
     });
   }
   return {
-    query,
-    transform: (res) => res.votes,
+    aggregate,
+    map: (res) => res.votes,
   };
 }
 
@@ -203,7 +207,7 @@ export function getVoteUser(id, promise = true) {
   }
   return {
     query,
-    transform: (res) => res.user,
+    map: (res) => res.user,
   };
 }
 
@@ -244,7 +248,7 @@ function topPolls(query, promise = true) {
   }
   return {
     aggregate,
-    map: (res) => res.map(r => r.document),
+    map: (res) => res.document,
   };
 }
 

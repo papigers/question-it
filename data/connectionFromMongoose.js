@@ -52,6 +52,8 @@ export async function connectionFromMongooseQuery(query, args = {}, mapper, tran
     slice = res;
   }
 
+  slice = slice.map(d => d.toObject());
+
   if (typeof transform === 'function') {
     slice = slice.map(transform)[0];
   }
@@ -124,7 +126,7 @@ export async function connectionFromMongooseAggregate(aggr, args = {}, mapper, t
     slice = res;
   }
 
-  if (typeof mapper === 'function') {
+  if (typeof transform === 'function') {
     slice = slice.map(transform)[0];
   }
 

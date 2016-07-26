@@ -24,12 +24,19 @@ import {
   // toGlobalId
 } from 'graphql-relay';
 
+import * as db from './database.js';
+
 import {
   connectionFromMongooseQuery,
   connectionFromMongooseAggregate
 } from './connectionFromMongoose';
 
-import * as db from './database.js';
+async function connectionFromMongoose({ query, aggregate, map }, args) {
+  if (query) {
+    return await connectionFromMongooseQuery(query, args, map);
+  }
+  return await connectionFromMongooseAggregate(aggregate, args, map);
+}
 
 /* eslint-enable comma-dangle */
 
@@ -88,7 +95,7 @@ function privateFieldType(field, type) {
     }),
     resolve: ((user, args, { viewerId }) => {
       const isPublic = user[field].public;
-      const value = isPublic || viewerId === user._id ? user[field].value : null;
+      const value = isPublic || viewerId === user._id.toString() ? user[field].value : null;
       return {
         value,
         public: isPublic,
@@ -141,17 +148,16 @@ const userType = new GraphQLObjectType({
     votes: {
       type: voteConnectionType,
       args: connectionArgs,
-      async resolve(user, args) {
-        const { query, aggregate, map, transform } = db.getUserVotes(user._id, false);
-        if (query) {
-          return await connectionFromMongooseQuery(query, args, map, transform);
-        }
-        return await connectionFromMongooseAggregate(aggregate, args, map, transform);
-      },
+      resolve: (user, args) => connectionFromMongoose(db.getUserVotes(user._id, false), args),
     },
     voteCount: {
       type: GraphQLInt,
       resolve: (user => db.countUserVotes(user.id)),
+    },
+    recievedVotes: {
+      type: voteConnectionType,
+      args: connectionArgs,
+      resolve: (user, args) => connectionFromMongoose(db.getUserRecievedVotes(user._id, false), args),
     },
     recievedVotesCount: {
       type: GraphQLInt,
@@ -165,13 +171,7 @@ const userType = new GraphQLObjectType({
         },
         ...connectionArgs,
       },
-      async resolve(user, { orderBy, ...args }) {
-        const { query, aggregate, map, transform } = db.getUserPolls(user._id, orderBy, false);
-        if (query) {
-          return await connectionFromMongooseQuery(query, args, map, transform);
-        }
-        return await connectionFromMongooseAggregate(aggregate, args, map, transform);
-      },
+      resolve: (user, { orderBy, ...args }) => connectionFromMongoose(db.getUserPolls(user._id, orderBy, false), args),
     },
     pollCount: {
       type: GraphQLInt,
@@ -208,13 +208,7 @@ const pollType = new GraphQLObjectType({
     votes: {
       type: voteConnectionType,
       args: connectionArgs,
-      async resolve(poll, args) {
-        const { query, aggregate, map, transform } = db.getPollVotes(poll._id, false);
-        if (query) {
-          return await connectionFromMongooseQuery(query, args, map, transform);
-        }
-        return await connectionFromMongooseAggregate(aggregate, args, map, transform);
-      },
+      resolve: (poll, args) => connectionFromMongoose(db.getPollVotes(poll._id, false), args),
     },
     voteCount: {
       type: GraphQLInt,
@@ -279,13 +273,7 @@ const storeType = new GraphQLObjectType({
     votes: {
       type: voteConnectionType,
       args: connectionArgs,
-      async resolve(store, args) {
-        const { query, aggregate, map, transform } = db.getVotes({}, false);
-        if (query) {
-          return await connectionFromMongooseQuery(query, args, map, transform);
-        }
-        return await connectionFromMongooseAggregate(aggregate, args, map, transform);
-      },
+      resolve: (store, args) => connectionFromMongoose(db.getVotes({}, false), args),
     },
     voteCount: {
       type: GraphQLInt,
@@ -306,13 +294,9 @@ const storeType = new GraphQLObjectType({
           type: GraphQLString,
         },
       },
-      async resolve(store, { orderBy, query, ...args }) {
+      resolve: (store, { orderBy, query, ...args }) => {
         const q = query ? { title: new RegExp(query, 'i') } : {};
-        const { query: _query, aggregate, map, transform } = db.getPolls(q, orderBy, false);
-        if (_query) {
-          return await connectionFromMongooseQuery(_query, args, map, transform);
-        }
-        return await connectionFromMongooseAggregate(aggregate, args, map, transform);
+        return connectionFromMongoose(db.getPolls(q, orderBy, false), args);
       },
     },
   })),

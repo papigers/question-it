@@ -20,9 +20,8 @@ class UserIntro extends React.Component {
   }
 
   render() {
-    const { username, bio } = this.props.user;
+    const { username, bio, birthDate, name } = this.props.user;
     const { isViewer } = this.props;
-
     return (
       <div>
         <h2 className="categoryHeader">Intro</h2>
@@ -41,20 +40,26 @@ class UserIntro extends React.Component {
               <h2>{username}</h2>
             </ListItem>
           </div>
-          <div className={s.fullRow}>
-            <Subheader className="subheader">Name:</Subheader>
-            <ListItem className="item" disabled>
-              Gershon Papi
-              {isViewer ? <IconButton className={s.editIcon}><EditIcon /></IconButton> : null}
-            </ListItem>
-          </div>
-          <div className={s.fullRow}>
-            <Subheader className="subheader">Age:</Subheader>
-            <ListItem className="item" disabled>
-              23
-              {isViewer ? <IconButton className={s.editIcon}><EditIcon /></IconButton> : null}
-            </ListItem>
-          </div>
+          {
+            (isViewer || name.public) && name.value ?
+              <div className={s.fullRow}>
+                <Subheader className="subheader">Name:</Subheader>
+                <ListItem className="item" disabled>
+                  {name.value}
+                  {isViewer ? <IconButton className={s.editIcon}><EditIcon /></IconButton> : null}
+                </ListItem>
+              </div> : null
+          }
+          {
+            (isViewer || birthDate.public) && birthDate.value ?
+              <div className={s.fullRow}>
+                <Subheader className="subheader">Age:</Subheader>
+                <ListItem className="item" disabled>
+                  {Math.abs(new Date(Date.now() - new Date(birthDate.value).getTime()).getUTCFullYear() - 1970)}
+                  {isViewer ? <IconButton className={s.editIcon}><EditIcon /></IconButton> : null}
+                </ListItem>
+              </div> : null
+          }
           <div className={s.fullRow}>
             <Subheader className="subheader">Bio:</Subheader>
             <ListItem className="item" disabled>
@@ -75,6 +80,14 @@ UserIntro = Relay.createContainer(withStyles(s)(UserIntro), {
     user: (() => Relay.QL`
       fragment on User{
         username,
+        birthDate{
+          value,
+          public
+        },
+        name{
+          value,
+          public
+        },
         bio
       }
     `),
