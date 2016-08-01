@@ -29,13 +29,15 @@ import * as db from './database.js';
 import {
   connectionFromMongooseQuery,
   connectionFromMongooseAggregate
-} from './connectionFromMongoose';
+} from 'relay-mongodb-connection';
 
-async function connectionFromMongoose({ query, aggregate, map }, args) {
-  if (query) {
-    return await connectionFromMongooseQuery(query, args, map);
+import Query from 'mongoose/lib/query';
+
+function connectionFromMongoose({ query, map }, args) {
+  if (query instanceof Query) {
+    return connectionFromMongooseQuery(query, args, map);
   }
-  return await connectionFromMongooseAggregate(aggregate, args, map);
+  return connectionFromMongooseAggregate(query, args, map);
 }
 
 /* eslint-enable comma-dangle */

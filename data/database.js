@@ -115,7 +115,7 @@ export function countUserVotes(id, promise = true) {
 }
 
 export function getUserRecievedVotes(id, promise = true) {
-  const aggregate = Poll.aggregate([
+  const query = Poll.aggregate([
     { $match: { author: id } },
     { $unwind: '$votes' },
     { $lookup: { from: 'votes', localField: 'votes', foreignField: '_id', as: 'votes' } },
@@ -123,17 +123,17 @@ export function getUserRecievedVotes(id, promise = true) {
   ]);
   if (promise) {
     return new Promise((resolve, reject) => {
-      aggregate.exec((err, res) => err ? reject(err) : resolve(res.votes));
+      query.exec((err, res) => err ? reject(err) : resolve(res.votes));
     });
   }
   return {
-    aggregate,
+    query,
     map: (res) => res.votes,
   };
 }
 
 export function countUserRecievedVotes(id, promise = true) {
-  const aggregate = Poll.aggregate([
+  const query = Poll.aggregate([
     { $match: { author: id } },
     { $unwind: '$votes' },
     { $group: { _id: null, vts: { $push: '$votes' } } },
@@ -141,11 +141,11 @@ export function countUserRecievedVotes(id, promise = true) {
   ]);
   if (promise) {
     return new Promise((resolve, reject) => {
-      aggregate.exec((err, [{ voteCount }]) => err ? reject(err) : resolve(voteCount));
+      query.exec((err, [{ voteCount }]) => err ? reject(err) : resolve(voteCount));
     });
   }
   return {
-    aggregate,
+    query,
     map: ([{ voteCount }]) => voteCount,
   };
 }
@@ -164,8 +164,7 @@ export function getPollAuthor(id, promise = true) {
 }
 
 export function getPollVotes(id, promise = true) {
-  const query = Poll.findById(id).populate({ path: 'votes' });
-  const aggregate = Poll.aggregate([
+  const query = Poll.aggregate([
     { $match: { _id: id } },
     { $unwind: '$votes' },
     { $lookup: { from: 'votes', localField: 'votes', foreignField: '_id', as: 'votes' } },
@@ -177,23 +176,23 @@ export function getPollVotes(id, promise = true) {
     });
   }
   return {
-    aggregate,
+    query,
     map: (res) => res.votes,
   };
 }
 
 export function countPollVotes(id, promise = true) {
-  const aggregate = Poll.aggregate([
+  const query = Poll.aggregate([
     { $match: { _id: id } },
     { $project: { voteCount: { $size: '$votes' } } },
   ]);
   if (promise) {
     return new Promise((resolve, reject) => {
-      aggregate.exec((err, [{ voteCount }]) => err ? reject(err) : resolve(voteCount));
+      query.exec((err, [{ voteCount }]) => err ? reject(err) : resolve(voteCount));
     });
   }
   return {
-    aggregate,
+    query,
     map: ([{ voteCount }]) => voteCount,
   };
 }
@@ -235,19 +234,19 @@ export function getPolls(query = {}, orderBy = 1, promise = true) {
   }
 }
 
-function topPolls(query, promise = true) {
-  const aggregate = Poll.aggregate([
-    { $match: query },
+function topPolls(q, promise = true) {
+  const query = Poll.aggregate([
+    { $match: q },
     { $project: { voteCount: { $size: '$votes' }, document: '$$ROOT' } },
     { $sort: { voteCount: -1 } },
   ]);
   if (promise) {
     return new Promise((resolve, reject) => {
-      aggregate.exec((err, res) => err ? reject(err) : resolve(res.map(r => r.document)));
+      query.exec((err, res) => err ? reject(err) : resolve(res.map(r => r.document)));
     });
   }
   return {
-    aggregate,
+    query,
     map: (res) => res.document,
   };
 }

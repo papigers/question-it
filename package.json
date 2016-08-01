@@ -58,6 +58,7 @@
     "react-relay": "^0.9.0",
     "react-router": "^2.5.1",
     "react-tap-event-plugin": "^1.0.0",
+    "relay-mongodb-connection": "^2.1.0",
     "scriptjs": "^2.5.8",
     "source-map-support": "^0.4.0",
     "sweet-scroll": "^1.0.1",
