@@ -1,5 +1,4 @@
 const path = require('path');
-const webpack = require('webpack');
 const config = require('../config');
 
 function contains(arr, val) {
@@ -7,7 +6,6 @@ function contains(arr, val) {
 }
 
 const DEBUG = !(process.env.NODE_ENV === 'production' || contains(process.argv, '-p'));
-const ENV = process.env.NODE_ENV || 'development';
 const AUTOPREFIXER_BROWSERS = [
   'Android 2.3',
   'Android >= 4',
@@ -92,13 +90,6 @@ const webpackConfig = {
       },
     ],
   },
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env': Object.assign({}, process.env, {
-        NODE_ENV: JSON.stringify(ENV),
-      }),
-    }),
-  ],
   devServer: {
     hot: true,
     proxy: {
