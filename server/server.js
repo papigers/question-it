@@ -29,10 +29,10 @@ export default function() {
   const MONGODB_URI = process.env.MONGODB_URI || config.mongoUrl;
   mongoose.connect(MONGODB_URI);
   /* eslint-disable no-console */
-  mongoose.once('connected', () => {
+  mongoose.connection.once('connected', () => {
     console.log('\x1b[1m\x1b[32mConnected to DB on:\x1b[39m', MONGODB_URI);
   });
-  mongoose.on('error', () => {
+  mongoose.connection.on('error', () => {
     console.log('\x1b[1m\x1b[37mDatabase Error:\x1b[39m', MONGODB_URI);
   });
   /* eslint-enable no-console */
