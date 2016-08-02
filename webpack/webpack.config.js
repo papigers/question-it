@@ -94,10 +94,9 @@ const webpackConfig = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': {
-        BROWSER: JSON.stringify(true),
+      'process.env': Object.assign({}, process.env, {
         NODE_ENV: JSON.stringify(ENV),
-      },
+      }),
     }),
   ],
   devServer: {
