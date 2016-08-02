@@ -3,10 +3,12 @@ require('babel-register');
 import mongoose from 'mongoose';
 import { User, Poll, Vote } from '../../data/models';
 import data from './data';
+import config from '../../config';
 
 const clean = true;
+const MONGODB_URI = process.env.MONGODB_URI || config.mongoUrl;
 
-mongoose.connect('mongodb://localhost/question-it', () => {
+mongoose.connect(MONGODB_URI, () => {
   if (clean) {
     mongoose.connection.db.dropDatabase();
   }
