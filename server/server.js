@@ -26,16 +26,15 @@ export default function() {
   app.use(express.static('statics'));
   app.use('/public', express.static(config.buildLocation));
 
-  const MONGODB_URI = process.env.MONGODB_URI || config.mongoUrl;
+  const MONGODB_URI = config.mongoUrl;
   mongoose.connect(MONGODB_URI);
   /* eslint-disable no-console */
-  console.log(process.env);
-  console.log(process.env.MONGODB_URI);
   mongoose.connection.once('connected', () => {
     console.log('\x1b[1m\x1b[32mConnected to DB on:\x1b[39m', MONGODB_URI);
   });
-  mongoose.connection.on('error', () => {
-    console.log('\x1b[1m\x1b[37mDatabase Error:\x1b[39m', MONGODB_URI);
+  mongoose.connection.on('error', (err) => {
+    console.log('\x1b[1m\x1b[31mDatabase Error:\x1b[39m');
+    console.log(err.stack);
   });
   /* eslint-enable no-console */
 
@@ -43,7 +42,7 @@ export default function() {
     schema,
     graphiql: true,
     context: {
-      viewerId: '578db69904ec1604238533ca',
+      viewerId: config.mockViewer,
     },
   }));
 
@@ -116,7 +115,7 @@ export default function() {
     });
   });
 
-  const PORT = process.env.PORT || config.port;
+  const PORT = config.port;
   app.listen(PORT, () => {
     /* eslint-disable no-console */
     console.log('\x1b[1m\x1b[32m');

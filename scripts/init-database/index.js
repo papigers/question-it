@@ -6,7 +6,7 @@ import data from './data';
 import config from '../../config';
 
 const clean = true;
-const MONGODB_URI = process.env.MONGODB_URI || config.mongoUrl;
+const MONGODB_URI = config.mongoUrl;
 
 mongoose.connect(MONGODB_URI, () => {
   if (clean) {

@@ -4,6 +4,7 @@ module.exports = {
   buildLocation: path.join(__dirname, 'statics', 'build'),
   favicon: path.join(__dirname, 'statics', 'favicon', 'favicon.ico'),
   hostname: 'localhost',
-  port: 3000,
-  mongoUrl: 'mongodb://localhost/question-it',
+  port: process.env.PORT || 3000,
+  mongoUrl: process.env.MONGODB_URI || 'mongodb://localhost/question-it',
+  mockViewer: process.env.MOCK_VIEWER || '578db69904ec1604238533ca',
 };
