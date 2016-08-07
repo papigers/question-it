@@ -10,7 +10,7 @@ class SocialButton extends React.Component {
 
   static propTypes = {
     type: React.PropTypes.string.isRequired,
-    isViewer: React.PropTypes.bool.isRequired,
+    isViewer: React.PropTypes.bool,
     disabled: React.PropTypes.bool,
     className: React.PropTypes.string,
   }

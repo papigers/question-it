@@ -23,8 +23,8 @@ const app = express();
 export default function() {
   app.use(favicon(config.favicon));
 
-  app.use(express.static('statics'));
-  app.use('/public', express.static(config.buildLocation));
+  app.use(express.static('public'));
+  app.use('/bundle', express.static(config.buildLocation));
 
   const MONGODB_URI = config.mongoUrl;
   mongoose.connect(MONGODB_URI);
@@ -82,19 +82,19 @@ export default function() {
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
             <meta http-equiv="Content-Style-Type" content="text/css">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <link rel="apple-touch-icon" sizes="180x180" href="/statics/favicon/apple-touch-icon.png">
-            <link rel="icon" type="image/png" href="/statics/favicon/favicon-32x32.png" sizes="32x32">
-            <link rel="icon" type="image/png" href="/statics/favicon/favicon-16x16.png" sizes="16x16">
-            <link rel="manifest" href="/statics/favicon/manifest.json">
-            <link rel="mask-icon" href="/statics/favicon/safari-pinned-tab.svg" color="#d50000">
-            <link rel="shortcut icon" href="/statics/favicon/favicon.ico">
-            <meta name="msapplication-config" content="/statics/favicon/browserconfig.xml">
-            <meta name="theme-color" content="#a50000">
             <title>Question It - Online Polls</title>
-            <script async type="application/javascript" src="/public/bundle.js"></script>
+            <script async type="application/javascript" src="/bundle/bundle.js"></script>
             <style type="text/css">${css.join('')}</style>
             <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
             <link href="https://file.myfontastic.com/m6D5EwwEfBU4hxAfLHHbdR/icons.css" rel="stylesheet">
+            <link rel="apple-touch-icon" sizes="180x180" href="/public/favicon/apple-touch-icon.png">
+            <link rel="icon" type="image/png" href="/public/favicon/favicon-32x32.png" sizes="32x32">
+            <link rel="icon" type="image/png" href="/public/favicon/favicon-16x16.png" sizes="16x16">
+            <link rel="manifest" href="/public/favicon/manifest.json">
+            <link rel="mask-icon" href="/public/favicon/safari-pinned-tab.svg" color="#d50000">
+            <link rel="shortcut icon" href="/public/favicon/favicon.ico">
+            <meta name="msapplication-config" content="/public/favicon/browserconfig.xml">
+            <meta name="theme-color" content="#a50000">
           </head>
           <body>
             <div id="react-view">${componentHTML}</div>
@@ -106,6 +106,7 @@ export default function() {
             <script id="preloadedData" type="application/json" src="">
               ${JSON.stringify(data)}
             </script>
+            <link type="text/css" rel="stylesheet" href="/bundle/bundle.css">
           </body>
         </html>
         `;

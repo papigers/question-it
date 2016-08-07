@@ -20,9 +20,9 @@ if (!fs.existsSync(buildLocation)) {
       console.error('Error inspecting schema: ', JSON.stringify(result.errors, null, 2));
     }
     else {
-      fs.writeFileSync(path.join(buildLocation, 'schema.json'), JSON.stringify(result, null, 2));
+      fs.writeFileSync(path.resolve(buildLocation, 'schema.json'), JSON.stringify(result, null, 2));
     }
   });
 
-  fs.writeFileSync(path.join(buildLocation, 'schema.graphql'), printSchema(Schema));
+  fs.writeFileSync(path.resolve(buildLocation, 'schema.graphql'), printSchema(Schema));
 })();

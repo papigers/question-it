@@ -1,3 +1,12 @@
 require('babel-register');
-require('babel-polyfill');
-require('./server/start-server');
+require('source-map-support/register');
+
+const server = require('universal-webpack/build/server');
+const config = require('./config');
+
+server({
+  context: config.root,
+  output: {
+    path: config.buildLocation,
+  },
+}, config.universalWebpack);

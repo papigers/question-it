@@ -48,7 +48,15 @@ function run() {
   match({ routes, history: browserHistory }, (error, redirectLocation, renderProps) => {
     IsomorphicRouter.prepareInitialRender(environment, renderProps).then(props => {
       render(
-        <Root onInsertCss={(styles) => styles._insertCss()}>
+        <Root
+          onInsertCss={
+            function insertStyles(styles) {
+              if (!process.env.BROWSER) {
+                styles._insertCss();
+              }
+            }
+          }
+        >
           <Router {...props} />
         </Root>,
         document.getElementById('react-view'));

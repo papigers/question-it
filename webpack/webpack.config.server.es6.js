@@ -1,7 +1,7 @@
 import { server_configuration } from 'universal-webpack'; // eslint-disable-line camelcase
-import settings from './universal-webpack-settings';
+import { universalWebpack as settings } from '../config';
 import configuration from './webpack.config';
 
-const config = server_configuration(configuration, settings);
+const config = server_configuration(configuration(), settings);
 
 export default config;

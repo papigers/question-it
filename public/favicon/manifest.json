@@ -2,7 +2,7 @@
 	"name": "Question It",
 	"icons": [
 		{
-			"src": "\/statics\/favicon\/android-chrome-192x192.png",
+			"src": "\/public\/favicon\/android-chrome-192x192.png",
 			"sizes": "192x192",
 			"type": "image\/png"
 		}

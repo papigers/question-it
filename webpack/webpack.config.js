@@ -1,11 +1,13 @@
 const path = require('path');
 const config = require('../config');
+const webpack = require('webpack');
 
 function contains(arr, val) {
   return arr.indexOf(val) > -1;
 }
 
-const DEBUG = !(process.env.NODE_ENV === 'production' || contains(process.argv, '-p'));
+const DEV = !(process.env.NODE_ENV === 'production' || contains(process.argv, '-p'));
+
 const AUTOPREFIXER_BROWSERS = [
   'Android 2.3',
   'Android >= 4',
@@ -18,8 +20,8 @@ const AUTOPREFIXER_BROWSERS = [
 ];
 
 
-const webpackConfig = {
-  context: path.resolve(__dirname, '..'),
+const webpackConfig = (options) => ({
+  context: config.root,
   entry: [path.resolve(__dirname, '../client/index.jsx')],
   resolve: {
     modulesDirectories: ['node_modules', 'shared'],
@@ -28,7 +30,7 @@ const webpackConfig = {
   output: {
     path: config.buildLocation,
     filename: 'bundle.js',
-    publicPath: '/public/',
+    publicPath: '/bundle/',
   },
   node: {
     __dirname: true,
@@ -40,18 +42,18 @@ const webpackConfig = {
         exclude: /node_modules/,
         loaders: [
           'react-hot',
-          `babel?plugins[]=${path.join(__dirname, '..', 'data', 'plugins', 'babelRelayPlugin')}`,
+          `babel?plugins[]=${path.resolve(__dirname, '..', 'data', 'plugins', 'babelRelayPlugin')}`,
         ],
       },
       {
         test: /\.css$/,
         loaders: [
-          'isomorphic-style-loader',
+          `${options && options.client ? '' : 'isomorphic-'}style-loader`,
           `css-loader?${JSON.stringify({
-            sourceMap: DEBUG,
-            localIdentName: DEBUG ? '[name]_[local]_[hash:base64:3]' : '[hash:base64:4]',
+            sourceMap: DEV,
+            localIdentName: DEV ? '[name]_[local]_[hash:base64:3]' : '[hash:base64:4]',
             modules: true,
-            minimize: !DEBUG,
+            minimize: !DEV,
           })}`,
           'postcss-loader',
         ],
@@ -59,11 +61,11 @@ const webpackConfig = {
       {
         test: /\.less$/,
         loaders: [
-          'isomorphic-style-loader',
+          `${options && options.client ? '' : 'isomorphic-'}style-loader`,
           `css-loader?${JSON.stringify({
-            sourceMap: DEBUG,
-            localIdentName: DEBUG ? '[name]_[local]_[hash:base64:3]' : '[hash:base64:4]',
-            minimize: !DEBUG,
+            sourceMap: DEV,
+            localIdentName: DEV ? '[name]_[local]_[hash:base64:3]' : '[hash:base64:4]',
+            minimize: !DEV,
           })}`,
           'less-loader',
         ],
@@ -90,6 +92,17 @@ const webpackConfig = {
       },
     ],
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        BROWSER: JSON.stringify(options && options.client),
+        NODE_ENV: JSON.stringify(DEV ? 'development' : 'production'),
+        PORT: JSON.stringify(config.port),
+        MONGODB_URI: JSON.stringify(config.mongoUrl),
+        MOCK_VIEWER: JSON.stringify(config.mockViewer),
+      },
+    }),
+  ],
   devServer: {
     hot: true,
     proxy: {
@@ -145,7 +158,7 @@ const webpackConfig = {
     ];
     /* eslint-enable global-require */
   },
-};
+});
 
 
 module.exports = webpackConfig;
