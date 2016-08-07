@@ -94,13 +94,8 @@ const webpackConfig = (options) => ({
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': {
-        BROWSER: JSON.stringify(options && options.client),
-        NODE_ENV: JSON.stringify(DEV ? 'development' : 'production'),
-        PORT: JSON.stringify(config.port),
-        MONGODB_URI: JSON.stringify(config.mongoUrl),
-        MOCK_VIEWER: JSON.stringify(config.mockViewer),
-      },
+      'process.env.BROWSER': JSON.stringify(options && options.client),
+      'process.env.NODE_ENV': JSON.stringify(DEV ? 'development' : 'production'),
     }),
   ],
   devServer: {
