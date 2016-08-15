@@ -46,7 +46,7 @@
   position: fixed;
   z-index: 1100;
   width: 100%;
-  margin-top: -30px;
+  margin-top: -50px;
 
   & > div{
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.23) !important;

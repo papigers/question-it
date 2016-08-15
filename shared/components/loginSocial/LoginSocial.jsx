@@ -9,7 +9,7 @@ class LoginSocial extends React.Component {
   render() {
     return (
       <div className={s.root}>
-        <SocialButton type="facebook" />
+        <SocialButton type="facebook" link="/login/facebook" />
         <SocialButton type="twitter" />
         <SocialButton type="google" />
       </div>

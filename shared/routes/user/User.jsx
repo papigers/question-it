@@ -148,7 +148,8 @@ User = Relay.createContainer(User, {
       fragment on User{
         id,
         ${UserIntro.getFragment('user')},
-        ${UserStats.getFragment('user')}
+        ${UserStats.getFragment('user')},
+        ${UserContact.getFragment('user')}
       }
     `),
   },

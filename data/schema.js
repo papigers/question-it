@@ -81,13 +81,13 @@ const { nodeInterface, nodeField } = nodeDefinitions(
   }
 );
 
-function privateFieldType(field, type) {
+function privateFieldType(field, type, valueField = 'value', resolve = user => user[field]) {
   const name = field[0].toUpperCase() + field.substr(1);
   return {
     type: new GraphQLObjectType({
       name,
       fields: (() => ({
-        value: {
+        [valueField]: {
           type,
         },
         public: {
@@ -96,14 +96,18 @@ function privateFieldType(field, type) {
       })),
     }),
     resolve: ((user, args, { viewerId }) => {
-      const isPublic = user[field].public;
-      const value = isPublic || viewerId === user._id.toString() ? user[field].value : null;
+      const isPublic = resolve(user).public;
+      const value = isPublic || viewerId === user._id.toString() ? resolve(user)[valueField] : null;
       return {
-        value,
+        [valueField]: value,
         public: isPublic,
       };
     }),
   };
+}
+
+function privateSocialFieldType(social) {
+  return privateFieldType(social, GraphQLString, 'link', (user) => user.profile[social]);
 }
 
 const pollSortEnum = new GraphQLEnumType({
@@ -136,9 +140,6 @@ const userType = new GraphQLObjectType({
     email: {
       type: new GraphQLNonNull(GraphQLString),
     },
-    password: {
-      type: new GraphQLNonNull(GraphQLString),
-    },
     avatar: {
       type: GraphQLString,
     },
@@ -147,6 +148,9 @@ const userType = new GraphQLObjectType({
     },
     birthDate: privateFieldType('birthDate', GraphQLDate),
     name: privateFieldType('name', GraphQLString),
+    facebook: privateSocialFieldType('facebook'),
+    google: privateSocialFieldType('google'),
+    twitter: privateSocialFieldType('twitter'),
     votes: {
       type: voteConnectionType,
       args: connectionArgs,
@@ -311,7 +315,7 @@ const Root = new GraphQLObjectType({
     node: nodeField,
     viewer: {
       type: userType,
-      resolve: ((root, args, { viewerId }) => db.getUser(viewerId)),
+      resolve: ((root, args, context) => db.getUser(context.viewerId)),
     },
     store: {
       type: storeType,

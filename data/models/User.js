@@ -11,7 +11,6 @@ const userSchema = mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
   },
   avatar: String,
   bio: String,
@@ -31,6 +30,44 @@ const userSchema = mongoose.Schema({
     public: {
       type: Boolean,
       default: false,
+    },
+  },
+  profile: {
+    facebook: {
+      id: {
+        type: String,
+      },
+      link: {
+        type: String,
+      },
+      public: {
+        type: Boolean,
+        default: false,
+      },
+    },
+    google: {
+      id: {
+        type: String,
+      },
+      link: {
+        type: String,
+      },
+      public: {
+        type: Boolean,
+        default: false,
+      },
+    },
+    twitter: {
+      id: {
+        type: String,
+      },
+      link: {
+        type: String,
+      },
+      public: {
+        type: Boolean,
+        default: false,
+      },
     },
   },
 }, {

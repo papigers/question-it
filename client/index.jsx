@@ -37,7 +37,9 @@ else {
 
 function run() {
   const environment = new Relay.Environment();
-  environment.injectNetworkLayer(new Relay.DefaultNetworkLayer('/graphql'));
+  environment.injectNetworkLayer(new Relay.DefaultNetworkLayer('/graphql', {
+    credentials: 'same-origin',
+  }));
 
   const data = JSON.parse(document.getElementById('preloadedData').textContent);
 

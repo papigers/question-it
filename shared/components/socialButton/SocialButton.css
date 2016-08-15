@@ -6,11 +6,11 @@ $disabled-color: gray;
 .root{
 	flex-grow: 1;
 	
-	& span{
+	& span, & a{
 		width: 100% !important;
 	}
 	
-	&, & span{
+	&, & span, & a{
 		border-radius: 0px !important;
 		
 		&:before{
@@ -24,27 +24,32 @@ $disabled-color: gray;
   }
 	
   &.disabled{
-		&>span{
+		& span{
 			background-color: $disabled-color !important;
 		}
 	}
 	
 	&.facebook{
-		&>span{
+		&>span, &>a{
 			background-color: $fb-color !important;
 		}
 	}
 	
 	&.twitter{
-		&>span{
+		&>span, &>a{
 			background-color: $tw-color !important;
 		}
 	}
 	
 	&.google{
-		&>span{
+		&>span, &>a{
 			background-color: $gg-color !important;
-			
+		}
+	}
+
+  &.envelope{
+		&>span, &>a{
+			background-color: $accent1Color !important;
 		}
 	}
 }

@@ -42,6 +42,7 @@ class App extends React.Component {
   render() {
     const { main, flexibleSpace, tabs } = this.props;
 
+
     return (
       <div id="app-view">
         <header>

@@ -1,4 +1,5 @@
 import React from 'react';
+import Relay from 'react-relay';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import Dialog from 'material-ui/Dialog';
@@ -9,13 +10,31 @@ import s from './Login.css';
 
 class LoginPage extends React.Component {
 
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired,
+  }
+
+  static propTypes = {
+    location: React.PropTypes.object.isRequired,
+    viewer: React.PropTypes.object,
+  }
+
   constructor(props) {
     super(props);
     this.state = { open: false };
   }
+
+  componentWillMount() {
+    if (this.props.viewer) {
+      this.context.router.replace('/');
+    }
+  }
   
   componentDidMount() {
     NProgress.done();
+    if (this.props.location.query.hasOwnProperty('redirect')) {
+      this.context.router.replace('/');
+    }
   }
 
   handleClose = () => {
@@ -54,4 +73,14 @@ class LoginPage extends React.Component {
   }
 }
 
-export default withStyles(s)(LoginPage);
+LoginPage = withStyles(s)(LoginPage);
+
+export default Relay.createContainer(LoginPage, {
+  fragments: {
+    viewer: () => Relay.QL`
+      fragment on User {
+        id
+      }
+    `,
+  },
+});

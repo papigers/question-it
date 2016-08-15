@@ -141,12 +141,12 @@ export function countUserRecievedVotes(id, promise = true) {
   ]);
   if (promise) {
     return new Promise((resolve, reject) => {
-      query.exec((err, [{ voteCount }]) => err ? reject(err) : resolve(voteCount));
+      query.exec((err, res) => err ? reject(err) : resolve(res[0] && res[0].voteCount ? res[0].voteCount : 0));
     });
   }
   return {
     query,
-    map: ([{ voteCount }]) => voteCount,
+    map: (res) => res[0] && res[0].voteCount ? res[0].voteCount : 0,
   };
 }
 

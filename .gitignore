@@ -30,4 +30,8 @@ public/bower_components
 # Debug log from npm
 npm-debug.log
 npm-debug.log.*
+
+
 public/build/
+
+.env

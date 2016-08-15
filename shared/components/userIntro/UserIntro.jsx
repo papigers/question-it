@@ -20,7 +20,7 @@ class UserIntro extends React.Component {
   }
 
   render() {
-    const { username, bio, birthDate, name } = this.props.user;
+    const { username, bio, birthDate, name, avatar } = this.props.user;
     const { isViewer } = this.props;
     return (
       <div>
@@ -28,8 +28,9 @@ class UserIntro extends React.Component {
         <Paper zDepth={2} className={`${s.introRow} category`}>
           <div className={s.avatarContainer}>
             <Avatar
-              icon={<ProfileAvatar />}
-              size={70}
+              icon={avatar ? null : <ProfileAvatar />}
+              src={avatar}
+              size={100}
               backgroundColor="black"
               className={s.avatar}
             />
@@ -75,7 +76,7 @@ class UserIntro extends React.Component {
 
 UserIntro = withStyles(s)(UserIntro);
 
-UserIntro = Relay.createContainer(withStyles(s)(UserIntro), {
+UserIntro = Relay.createContainer(UserIntro, {
   fragments: {
     user: (() => Relay.QL`
       fragment on User{
@@ -88,7 +89,8 @@ UserIntro = Relay.createContainer(withStyles(s)(UserIntro), {
           value,
           public
         },
-        bio
+        bio,
+        avatar
       }
     `),
   },

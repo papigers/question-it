@@ -17,7 +17,8 @@ class UserStats extends React.Component {
 
   render() {
     const { user } = this.props;
-    const topPoll = user.polls.edges[0].node;
+    const polls = user.polls.edges;
+    const topPoll = polls[0] && polls[0].node;
 
     return (
       <div>
@@ -48,7 +49,12 @@ class UserStats extends React.Component {
             <div className="col-xs-6 col-md-3">
               <Subheader className="subheader">Most Voted Poll:</Subheader>
               <ListItem className="item" disabled>
-                <Link className={s.stat} to={`/poll/${topPoll.id}`}>{topPoll.title}</Link>
+                {topPoll ?
+                  <Link className={s.stat} to={`/poll/${topPoll.id}`}>
+                    {topPoll.title}
+                  </Link>
+                  : <span className={s.stat}>No Polls</span>
+                }
               </ListItem>
             </div>
 

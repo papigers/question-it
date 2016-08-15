@@ -92,7 +92,12 @@ export default (
     />
 
 
-    <Route components={{ main: Login }} path="login" />
+    <Route
+      components={{ main: Login }}
+      path="login"
+      queries={{ main: viewerQuery }}
+      render={{ main: renderLoading }}
+    />
 
   </Route>
 );
