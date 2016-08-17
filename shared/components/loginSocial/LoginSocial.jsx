@@ -10,8 +10,8 @@ class LoginSocial extends React.Component {
     return (
       <div className={s.root}>
         <SocialButton type="facebook" link="/login/facebook" />
-        <SocialButton type="twitter" />
-        <SocialButton type="google" />
+        <SocialButton type="google" link="/login/google" />
+        <SocialButton type="linkedin" link="/login/linkedin" />
       </div>
 		);
   }

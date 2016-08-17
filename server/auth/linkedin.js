@@ -1,24 +1,24 @@
-import { Strategy } from 'passport-facebook';
-import { auth as config } from '../../config';
+import { Strategy } from 'passport-linkedin-oauth2';
+import config from '../../config';
 import { User } from '../../data/models';
 
 /* eslint-disable no-underscore-dangle */
 
 export default new Strategy({
-  clientID: config.facebook.id,
-  clientSecret: config.facebook.secret,
-  callbackURL: config.facebook.callbackURL,
-  profileFields: ['name', 'displayName', 'birthday', 'email', 'link'],
+  clientID: config.auth.linkedin.id,
+  clientSecret: config.auth.linkedin.secret,
+  callbackURL: '/login/linkedin/callback',
+  scope: ['r_emailaddress', 'r_basicprofile'],
   passReqToCallback: true,
 }, (req, accessToken, refreshToken, profile, done) => {
-  async function loginFacebook() {
+  async function loginLinkedin() {
     if (req.user) {
       let userDB = await User.findOne({
-        'profile.facebook.id': profile.id,
+        'profile.linkedin.id': profile.id,
       });
 
       if (userDB) {
-        userDB.profile.facebook.link = profile._json.link;
+        userDB.profile.linkedin.link = profile._json.publicProfileUrl;
         userDB = await userDB.save();
         return done(null, { id: userDB.id });
       }
@@ -27,14 +27,14 @@ export default new Strategy({
     }
 
     const users = await User.find({
-      'profile.facebook.id': profile.id,
+      'profile.linkedin.id': profile.id,
     });
 
     if (users.length) {
       return done(null, { id: users[0].id });
     }
 
-    const email = profile._json.email;
+    const email = profile._json.emailAddress;
     let user;
     if (email) {
       user = await User.findOne({
@@ -42,8 +42,8 @@ export default new Strategy({
       });
 
       if (user) {
-        user.profile.facebook.id = profile.id;
-        user.profile.facebook.link = profile._json.link;
+        user.profile.linkedin.id = profile.id;
+        user.profile.linkedin.link = profile._json.publicProfileUrl;
         user = await user.save();
         return done(null, { id: user.id });
       }
@@ -53,7 +53,7 @@ export default new Strategy({
     return done(null, { id: user.id });
   }
 
-  loginFacebook().catch(done);
+  loginLinkedin().catch(done);
 });
 
 async function createUser(profile) {
@@ -64,14 +64,13 @@ async function createUser(profile) {
     checkUsername = await User.find({ username }).length;
   }
   return await User.create({
-    email: profile._json.email,
+    email: profile._json.emailAddress,
     username,
-    avatar: `https://graph.facebook.com/${profile.id}/picture?type=large`,
+    avatar: profile._json.pictureUrl,
     'name.value': profile.displayName,
-    'birthDate.value': new Date(profile._json.birthday),
-    'profile.facebook': {
+    'profile.linkedin': {
       id: profile.id,
-      link: profile._json.link,
+      link: profile._json.publicProfileUrl,
     },
   });
 }

@@ -19,7 +19,7 @@ import Root from '../shared/root';
 
 import config from '../config';
 
-const GRAPHQL_URL = `http://${config.hostname}:${config.port}/graphql`;
+const GRAPHQL_URL = `${config.appURL}:${config.port}/graphql`;
 
 const app = express();
 
@@ -130,7 +130,7 @@ app.use((req, res, next) => {
 
 export default function() {
   const PORT = config.port;
-  const MONGODB_URI = config.mongoUrl;
+  const MONGODB_URI = config.mongoURL;
   mongoose.connect(MONGODB_URI);
 
   /* eslint-disable no-console */
@@ -144,7 +144,7 @@ export default function() {
 
   app.listen(PORT, () => {
     console.log('\x1b[1m\x1b[32m');
-    console.log('Server listening on:\x1b[39m', `http://${config.hostname}:${PORT}`);
+    console.log('Server listening on:\x1b[39m', `${config.appURL}:${PORT}`);
     /* eslint-enable no-console */
   });
 }

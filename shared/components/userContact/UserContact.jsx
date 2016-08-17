@@ -11,7 +11,7 @@ import SocialButton from '../../components/socialButton';
 
 import s from './UserContact.css';
 
-const socials = ['facebook', 'google', 'twitter'];
+const socials = ['facebook', 'google', 'linkedin'];
 
 class UserContact extends React.Component {
 
@@ -23,7 +23,7 @@ class UserContact extends React.Component {
   render() {
     const { isViewer, user } = this.props;
 
-    const socialButtons = socials.map((social) => {
+    const socialButtons = socials.map((social, i) => {
       const socialName = social[0].toUpperCase() + social.substr(1);
       const linked = user[social].link && user[social].link.length;
       let editSocial = null;
@@ -37,7 +37,7 @@ class UserContact extends React.Component {
           <Subheader className="subheader center-text">Click to link account</Subheader>;
       }
       return (
-        <div className="col-xs-4">
+        <div className="col-xs-4" key={i}>
           <Subheader className="subheader">{socialName}:</Subheader>
           <ListItem className="item" disabled>
             <SocialButton
@@ -46,6 +46,7 @@ class UserContact extends React.Component {
               type={social}
               disabled={!linked}
               isViewer={isViewer}
+              newWindow
             />
           </ListItem>
           {editSocial}
@@ -98,7 +99,7 @@ UserContact = Relay.createContainer(UserContact, {
           link,
           public,
         },
-        twitter{
+        linkedin{
           link,
           public,
         }

@@ -1,10 +1,11 @@
 $fb-color: #3b5998;
-$gg-color: #d50000;
-$tw-color: cornflowerblue;
+$gg-color: #DC4439;
+$li-color: #0077b5;
 $disabled-color: gray;
 
 .root{
 	flex-grow: 1;
+  flex-shrink: 0;
 	
 	& span, & a{
 		width: 100% !important;
@@ -35,9 +36,9 @@ $disabled-color: gray;
 		}
 	}
 	
-	&.twitter{
+	&.linkedin{
 		&>span, &>a{
-			background-color: $tw-color !important;
+			background-color: $li-color !important;
 		}
 	}
 	

@@ -7,7 +7,6 @@ const userSchema = mongoose.Schema({
   },
   email: {
     type: String,
-    required: true,
   },
   password: {
     type: String,
@@ -57,7 +56,7 @@ const userSchema = mongoose.Schema({
         default: false,
       },
     },
-    twitter: {
+    linkedin: {
       id: {
         type: String,
       },

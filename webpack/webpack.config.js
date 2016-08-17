@@ -101,7 +101,7 @@ const webpackConfig = (options) => ({
   devServer: {
     hot: true,
     proxy: {
-      '*': `http://${config.hostname}:${config.port}`,
+      '*': `${config.appURL}:${config.port}`,
     },
     host: '127.0.0.1',
   },

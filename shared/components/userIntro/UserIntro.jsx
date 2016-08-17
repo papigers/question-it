@@ -64,7 +64,7 @@ class UserIntro extends React.Component {
           <div className={s.fullRow}>
             <Subheader className="subheader">Bio:</Subheader>
             <ListItem className="item" disabled>
-              {bio}
+              {bio || 'No Bio.'}
               {isViewer ? <IconButton className={s.editBio}><EditIcon /></IconButton> : null}
             </ListItem>
           </div>

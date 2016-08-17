@@ -138,7 +138,7 @@ const userType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
     },
     email: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
     },
     avatar: {
       type: GraphQLString,
@@ -150,7 +150,7 @@ const userType = new GraphQLObjectType({
     name: privateFieldType('name', GraphQLString),
     facebook: privateSocialFieldType('facebook'),
     google: privateSocialFieldType('google'),
-    twitter: privateSocialFieldType('twitter'),
+    linkedin: privateSocialFieldType('linkedin'),
     votes: {
       type: voteConnectionType,
       args: connectionArgs,

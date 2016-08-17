@@ -2,14 +2,18 @@ const path = require('path');
 
 const root = path.resolve(__dirname);
 const buildLocation = path.join(root, 'public', 'build');
+const appURL = process.env.APP_URI || 'http://localhost';
+const port = process.env.PORT || 3000;
 
 module.exports = {
   root,
   buildLocation,
   favicon: path.join(root, 'public', 'favicon', 'favicon.ico'),
   hostname: 'localhost',
-  port: process.env.PORT || 3000,
-  mongoUrl: process.env.MONGODB_URI || 'mongodb://localhost/question-it',
+  port,
+  devServerPort: 8080,
+  appURL,
+  mongoURL: process.env.MONGODB_URI || 'mongodb://localhost/question-it',
   mockViewer: process.env.MOCK_VIEWER || '578db69904ec1604238533ca',
   
   auth: {
@@ -19,12 +23,18 @@ module.exports = {
     facebook: {
       id: process.env.FACEBOOK_ID,
       secret: process.env.FACEBOOK_SECRET,
+      callbackURL: '/login/facebook/callback',
     },
     google: {
+      id: process.env.GOOGLE_ID,
       secret: process.env.GOOGLE_SECRET,
+      callbackURL: '/login/google/callback',
     },
-    twitter: {
-      secret: process.env.TWITTER_SECRET,
+    linkedin: {
+      id: process.env.LINKEDIN_ID,
+      secret: process.env.LINKEDIN_SECRET,
+      state: process.env.LINKEDIN_STATE,
+      callbackURL: '/login/linkedin/callback',
     },
   },
 
