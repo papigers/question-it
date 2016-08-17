@@ -32,9 +32,6 @@ class LoginPage extends React.Component {
   
   componentDidMount() {
     NProgress.done();
-    if (this.props.location.query.hasOwnProperty('redirect')) {
-      this.context.router.replace('/');
-    }
   }
 
   handleClose = () => {

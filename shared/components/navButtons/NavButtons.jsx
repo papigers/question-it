@@ -4,6 +4,12 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Mobile from './mobile';
 import Desktop from './desktop';
 
+import RaisedButton from 'material-ui/RaisedButton';
+import SettingsIcon from 'material-ui/svg-icons/action/settings';
+import Popover from 'material-ui/Popover';
+import Menu from 'material-ui/Menu';
+import MenuItem from 'material-ui/MenuItem';
+
 import s from './NavButtons.css';
 
 const pages = [
@@ -21,6 +27,13 @@ class NavButtons extends React.Component {
     viewer: React.PropTypes.object,
   }
 
+  constructor() {
+    super();
+    this.state = {
+      open: false,
+    };
+  }
+
   componentWillMount() {
     const loggedOn = this.context.viewer;
     if (loggedOn) {
@@ -28,7 +41,21 @@ class NavButtons extends React.Component {
     }
   }
 
+  onSettingsClick = (event) => {
+    event.preventDefault();
+    this.setState({
+      open: true,
+      anchorEl: event.currentTarget,
+    });
+  };
+
   isActive = (path) => this.context.router.isActive(path, path !== '/explore')
+
+  closeSettings = () => {
+    this.setState({
+      open: false,
+    });
+  };
 
   render() {
     const loggedOn = this.context.viewer;
@@ -44,11 +71,36 @@ class NavButtons extends React.Component {
           return true;
       }
     });
-
     return (
       <div className={s.root}>
-        <Mobile className="hide-sm-up" pages={showPages} isActive={this.isActive} />
         <Desktop className="hide-sm-down" pages={showPages} isActive={this.isActive} />
+        {loggedOn && <div>
+          <RaisedButton
+            className={s.settings}
+            secondary
+            ref="settings"
+            icon={<SettingsIcon />}
+            onTouchTap={this.onSettingsClick}
+          />
+          <Popover
+            open={this.state.open}
+            anchorEl={this.state.anchorEl}
+            anchorOrigin={{ horizontal: 'middle', vertical: 'center' }}
+            targetOrigin={{ horizontal: 'right', vertical: 'top' }}
+            onRequestClose={this.closeSettings}
+          >
+            <Menu>
+              <MenuItem
+                primaryText="Logoff"
+                linkButton
+                containerElement={
+                  <a href="/logoff" />
+                }
+              />
+            </Menu>
+          </Popover>
+        </div>}
+        <Mobile className="hide-sm-up" pages={showPages} isActive={this.isActive} />
       </div>
     );
   }

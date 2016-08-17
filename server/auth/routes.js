@@ -9,6 +9,11 @@ router.get('/login/facebook', passport.authenticate('facebook', {
   session: false,
 }));
 
+router.get('/logoff', (req, res) => {
+  res.clearCookie('id_token');
+  res.redirect('/');
+});
+
 router.get(auth.facebook.callbackURL, passport.authenticate('facebook', {
   failureRedirect: '/login',
   session: false,
@@ -16,7 +21,7 @@ router.get(auth.facebook.callbackURL, passport.authenticate('facebook', {
   const expiresIn = 60 * 60 * 24 * 180; // 180 days
   const token = jwt.sign(req.user, auth.jwt.secret, { expiresIn });
   res.cookie('id_token', token, { maxAge: 1000 * expiresIn, httpOnly: true });
-  res.redirect('/login?redirect');
+  res.redirect('/');
 });
 
 router.get('/login/linkedin', passport.authenticate('linkedin', {
@@ -31,7 +36,7 @@ router.get(auth.linkedin.callbackURL, passport.authenticate('linkedin', {
   const expiresIn = 60 * 60 * 24 * 180; // 180 days
   const token = jwt.sign(req.user, auth.jwt.secret, { expiresIn });
   res.cookie('id_token', token, { maxAge: 1000 * expiresIn, httpOnly: true });
-  res.redirect('/login?redirect');
+  res.redirect('/');
 });
 
 router.get('/login/google', passport.authenticate('google', {
@@ -47,7 +52,7 @@ router.get(auth.google.callbackURL, passport.authenticate('google', {
   const expiresIn = 60 * 60 * 24 * 180; // 180 days
   const token = jwt.sign(req.user, auth.jwt.secret, { expiresIn });
   res.cookie('id_token', token, { maxAge: 1000 * expiresIn, httpOnly: true });
-  res.redirect('/login?redirect');
+  res.redirect('/');
 });
 
 export default router;

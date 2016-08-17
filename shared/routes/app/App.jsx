@@ -14,7 +14,7 @@ class App extends React.Component {
   static propTypes = {
     routes: React.PropTypes.array.isRequired,
     location: React.PropTypes.object.isRequired,
-    main: React.PropTypes.element.isRequired,
+    main: React.PropTypes.element,
     params: React.PropTypes.object,
     viewer: React.PropTypes.object,
     tabs: React.PropTypes.element,
