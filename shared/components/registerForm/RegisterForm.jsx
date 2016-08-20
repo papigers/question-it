@@ -1,6 +1,7 @@
 import React from 'react';
+
 import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
+
 import ValidTextField from '../validTextField';
 
 const styles = {
@@ -9,6 +10,9 @@ const styles = {
     margin: '0 auto',
     display: 'block',
   },
+  blackStyle: {
+    borderColor: 'black',
+  },
 };
 
 class RegisterForm extends React.Component {
@@ -16,35 +20,75 @@ class RegisterForm extends React.Component {
   static propTypes = {
     uniqueId: React.PropTypes.string.isRequired,
   }
+  
+  constructor() {
+    super();
+    this.state = {
+      maxValid: 3,
+      numValid: 0,
+    };
+  }
+
+  componentWillMount() {
+    this.validate = [];
+  }
+
+  setValidateRef = (el) => {
+    this.validate.push(el);
+  }
+
+  incValid = () => this.setState({ numValid: this.state.numValid + 1 });
+
+  decValid = () => this.setState({ numValid: this.state.numValid - 1 });
+
+  submit = () => {
+    this.validate.forEach(el => el.validate());
+    if (this.state.maxValid !== this.state.numValid) {
+      return;
+    }
+  }
+
   render() {
     return (
       <div>
         <ValidTextField
           muiId={`register-form-username-${this.props.uniqueId}`}
           style={styles.input}
-          label="Username"
+          type="username"
+          floatingLabelText="Username"
           required="Username is required."
-        />
-			
-        <TextField
-          id={`register-form-pass-${this.props.uniqueId}`}
-          floatingLabelText="Password"
-          style={styles.input}
-          type="password"
-        />
-        
-        <TextField
-          id={`register-form-pass-confirm-${this.props.uniqueId}`}
-          floatingLabelText="Confirm Password"
-          style={styles.input}
-          type="password"
+          underlineStyle={styles.blackStyle}
+          incValid={this.incValid}
+          decValid={this.decValid}
+          min={6}
+          max={12}
+          ref={this.setValidateRef}
         />
         
-        <TextField
+        <ValidTextField
           floatingLabelText="Email"
-          id={`register-form-email-${this.props.uniqueId}`}
+          muiId={`register-form-email-${this.props.uniqueId}`}
           style={styles.input}
           type="email"
+          required="Email is required."
+          underlineStyle={styles.blackStyle}
+          incValid={this.incValid}
+          decValid={this.decValid}
+          ref={this.setValidateRef}
+        />
+			
+        <ValidTextField
+          floatingLabelText="Password"
+          muiId={`register-form-pass-${this.props.uniqueId}`}
+          style={styles.input}
+          type="password"
+          required="Password is required."
+          confirm
+          underlineStyle={styles.blackStyle}
+          incValid={this.incValid}
+          decValid={this.decValid}
+          min={8}
+          ref={this.setValidateRef}
         />
 
         <RaisedButton
@@ -52,6 +96,8 @@ class RegisterForm extends React.Component {
           fullWidth
           label="Register"
           className="formButton"
+          disabled={this.state.numValid !== this.state.maxValid}
+          onClick={this.submit}
         />
       </div>
 		);
