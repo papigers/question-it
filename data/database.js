@@ -14,6 +14,18 @@ export function getViewer(promise = true) {
   };
 }
 
+export function findUser(q, promise = true) {
+  const query = User.find(q);
+  if (promise) {
+    return new Promise((resolve, reject) => {
+      query.exec((err, res) => err ? reject(err) : resolve(res));
+    });
+  }
+  return {
+    query,
+  };
+}
+
 export function getUser(id, promise = true) {
   const query = User.findById(id);
   if (promise) {
@@ -304,5 +316,18 @@ export function createVote(user, poll, options) {
           .exec((updErr) => updErr ? reject(updErr) : resolve(res));
       }
     });
+  });
+}
+
+export function createUser(username, email, password) {
+  const user = new User({
+    username,
+    email,
+    password,
+  });
+  return new Promise((resolve, reject) => {
+    user.save((err, res) =>
+      err ? reject(err) : resolve(res)
+    );
   });
 }

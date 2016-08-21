@@ -20,6 +20,7 @@ const styles = {
 class ValidTextField extends React.Component {
 
   static propTypes = {
+    onChange: React.PropTypes.func,
     required: React.PropTypes.string,
     floatingLabelText: React.PropTypes.string,
     style: React.PropTypes.object,
@@ -37,6 +38,18 @@ class ValidTextField extends React.Component {
       error: '',
       valid: false,
     };
+  }
+
+  onBlur = (event) => {
+    const value = event.target.value;
+    this.validate(value);
+  }
+
+  onChange = (event, value, confirm) => {
+    if (!confirm && this.props.onChange) {
+      this.props.onChange(event);
+    }
+    this.setState({ error: '' });
   }
 
   valid = (error) => {
@@ -59,11 +72,6 @@ class ValidTextField extends React.Component {
       });
     }
   }
-
-  onBlur = (event) => {
-    const value = event.target.value;
-    this.validate(value);
-  }
   
   validate = () => {
     if (this.props.type === 'password' && this.props.confirm) {
@@ -72,7 +80,7 @@ class ValidTextField extends React.Component {
       }
     }
     return this.validateAll(this.refs.field.input.value);
-  } 
+  }
   
   validateAll = (value) => {
     if (this.props.required && value.length === 0) {
@@ -104,6 +112,8 @@ class ValidTextField extends React.Component {
 	
   render() {
     const { confirm } = this.props;
+    const confirmProps = Object.assign({}, this.props);
+    delete confirmProps.value;
     return (
       <div>
         <TextField
@@ -112,19 +122,19 @@ class ValidTextField extends React.Component {
           id={this.props.muiId}
           errorText={this.state.error}
           onBlur={this.onBlur}
+          onChange={this.onChange}
           underlineStyle={this.state.valid ? styles.valid : null}
-          onChange={() => this.setState({ error: '' })}
           ref="field"
         />
         {confirm &&
           <TextField
-            {...this.props}
+            {...confirmProps}
             className={`${s.field} ${this.state.focusConfirm && s.focus}`}
             id={`${this.props.muiId}_confirm`}
             floatingLabelText={`Confrim ${this.props.floatingLabelText}`}
             errorText={this.state.error}
             onBlur={this.onBlur}
-            onChange={() => this.setState({ error: '' })}
+            onChange={(e, v) => this.onChange(e, v, true)}
             underlineStyle={this.state.valid ? styles.valid : null}
             ref="confirm"
           />

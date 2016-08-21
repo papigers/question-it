@@ -422,11 +422,57 @@ const CreateVoteMutation = mutationWithClientMutationId({
   
 });
 
+const RegisterUserMutation = mutationWithClientMutationId({
+  name: 'RegisterUser',
+
+  inputFields: {
+    username: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    email: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    password: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+
+  },
+
+  outputFields: {
+    user: {
+      type: userType,
+      resolve: (({ user }) => user),
+    },
+    error: {
+      type: GraphQLString,
+      resolve: (({ error }) => error),
+    },
+  },
+
+  mutateAndGetPayload: ({ username, email, password }) =>
+    new Promise((resolve) => {
+      db.findUser({ username: new RegExp(username, 'i') }).then(res => {
+        if (res.length) {
+          resolve({ error: 'Username is already taken.' });
+        }
+        return db.findUser({ email: new RegExp(email, 'i') });
+      }).then(res => {
+        if (res.length) {
+          resolve({ error: 'Email is already taken.' });
+        }
+        return db.createUser(username, email, password);
+      })
+        .then(user => resolve({ user }))
+        .catch(() => resolve({ error: 'There was a problem creating the user, try again.' }));
+    }),
+});
+
 const Mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
     createPoll: CreatePollMutation,
     votePoll: CreateVoteMutation,
+    registerUser: RegisterUserMutation,
   },
 });
 

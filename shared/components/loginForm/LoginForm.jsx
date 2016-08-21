@@ -24,6 +24,7 @@ class LoginForm extends React.Component {
   constructor() {
     super();
     this.state = {
+      pressed: false,
       maxValid: 2,
       numValid: 0,
     };
@@ -42,7 +43,8 @@ class LoginForm extends React.Component {
   decValid = () => this.setState({ numValid: this.state.numValid - 1 });
 
   submit = () => {
-    this.validate.forEach(el => el.validate());
+    this.setState({ pressed: true });
+    this.validate.forEach(el => el._reactInternalInstance._renderedComponent._instance.validate()); // eslint-disable-line no-underscore-dangle, max-len
     if (this.state.maxValid !== this.state.numValid) {
       return;
     }
@@ -81,7 +83,7 @@ class LoginForm extends React.Component {
           label="Login"
           className="formButton"
           onClick={this.submit}
-          disabled={this.state.numValid !== this.state.maxValid}
+          disabled={this.state.pressed && (this.state.numValid !== this.state.maxValid)}
         />
       </div>
 		);
