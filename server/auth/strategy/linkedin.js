@@ -1,6 +1,6 @@
 import { Strategy } from 'passport-linkedin-oauth2';
-import config from '../../config';
-import { User } from '../../data/models';
+import config from '../../../config';
+import { User } from '../../../data/models';
 
 /* eslint-disable no-underscore-dangle */
 
@@ -38,7 +38,7 @@ export default new Strategy({
     let user;
     if (email) {
       user = await User.findOne({
-        email,
+        email: new RegExp(email, 'i'),
       });
 
       if (user) {

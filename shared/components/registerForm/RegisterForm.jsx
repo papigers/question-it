@@ -52,7 +52,8 @@ class RegisterForm extends React.Component {
 
   decValid = () => this.setState({ numValid: this.state.numValid - 1 });
 
-  submit = () => {
+  submit = (e) => {
+    e.preventDefault();
     this.setState({ pressed: true });
     this.validate.forEach(el => el._reactInternalInstance._renderedComponent._instance.validate()); // eslint-disable-line no-underscore-dangle, max-len
     if (this.state.maxValid !== this.state.numValid) {
@@ -65,7 +66,34 @@ class RegisterForm extends React.Component {
           this.setState({ error: res.error });
           return;
         }
-        // this.context.router.push('/login/local');
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/login/local', true);
+        xhr.setRequestHeader('Content-type', 'application/json');
+        xhr.setRequestHeader('Accept', 'application/json, application/xml, text/plain, text/html, *.*');
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState === 4) {
+            let resp;
+            try {
+              resp = JSON.parse(xhr.responseText);
+
+              if (xhr.status === 200) {
+                window.location.href = resp.redirect;
+              }
+              else {
+                this.setState({ error: (resp.error || 'Login failed, please try again later') });
+              }
+            }
+            catch (err) {
+              this.setState({ error: 'Login failed, please try again later' });
+            }
+          }
+        };
+        xhr.send(JSON.stringify({
+          username: this.state.username,
+          password: this.state.password,
+        }));
+        this.setState({ error: '' });
       },
       onFailure: () => {
         this.setState({ error: 'Something went wrong, try again later.' });
@@ -76,7 +104,7 @@ class RegisterForm extends React.Component {
   render() {
     const { pressed, numValid, maxValid, username, email, password, error } = this.state;
     return (
-      <div>
+      <form onSubmit={this.submit}>
         <ValidTextField
           muiId={`register-form-username-${this.props.uniqueId}`}
           style={styles.input}
@@ -129,10 +157,11 @@ class RegisterForm extends React.Component {
           label="Register"
           className="formButton"
           disabled={pressed && (numValid !== maxValid)}
+          type="submit"
           onClick={this.submit}
         />
         <span className="center-text" style={{ color: '#ad9d9d' }}>{error}</span>
-      </div>
+      </form>
 		);
   }
 }

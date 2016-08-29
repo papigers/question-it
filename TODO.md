@@ -1,7 +1,7 @@
 # TODO
 * ~~Finish relay query bindings to routes~~. Things left:
   * ~~Explore: search.~~
-  * User: social, more attributes not yet "relayed".
+  * ~~User: social, more attributes not yet "relayed".~~
 * ~~Relay mutations.~~ TODO:
   * User: edit attributes mutation and views.
 * ~~Poll pagination on scroll.~~
@@ -11,7 +11,8 @@
   * ~~Facebook~~
   * ~~Google~~
   * ~~Linkedin~~
-  * Local
+  * ~~Local~~
+  * Linking accounts
 * Create React unit tests.
 * Deploy to heroku.
 

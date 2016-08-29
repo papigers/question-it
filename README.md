@@ -15,7 +15,7 @@ This application is one of the backend challenges at [FCC](https://www.freecodec
 This application is being rendered both on the client and on the server.  
 The state is kept consisted using [`isomorphic-relay`](https://www.npmjs.com/package/isomorphic-relay) & [`isomorphic-relay-router`](https://www.npmjs.com/package/isomorphic-relay-router).
 [`isomorphic-style-loader`](https://www.npmjs.com/package/isomorphic-style-loader) is being used to render the [critical rendering path](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/?hl=en).
-[`universal-webpack`](https://www.npmjs.com/package/universal-webpack) is easily create "universal" webpack build configuration.
+[`universal-webpack`](https://www.npmjs.com/package/universal-webpack) is used to easily create "universal" webpack build configuration.
 
 #### Reactive
 I've created this simple application in order to learn react - front to back. Using most the involved technologies, and preferably, only them.

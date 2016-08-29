@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, IndexRoute, IndexRedirect } from 'react-router';
+import { Route, IndexRoute, IndexRedirect, Redirect } from 'react-router';
 
 import { storeQuery, viewerQuery, nodeQuery } from '../queries';
 
@@ -98,6 +98,8 @@ export default (
       queries={{ main: viewerQuery }}
       render={{ main: renderLoading }}
     />
+
+    <Redirect from="login/local" to="login" />
 
   </Route>
 );

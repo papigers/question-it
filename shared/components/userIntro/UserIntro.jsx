@@ -22,6 +22,7 @@ class UserIntro extends React.Component {
   render() {
     const { username, bio, birthDate, name, avatar } = this.props.user;
     const { isViewer } = this.props;
+
     return (
       <div>
         <h2 className="categoryHeader">Intro</h2>
@@ -42,21 +43,24 @@ class UserIntro extends React.Component {
             </ListItem>
           </div>
           {
-            (isViewer || name.public) && name.value ?
+            (isViewer || name.public && name.value) ?
               <div className={s.fullRow}>
                 <Subheader className="subheader">Name:</Subheader>
                 <ListItem className="item" disabled>
-                  {name.value}
+                  {name.value || 'Add your name'}
                   {isViewer ? <IconButton className={s.editIcon}><EditIcon /></IconButton> : null}
                 </ListItem>
               </div> : null
           }
           {
-            (isViewer || birthDate.public) && birthDate.value ?
+            (isViewer || birthDate.public && birthDate.value) ?
               <div className={s.fullRow}>
                 <Subheader className="subheader">Age:</Subheader>
                 <ListItem className="item" disabled>
-                  {Math.abs(new Date(Date.now() - new Date(birthDate.value).getTime()).getUTCFullYear() - 1970)}
+                  {birthDate.value ?
+                    Math.abs(new Date(Date.now() - new Date(birthDate.value).getTime()).getUTCFullYear() - 1970) :
+                    'Add your age'
+                  }
                   {isViewer ? <IconButton className={s.editIcon}><EditIcon /></IconButton> : null}
                 </ListItem>
               </div> : null

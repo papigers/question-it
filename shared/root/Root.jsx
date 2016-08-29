@@ -12,8 +12,8 @@ import grid from './bootstrap-grid/grid.css.less';
 class Root extends React.Component {
 
   static propTypes = {
-    children: React.PropTypes.element.isRequired,
-    userAgent: React.PropTypes.string,
+    children: PropTypes.element.isRequired,
+    userAgent: PropTypes.string,
   }
 
   constructor(props) {
@@ -36,7 +36,7 @@ class StylesRoot extends React.Component {
   static propTypes = {
     children: PropTypes.element.isRequired,
     onInsertCss: PropTypes.func.isRequired,
-    userAgent: React.PropTypes.string,
+    userAgent: PropTypes.string,
   }
 
   static childContextTypes = {

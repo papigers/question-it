@@ -1,10 +1,9 @@
 import passport from 'passport';
-import facebookStrategy from './facebook';
-import linkedinStrategy from './linkedin';
-import googleStrategy from './google';
+import { FacebookStrategy, LinkedinStrategy, GoogleStrategy, LocalStrategy } from './strategy';
 
-passport.use(facebookStrategy);
-passport.use(linkedinStrategy);
-passport.use(googleStrategy);
+passport.use(FacebookStrategy);
+passport.use(LinkedinStrategy);
+passport.use(GoogleStrategy);
+passport.use(LocalStrategy);
 
 export default passport;
