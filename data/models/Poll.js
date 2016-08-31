@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { hrefMiddleware } from './middlewares';
 
 const pollSchema = mongoose.Schema({
   title: {
@@ -26,9 +27,17 @@ const pollSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Vote',
   }],
+  href: {
+    type: String,
+    index: {
+      unique: true,
+    },
+  },
 }, {
   timestamps: true,
 });
+
+pollSchema.post('validate', hrefMiddleware);
 
 const Poll = mongoose.model('Poll', pollSchema);
 

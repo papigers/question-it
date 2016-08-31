@@ -57,32 +57,26 @@ class LoginForm extends React.Component {
       return;
     }
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/login/local', true);
-    xhr.setRequestHeader('Content-type', 'application/json');
-    xhr.setRequestHeader('Accept', 'application/json, application/xml, text/plain, text/html, *.*');
-    xhr.onreadystatechange = () => {
-      if (xhr.readyState === 4) {
-        let res;
-        try {
-          res = JSON.parse(xhr.responseText);
-
-          if (xhr.status === 200) {
-            window.location.href = res.redirect;
-          }
-          else {
-            this.setState({ error: (res.error || 'Login failed, please try again later') });
-          }
-        }
-        catch (err) {
-          this.setState({ error: 'Login failed, please try again later' });
-        }
+    fetch('/login/local', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      credentials: 'same-origin',
+      body: JSON.stringify({
+        username: this.state.username,
+        password: this.state.password,
+      }),
+    }).then(res => res.json()).then(json => {
+      if (json.success) {
+        this.setState({ error: '' });
+        window.location.href = json.redirect;
       }
-    };
-    xhr.send(JSON.stringify({
-      username: this.state.username,
-      password: this.state.password,
-    }));
+      else {
+        this.setState({ error: json.error });
+      }
+    });
   }
 
   render() {

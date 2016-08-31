@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { hrefMiddleware } from './middlewares';
 
 const voteSchema = mongoose.Schema({
   user: {
@@ -14,9 +15,17 @@ const voteSchema = mongoose.Schema({
       'Vote must contain between 1 to 10 options',
     ],
   },
+  href: {
+    type: String,
+    index: {
+      unique: true,
+    },
+  },
 }, {
   timestamps: true,
 });
+
+voteSchema.post('validate', hrefMiddleware);
 
 const Vote = mongoose.model('Vote', voteSchema);
 

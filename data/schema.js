@@ -48,15 +48,15 @@ const store = new Store();
 
 const { nodeInterface, nodeField } = nodeDefinitions(
   (globalId) => {
-    const { type, id } = fromGlobalId(globalId);
+    const { type, id: href } = fromGlobalId(globalId);
     if (type === 'Poll') {
-      return db.getPoll(id);
+      return db.findPoll({ href }, true);
     }
     else if (type === 'User') {
-      return db.getUser(id);
+      return db.findUser({ href }, true);
     }
     else if (type === 'Vote') {
-      return db.getVote(id);
+      return db.findVote({ href }, true);
     }
     else if (type === 'Store') {
       return store;
@@ -133,7 +133,7 @@ const userType = new GraphQLObjectType({
   name: 'User',
   description: 'Registered user',
   fields: (() => ({
-    id: globalIdField('User', user => user._id),
+    id: globalIdField('User', user => user.href),
     username: {
       type: new GraphQLNonNull(GraphQLString),
     },
@@ -197,7 +197,7 @@ const pollType = new GraphQLObjectType({
   name: 'Poll',
   description: 'Poll which can be voted by registered users',
   fields: (() => ({
-    id: globalIdField('Poll', poll => poll._id),
+    id: globalIdField('Poll', poll => poll.href),
     title: {
       type: new GraphQLNonNull(GraphQLString),
     },
@@ -242,7 +242,7 @@ const voteType = new GraphQLObjectType({
   name: 'Vote',
   description: 'User vote on a poll',
   fields: (() => ({
-    id: globalIdField('Vote', vote => vote._id),
+    id: globalIdField('Vote', vote => vote.href),
     user: {
       type: new GraphQLNonNull(userType),
       resolve: ((vote) => db.getVoteUser(vote._id)),

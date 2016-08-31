@@ -42,6 +42,7 @@
   "dependencies": {
     "babel-register": "^6.9.0",
     "babel-runtime": "^6.11.6",
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.2",
     "cookie-parser": "^1.4.3",
     "dotenv": "^2.0.0",
@@ -72,6 +73,7 @@
     "react-tap-event-plugin": "^1.0.0",
     "relay-mongodb-connection": "^2.1.0",
     "scriptjs": "^2.5.8",
+    "short-mongo-id": "^0.1.1",
     "source-map-support": "^0.4.0",
     "sweet-scroll": "^1.0.1",
     "universal-webpack": "^0.1.33"

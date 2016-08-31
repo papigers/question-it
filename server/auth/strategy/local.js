@@ -7,11 +7,24 @@ export default new Strategy({
   passReqToCallback: true,
 }, (req, username, password, done) => {
   async function loginLocal() {
-    const user = await User.findOne({ username: new RegExp(username, 'i') });
-    if (!user || user.password !== password) {
+    let user;
+    if (username.indexOf('@') < 0) {
+      user = await User.findOne({ username: new RegExp(username, 'i') });
+    }
+    else {
+      user = await User.findOne({ email: new RegExp(username, 'i') });
+    }
+    if (!user) {
       return done(null, null, { message: 'Invalid username or password' });
     }
-    return done(null, { id: user._id });
+    user.validPassword(password, (err, valid) => {
+      if (err) {
+        return done(err);
+      }
+      return valid ?
+        done(null, { id: user._id })
+      : done(null, null, { message: 'Invalid username or password' });
+    });
   }
 
   loginLocal().catch(done);

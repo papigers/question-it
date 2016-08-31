@@ -1,4 +1,7 @@
 import mongoose from 'mongoose';
+import { hrefMiddleware } from './middlewares';
+
+import bcrypt from 'bcrypt-nodejs';
 
 const userSchema = mongoose.Schema({
   username: {
@@ -72,9 +75,31 @@ const userSchema = mongoose.Schema({
       },
     },
   },
+  href: {
+    type: String,
+    index: {
+      unique: true,
+    },
+  },
 }, {
   timestamps: true,
 });
+
+userSchema.methods.generateHash = function generateHash(password, next) {
+  bcrypt.genSalt(8, (err, salt) => {
+    if (err) {
+      return next(err);
+    }
+    bcrypt.hash(password, salt, null, next);
+  });
+};
+
+userSchema.methods.validPassword = function validPassword(password, next) {
+  bcrypt.compare(password, this.password, next);
+};
+
+
+userSchema.post('validate', hrefMiddleware);
 
 const User = mongoose.model('User', userSchema);
 

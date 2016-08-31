@@ -14,8 +14,8 @@ export function getViewer(promise = true) {
   };
 }
 
-export function findUser(q, promise = true) {
-  const query = User.find(q);
+export function findDoc(model, q, promise = true, one = false) {
+  const query = one ? model.findOne(q) : model.find(q);
   if (promise) {
     return new Promise((resolve, reject) => {
       query.exec((err, res) => err ? reject(err) : resolve(res));
@@ -24,6 +24,10 @@ export function findUser(q, promise = true) {
   return {
     query,
   };
+}
+
+export function findUser(q, one = false, promise = true) {
+  return findDoc(User, q, promise, one);
 }
 
 export function getUser(id, promise = true) {
@@ -50,6 +54,10 @@ export function getUsers(promise = true) {
   };
 }
 
+export function findPoll(q, one = false, promise = true) {
+  return findDoc(Poll, q, promise, one);
+}
+
 export function getPoll(id, promise = true) {
   const query = Poll.findById(id);
   if (promise) {
@@ -72,6 +80,10 @@ export function countPolls(query = {}, promise = true) {
   return {
     query: q,
   };
+}
+
+export function findVote(q, one = false, promise = true) {
+  return findDoc(Vote, q, promise, one);
 }
 
 export function getVote(id, promise = true) {
@@ -323,11 +335,16 @@ export function createUser(username, email, password) {
   const user = new User({
     username,
     email,
-    password,
   });
   return new Promise((resolve, reject) => {
-    user.save((err, res) =>
-      err ? reject(err) : resolve(res)
-    );
+    user.generateHash(password, (error, hash) => {
+      if (error) {
+        return reject(error);
+      }
+      user.password = hash;
+      user.save((err, res) =>
+        err ? reject(err) : resolve(res)
+      );
+    });
   });
 }

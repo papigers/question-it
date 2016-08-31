@@ -96,10 +96,12 @@ class ValidTextField extends React.Component {
     
     if (this.props.type === 'username' || this.props.type === 'username&email') {
       if (!regex.username.test(value)) {
-        if (this.props.type !== 'username' && value.indexOf('@') > 0 && !regex.email.test(value)) {
+        if (this.props.type === 'username&email' && value.indexOf('@') > 0 && !regex.email.test(value)) {
           return this.valid('Not a valid email.');
         }
-        return this.valid('Not a valid username.\nOnly letters, numbers, underscore and dash are allowed.');
+        else if (this.props.type === 'username') {
+          return this.valid('Not a valid username.\nOnly letters, numbers, underscore and dash are allowed.');
+        }
       }
     }
     if (this.props.type === 'email') {
