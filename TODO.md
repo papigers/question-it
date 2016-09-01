@@ -7,12 +7,12 @@
 * ~~Poll pagination on scroll.~~
 * ~~Hooking up mongoose models and connect to GraphQl schema.~~
   * ~~Mongoose connection: pagination etc...~~
-* Authentication.
+* ~~Authentication.~~
   * ~~Facebook~~
   * ~~Google~~
   * ~~Linkedin~~
   * ~~Local~~
-  * Linking accounts
+  * ~~Linking accounts~~
 * Create React unit tests.
 * Deploy to heroku.
 

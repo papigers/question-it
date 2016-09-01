@@ -23,18 +23,18 @@ module.exports = {
     facebook: {
       id: process.env.FACEBOOK_ID,
       secret: process.env.FACEBOOK_SECRET,
-      callbackURL: '/login/facebook/callback',
+      callbackURL: '/facebook/callback',
     },
     google: {
       id: process.env.GOOGLE_ID,
       secret: process.env.GOOGLE_SECRET,
-      callbackURL: '/login/google/callback',
+      callbackURL: '/google/callback',
     },
     linkedin: {
       id: process.env.LINKEDIN_ID,
       secret: process.env.LINKEDIN_SECRET,
       state: process.env.LINKEDIN_STATE,
-      callbackURL: '/login/linkedin/callback',
+      callbackURL: '/linkedin/callback',
     },
   },
 

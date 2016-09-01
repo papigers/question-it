@@ -25,7 +25,7 @@ class SocialButton extends React.Component {
         className={`${s.root} ${disabled ? s.disabled : s[type]} ${this.props.className}`}
         iconClassName={`icon-${type}`}
         disabled={disabled && !isViewer}
-        containerElement={link ? <a href={link} target={newWindow && '_blank'} /> : null}
+        containerElement={link ? <a href={link} target={newWindow ? '_blank' : '_self'} /> : null}
       />
 		);
   }

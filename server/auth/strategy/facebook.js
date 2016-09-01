@@ -4,57 +4,60 @@ import { User } from '../../../data/models';
 
 /* eslint-disable no-underscore-dangle */
 
-export default new Strategy({
-  clientID: config.facebook.id,
-  clientSecret: config.facebook.secret,
-  callbackURL: config.facebook.callbackURL,
-  profileFields: ['name', 'displayName', 'birthday', 'email', 'link'],
-  passReqToCallback: true,
-}, (req, accessToken, refreshToken, profile, done) => {
-  async function loginFacebook() {
-    if (req.user) {
-      let userDB = await User.findOne({
-        'profile.facebook.id': profile.id,
-      });
 
-      if (userDB) {
-        userDB.profile.facebook.link = profile._json.link;
-        userDB = await userDB.save();
-        return done(null, { id: userDB.id });
-      }
-      const user = createUser(profile);
-      return done(null, { id: user.id });
-    }
-
-    const users = await User.find({
-      'profile.facebook.id': profile.id,
-    });
-
-    if (users.length) {
-      return done(null, { id: users[0].id });
-    }
-
-    const email = profile._json.email;
-    let user;
-    if (email) {
-      user = await User.findOne({
-        email: new RegExp(email, 'i'),
-      });
-
-      if (user) {
+export default function FacebookStrategy(link) {
+  return new Strategy({
+    clientID: config.facebook.id,
+    clientSecret: config.facebook.secret,
+    callbackURL: `/${link ? 'link' : 'login'}${config.facebook.callbackURL}`,
+    profileFields: ['name', 'displayName', 'birthday', 'email', 'link'],
+    passReqToCallback: true,
+  }, (req, accessToken, refreshToken, profile, done) => {
+    async function loginFacebook() {
+      if (req.user) {
+        let user = await User.findById(req.user.id);
         user.profile.facebook.id = profile.id;
         user.profile.facebook.link = profile._json.link;
+        user.avatar = user.avatar || `https://graph.facebook.com/${profile.id}/picture?type=large`;
+        user.name.value = user.name.value || profile.displayName;
+        user.birthDate.value = user.birthDate.value || new Date(profile._json.birthday);
         user = await user.save();
         return done(null, { id: user.id });
       }
+
+      const users = await User.find({
+        'profile.facebook.id': profile.id,
+      });
+
+      if (users.length) {
+        return done(null, { id: users[0].id });
+      }
+
+      const email = profile._json.email;
+      let user;
+      if (email) {
+        user = await User.findOne({
+          email: new RegExp(email, 'i'),
+        });
+
+        if (user) {
+          user.profile.facebook.id = profile.id;
+          user.profile.facebook.link = profile._json.link;
+          user.avatar = user.avatar || `https://graph.facebook.com/${profile.id}/picture?type=large`;
+          user.name.value = user.name.value || profile.displayName;
+          user.birthDate.value = user.birthDate.value || new Date(profile._json.birthday);
+          user = await user.save();
+          return done(null, { id: user.id });
+        }
+      }
+
+      user = await createUser(profile);
+      return done(null, { id: user.id });
     }
 
-    user = await createUser(profile);
-    return done(null, { id: user.id });
-  }
-
-  loginFacebook().catch(done);
-});
+    loginFacebook().catch(done);
+  });
+}
 
 async function createUser(profile) {
   let username = profile.displayName.replace(/\s+/g, '');

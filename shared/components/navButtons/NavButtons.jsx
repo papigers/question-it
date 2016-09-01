@@ -16,7 +16,7 @@ const pages = [
 	{ label: 'Home', path: '/' },
 	{ label: 'Explore', path: '/explore' },
   { label: 'Create', path: '/poll/new' },
-  { label: 'My Profile', path: '/user' },
+  { label: 'My Profile', path: '/profile' },
 	{ label: 'Login', path: '/login' },
 ];
 

@@ -25,9 +25,15 @@ class UserContact extends React.Component {
 
     const socialButtons = socials.map((social, i) => {
       const socialName = social[0].toUpperCase() + social.substr(1);
-      const linked = user[social].link && user[social].link.length;
+      let link = user[social].link;
+      const linked = link && link.length;
+      let newWindow = true;
       let editSocial = null;
       if (isViewer) {
+        if (!link) {
+          link = `/link/${social}`;
+          newWindow = false;
+        }
         editSocial = linked ?
           <Checkbox
             defaultChecked={!user[social].public}
@@ -41,12 +47,12 @@ class UserContact extends React.Component {
           <Subheader className="subheader">{socialName}:</Subheader>
           <ListItem className="item" disabled>
             <SocialButton
-              link={user[social].link}
+              link={link}
               className={s.social}
               type={social}
               disabled={!linked}
               isViewer={isViewer}
-              newWindow
+              newWindow={newWindow}
             />
           </ListItem>
           {editSocial}

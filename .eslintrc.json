@@ -13,6 +13,7 @@
     "react/prefer-stateless-function": 0,
     "no-param-reassign": 0,
     "no-warning-comments": 1,
+    "new-cap": 0,
     "max-len": ["error", 120],
     "no-confusing-arrow": 0,
     "no-console": [2, { "allow": ["warn", "error"] }],

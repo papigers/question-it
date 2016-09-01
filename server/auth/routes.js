@@ -42,7 +42,7 @@ router.get('/login/facebook', passport.authenticate('facebook', {
   session: false,
 }));
 
-router.get(auth.facebook.callbackURL, passport.authenticate('facebook', {
+router.get(`/login${auth.facebook.callbackURL}`, passport.authenticate('facebook', {
   failureRedirect: '/login',
   session: false,
 }), (req, res) => {
@@ -52,12 +52,23 @@ router.get(auth.facebook.callbackURL, passport.authenticate('facebook', {
   res.redirect('/');
 });
 
+router.get('/link/facebook', passport.authorize('facebook-link', {
+  scope: ['email', 'user_birthday'],
+  session: false,
+}));
+
+router.get(`/link${auth.facebook.callbackURL}`, passport.authorize('facebook-link', {
+  session: false,
+}), (req, res) => {
+  res.redirect('/profile');
+});
+
 router.get('/login/linkedin', passport.authenticate('linkedin', {
   state: auth.linkedin.state,
   session: false,
 }));
 
-router.get(auth.linkedin.callbackURL, passport.authenticate('linkedin', {
+router.get(`/login${auth.linkedin.callbackURL}`, passport.authenticate('linkedin', {
   failureRedirect: '/login',
   session: false,
 }), (req, res) => {
@@ -65,6 +76,17 @@ router.get(auth.linkedin.callbackURL, passport.authenticate('linkedin', {
   const token = jwt.sign(req.user, auth.jwt.secret, { expiresIn });
   res.cookie('id_token', token, { maxAge: 1000 * expiresIn, httpOnly: true });
   res.redirect('/');
+});
+
+router.get('/link/linkedin', passport.authorize('linkedin-link', {
+  state: auth.linkedin.state,
+  session: false,
+}));
+
+router.get(`/link${auth.linkedin.callbackURL}`, passport.authorize('linkedin-link', {
+  session: false,
+}), (req, res) => {
+  res.redirect('/profile');
 });
 
 router.get('/login/google', passport.authenticate('google', {
@@ -73,7 +95,7 @@ router.get('/login/google', passport.authenticate('google', {
   session: false,
 }));
 
-router.get(auth.google.callbackURL, passport.authenticate('google', {
+router.get(`/login${auth.google.callbackURL}`, passport.authenticate('google', {
   failureRedirect: '/login',
   session: false,
 }), (req, res) => {
@@ -81,6 +103,18 @@ router.get(auth.google.callbackURL, passport.authenticate('google', {
   const token = jwt.sign(req.user, auth.jwt.secret, { expiresIn });
   res.cookie('id_token', token, { maxAge: 1000 * expiresIn, httpOnly: true });
   res.redirect('/');
+});
+
+router.get('/link/google', passport.authorize('google-link', {
+  state: auth.linkedin.state,
+  scope: ['profile', 'email'],
+  session: false,
+}));
+
+router.get(`/link${auth.google.callbackURL}`, passport.authorize('google-link', {
+  session: false,
+}), (req, res) => {
+  res.redirect('/profile');
 });
 
 export default router;

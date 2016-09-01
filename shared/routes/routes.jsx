@@ -21,6 +21,22 @@ function renderLoading({ props, routerProps, element }) {
   return React.cloneElement(element, props);
 }
 
+class RedirectToViewer extends React.Component {
+  static contextTypes = {
+    viewer: React.PropTypes.object.isRequired,
+    router: React.PropTypes.object.isRequired,
+  }
+
+  componentWillMount() {
+    this.context.router.replace(this.context.viewer ? `/user/${this.context.viewer.id}` : '/');
+  }
+
+  render() {
+    return (<div></div>);
+  }
+
+}
+
 export default (
   <Route component={App} path="/" queries={viewerQuery}>
 
@@ -83,6 +99,10 @@ export default (
       />
     </Route>
 
+    <Route
+      path="profile"
+      components={{ main: RedirectToViewer }}
+    />
 
     <Route
       path="user/:id"
