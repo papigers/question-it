@@ -15,13 +15,15 @@ class SocialButton extends React.Component {
     className: React.PropTypes.string,
     link: React.PropTypes.string,
     newWindow: React.PropTypes.bool,
+    onClick: React.PropTypes.func,
   }
 	
   render() {
-    const { type, disabled, isViewer, link, newWindow } = this.props;
+    const { type, disabled, isViewer, link, newWindow, onClick } = this.props;
     return (
       <FloatingActionButton
         linkButton
+        onClick={onClick}
         className={`${s.root} ${disabled ? s.disabled : s[type]} ${this.props.className}`}
         iconClassName={`icon-${type}`}
         disabled={disabled && !isViewer}

@@ -23,15 +23,22 @@ class LoginPage extends React.Component {
     super(props);
     this.state = { open: false };
   }
-
-  componentWillMount() {
-    if (this.props.viewer) {
-      this.context.router.replace('/');
-    }
-  }
   
   componentDidMount() {
+    if (this.props.viewer) {
+      let redirect = '/';
+      const { query } = this.props.location;
+      if (query && query.callback) {
+        redirect = sessionStorage.getItem('oauth-after-login') || '/';
+      }
+      this.context.router.replace(redirect);
+      sessionStorage.removeItem('oauth-after-login');
+    }
     NProgress.done();
+  }
+
+  componentWillUnmount() {
+    sessionStorage.removeItem('after-login');
   }
 
   handleClose = () => {

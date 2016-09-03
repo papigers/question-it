@@ -46,11 +46,12 @@ class User extends React.Component {
 
   static propTypes = {
     scrollspy: React.PropTypes.number.isRequired,
-    node: React.PropTypes.object.isRequired,
+    user: React.PropTypes.object,
   }
 
   static contextTypes= {
     viewer: React.PropTypes.object,
+    router: React.PropTypes.object,
   }
 
   componentWillMount() {
@@ -58,6 +59,15 @@ class User extends React.Component {
   }
 
   componentDidMount() {
+    if (!this.props.user) {
+      let redirect = '/';
+      if (this.context.router.isActive('profile', true)) {
+        redirect += 'login';
+        sessionStorage.setItem('after-login', window.location.pathname);
+      }
+      this.context.router.replace(redirect);
+    }
+
     NProgress.done();
     const SweetScroll = require('sweet-scroll'); // eslint-disable-line global-require
     this.sweetScroll = new SweetScroll({
@@ -78,7 +88,12 @@ class User extends React.Component {
   }
 
   render() {
-    const { node: user } = this.props;
+    const { user } = this.props;
+
+    if (!user) {
+      return <div></div>;
+    }
+
     const { viewer } = this.context;
     const isViewer = viewer !== null && viewer.id === user.id;
 
@@ -144,7 +159,7 @@ User = withStyles(s)(scrollSpy(User));
 
 User = Relay.createContainer(User, {
   fragments: {
-    node: (() => Relay.QL`
+    user: (() => Relay.QL`
       fragment on User{
         id,
         ${UserIntro.getFragment('user')},

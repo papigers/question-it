@@ -81,7 +81,7 @@ class PollItem extends React.Component {
           </div>
           <div className={s.content}>
             <h4 className="center-text">
-              <Link to={`/user/${poll.author.id}`}>
+              <Link to={`/profile/${poll.author.id}`}>
                 <span className={s.user} onClick={this.routeToUser}>{poll.author.username}</span>
               </Link>
               {' asked:'}

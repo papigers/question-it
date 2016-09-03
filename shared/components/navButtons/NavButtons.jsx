@@ -34,13 +34,6 @@ class NavButtons extends React.Component {
     };
   }
 
-  componentWillMount() {
-    const loggedOn = this.context.viewer;
-    if (loggedOn) {
-      pages[3].path = `/user/${loggedOn.id}`;
-    }
-  }
-
   onSettingsClick = (event) => {
     event.preventDefault();
     this.setState({

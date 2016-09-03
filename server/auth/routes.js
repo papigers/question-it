@@ -49,7 +49,7 @@ router.get(`/login${auth.facebook.callbackURL}`, passport.authenticate('facebook
   const expiresIn = 60 * 60 * 24 * 180; // 180 days
   const token = jwt.sign(req.user, auth.jwt.secret, { expiresIn });
   res.cookie('id_token', token, { maxAge: 1000 * expiresIn, httpOnly: true });
-  res.redirect('/');
+  res.redirect('/login?callback=true');
 });
 
 router.get('/link/facebook', passport.authorize('facebook-link', {
@@ -75,7 +75,7 @@ router.get(`/login${auth.linkedin.callbackURL}`, passport.authenticate('linkedin
   const expiresIn = 60 * 60 * 24 * 180; // 180 days
   const token = jwt.sign(req.user, auth.jwt.secret, { expiresIn });
   res.cookie('id_token', token, { maxAge: 1000 * expiresIn, httpOnly: true });
-  res.redirect('/');
+  res.redirect('/login?callback=true');
 });
 
 router.get('/link/linkedin', passport.authorize('linkedin-link', {
@@ -102,7 +102,7 @@ router.get(`/login${auth.google.callbackURL}`, passport.authenticate('google', {
   const expiresIn = 60 * 60 * 24 * 180; // 180 days
   const token = jwt.sign(req.user, auth.jwt.secret, { expiresIn });
   res.cookie('id_token', token, { maxAge: 1000 * expiresIn, httpOnly: true });
-  res.redirect('/');
+  res.redirect('/login?callback=true');
 });
 
 router.get('/link/google', passport.authorize('google-link', {

@@ -21,22 +21,6 @@ function renderLoading({ props, routerProps, element }) {
   return React.cloneElement(element, props);
 }
 
-class RedirectToViewer extends React.Component {
-  static contextTypes = {
-    viewer: React.PropTypes.object.isRequired,
-    router: React.PropTypes.object.isRequired,
-  }
-
-  componentWillMount() {
-    this.context.router.replace(this.context.viewer ? `/user/${this.context.viewer.id}` : '/');
-  }
-
-  render() {
-    return (<div></div>);
-  }
-
-}
-
 export default (
   <Route component={App} path="/" queries={viewerQuery}>
 
@@ -83,33 +67,42 @@ export default (
 
     </Route>
 
-    <Route
-      path="poll/new"
-      components={{ main: CreatePoll }}
-      queries={{ main: { ...viewerQuery, ...storeQuery } }}
-      render={{ main: renderLoading }}
-    />
-
     <Route path="poll">
+
+      <IndexRedirect to="/explore" />
+
+      <Route
+        path="new"
+        components={{ main: CreatePoll }}
+        queries={{ main: { ...viewerQuery, ...storeQuery } }}
+        render={{ main: renderLoading }}
+      />
+
       <Route
         path=":id"
         components={{ main: Poll }}
         queries={{ main: { ...nodeQuery, ...viewerQuery, ...storeQuery } }}
         render={{ main: renderLoading }}
       />
+
     </Route>
 
-    <Route
-      path="profile"
-      components={{ main: RedirectToViewer }}
-    />
+    <Route path="profile">
 
-    <Route
-      path="user/:id"
-      components={{ main: User }}
-      queries={{ main: nodeQuery }}
-      render={{ main: renderLoading }}
-    />
+      <IndexRoute
+        components={{ main: User }}
+        queries={{ main: { user: viewerQuery.viewer } }}
+        render={{ main: renderLoading }}
+      />
+
+      <Route
+        path=":id"
+        components={{ main: User }}
+        queries={{ main: { user: nodeQuery.node } }}
+        render={{ main: renderLoading }}
+      />
+
+    </Route>
 
 
     <Route

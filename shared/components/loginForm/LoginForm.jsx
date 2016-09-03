@@ -71,7 +71,7 @@ class LoginForm extends React.Component {
     }).then(res => res.json()).then(json => {
       if (json.success) {
         this.setState({ error: '' });
-        window.location.href = json.redirect;
+        window.location.href = sessionStorage.getItem('after-login') || json.redirect;
       }
       else {
         this.setState({ error: json.error });

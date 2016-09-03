@@ -150,7 +150,7 @@ class VoteArea extends React.Component {
       <div>
         <h1>Vote:</h1>
         <h2>{poll.title}</h2>
-        <h4><Link to={`/user/${poll.author.id}`}>{poll.author.username}</Link></h4>
+        <h4><Link to={`/profile/${poll.author.id}`}>{poll.author.username}</Link></h4>
         <List>
           {options}
         </List>

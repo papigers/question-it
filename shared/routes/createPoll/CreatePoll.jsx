@@ -49,12 +49,14 @@ class CreatePoll extends React.Component {
   }
 
   componentWillMount() {
-    if (!this.props.viewer) {
-      this.context.router.replace('/login');
-    }
+
   }
 
   componentDidMount() {
+    if (!this.props.viewer) {
+      sessionStorage.setItem('after-login', window.location.pathname);
+      this.context.router.replace('/login');
+    }
     NProgress.done();
   }
 
