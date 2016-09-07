@@ -46,12 +46,20 @@ class User extends React.Component {
 
   static propTypes = {
     scrollspy: React.PropTypes.number.isRequired,
+    route: React.PropTypes.object.isRequired,
     user: React.PropTypes.object,
   }
 
   static contextTypes= {
     viewer: React.PropTypes.object,
     router: React.PropTypes.object,
+  }
+
+  constructor() {
+    super();
+    this.state = {
+      changed: sections.map(() => false),
+    };
   }
 
   componentWillMount() {
@@ -68,6 +76,8 @@ class User extends React.Component {
       this.context.router.replace(redirect);
     }
 
+    this.context.router.setRouteLeaveHook(this.props.route, this.routerWillLeave);
+
     NProgress.done();
     const SweetScroll = require('sweet-scroll'); // eslint-disable-line global-require
     this.sweetScroll = new SweetScroll({
@@ -81,6 +91,18 @@ class User extends React.Component {
 
   setScrollspyRef = (ref) => {
     this.scrollSpy.push(ref);
+  }
+
+  setChanged = (section, isChanged) => {
+    const { changed } = this.state;
+    changed[section] = isChanged;
+    this.setState({ changed });
+  }
+
+  routerWillLeave = () => {
+    if (this.state.changed.some(val => val)) {
+      return 'You have some unsaved changes, still want to leave?';
+    }
   }
 
   scrollTo = (elId) => {
@@ -142,6 +164,7 @@ class User extends React.Component {
                     {React.createElement(section.component, {
                       isViewer,
                       user,
+                      setChanged: (changed) => this.setChanged(i, changed),
                     })}
                   </div>
                 ) : null

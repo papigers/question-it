@@ -8,10 +8,11 @@ import {
   GraphQLBoolean,
   GraphQLString,
   GraphQLList,
-  GraphQLEnumType
+  GraphQLEnumType,
+  GraphQLInputObjectType
 } from 'graphql';
 
-import GraphQLDate from 'graphql-custom-datetype';
+import GraphQLDate from 'graphql-date';
 
 import {
   connectionArgs,
@@ -467,12 +468,117 @@ const RegisterUserMutation = mutationWithClientMutationId({
     }),
 });
 
+const updateUserInput = new GraphQLInputObjectType({
+  name: 'UpdateUser',
+  description: 'Update user input',
+  fields: (() => ({
+    id: {
+      type: new GraphQLNonNull(GraphQLID),
+    },
+    avatar: {
+      type: GraphQLString,
+    },
+    bio: {
+      type: GraphQLString,
+    },
+    birthDate: {
+      type: new GraphQLInputObjectType({
+        name: 'BirthDateUpdate',
+        fields: (() => ({
+          public: {
+            type: GraphQLBoolean,
+          },
+          value: {
+            type: GraphQLDate,
+          },
+        })),
+      }),
+    },
+    name: {
+      type: new GraphQLInputObjectType({
+        name: 'NameUpdate',
+        fields: (() => ({
+          public: {
+            type: GraphQLBoolean,
+          },
+          value: {
+            type: GraphQLString,
+          },
+        })),
+      }),
+    },
+    profile: {
+      type: new GraphQLInputObjectType({
+        name: 'SocialProfilesUpdate',
+        fields: (() => ({
+          facebook: {
+            type: new GraphQLInputObjectType({
+              name: 'FacebookUpdate',
+              fields: (() => ({
+                public: {
+                  type: GraphQLBoolean,
+                },
+              })),
+            }),
+          },
+          google: {
+            type: new GraphQLInputObjectType({
+              name: 'GoogleUpdate',
+              fields: (() => ({
+                public: {
+                  type: GraphQLBoolean,
+                },
+              })),
+            }),
+          },
+          linkedin: {
+            type: new GraphQLInputObjectType({
+              name: 'LinkedinUpdate',
+              fields: (() => ({
+                public: {
+                  type: GraphQLBoolean,
+                },
+              })),
+            }),
+          },
+        })),
+      }),
+    },
+  })),
+});
+
+const UpdateUserMutation = mutationWithClientMutationId({
+  name: 'UpdateUser',
+
+  inputFields: {
+    updatedUser: {
+      type: new GraphQLNonNull(updateUserInput),
+    },
+  },
+
+  outputFields: {
+    viewer: {
+      type: userType,
+      resolve: ((root, args, { viewerId }) => db.getUser(viewerId)),
+    },
+  },
+
+  mutateAndGetPayload: ({ updatedUser }) => {
+    const update = updatedUser;
+    const id = update.id;
+    delete update.id;
+    const { id: href } = fromGlobalId(id);
+    return db.updateUser(href, update);
+  },
+});
+
 const Mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
     createPoll: CreatePollMutation,
     votePoll: CreateVoteMutation,
     registerUser: RegisterUserMutation,
+    updateUser: UpdateUserMutation,
   },
 });
 

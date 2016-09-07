@@ -4,11 +4,13 @@ import { User } from '../../../data/models';
 
 /* eslint-disable no-underscore-dangle */
 
-export default function LinkedinStrategy(link) {
+export default function LinkedinStrategy(link, reload) {
+  let cbUrl = link ? 'link' : 'login';
+  cbUrl = reload ? 'reload' : cbUrl;
   return new Strategy({
     clientID: config.linkedin.id,
     clientSecret: config.linkedin.secret,
-    callbackURL: `/${link ? 'link' : 'login'}${config.linkedin.callbackURL}`,
+    callbackURL: `/${cbUrl}${config.linkedin.callbackURL}`,
     scope: ['r_emailaddress', 'r_basicprofile'],
     passReqToCallback: true,
   }, (req, accessToken, refreshToken, profile, done) => {
@@ -17,10 +19,17 @@ export default function LinkedinStrategy(link) {
         let user = await User.findById(req.user.id);
         user.profile.linkedin.id = profile.id;
         user.profile.linkedin.link = profile._json.publicProfileUrl;
-        user.avatar = user.avatar || profile._json.pictureUrl;
-        user.name.value = user.name.value || profile.displayName;
+
+        user.avatar = reload ?
+          profile._json.image.url
+        : user.avatar || profile._json.publicProfileUrl;
+
+        user.name.value = reload ?
+          profile.displayName
+        : user.name.value || profile.displayName;
+
         user = await user.save();
-        return done(null, { id: user.id });
+        return done(null, { id: user.id, href: user.href });
       }
 
       const users = await User.find({
@@ -28,7 +37,7 @@ export default function LinkedinStrategy(link) {
       });
 
       if (users.length) {
-        return done(null, { id: users[0].id });
+        return done(null, { id: users[0].id, href: users[0].href });
       }
 
       const email = profile._json.emailAddress;
@@ -44,12 +53,12 @@ export default function LinkedinStrategy(link) {
           user.avatar = user.avatar || profile._json.pictureUrl;
           user.name.value = user.name.value || profile.displayName;
           user = await user.save();
-          return done(null, { id: user.id });
+          return done(null, { id: user.id, href: user.href });
         }
       }
 
       user = await createUser(profile);
-      return done(null, { id: user.id });
+      return done(null, { id: user.id, href: user.href });
     }
 
     loginLinkedin().catch(done);

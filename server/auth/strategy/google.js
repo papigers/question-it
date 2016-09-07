@@ -4,11 +4,13 @@ import { User } from '../../../data/models';
 
 /* eslint-disable no-underscore-dangle */
 
-export default function GoogleStrategy(link) {
+export default function GoogleStrategy(link, reload) {
+  let cbUrl = link ? 'link' : 'login';
+  cbUrl = reload ? 'reload' : cbUrl;
   return new Strategy({
     clientID: config.google.id,
     clientSecret: config.google.secret,
-    callbackURL: `/${link ? 'link' : 'login'}${config.google.callbackURL}`,
+    callbackURL: `/${cbUrl}${config.google.callbackURL}`,
     passReqToCallback: true,
   }, (req, accessToken, refreshToken, profile, done) => {
     async function loginGoogle() {
@@ -16,10 +18,17 @@ export default function GoogleStrategy(link) {
         let user = await User.findById(req.user.id);
         user.profile.google.id = profile.id;
         user.profile.google.link = profile._json.url;
-        user.avatar = user.avatar || profile._json.image.url;
-        user.name.value = user.name.value || profile.displayName;
+
+        user.avatar = reload ?
+          profile._json.image.url
+        : user.avatar || profile._json.image.url;
+
+        user.name.value = reload ?
+          profile.displayName
+        : user.name.value || profile.displayName;
+
         user = await user.save();
-        return done(null, { id: user.id });
+        return done(null, { id: user.id, href: user.href });
       }
 
       const users = await User.find({
@@ -27,7 +36,7 @@ export default function GoogleStrategy(link) {
       });
 
       if (users.length) {
-        return done(null, { id: users[0].id });
+        return done(null, { id: users[0].id, href: users[0].href });
       }
 
       const email = profile._json.emails[0] && profile._json.emails[0].value;
@@ -43,12 +52,12 @@ export default function GoogleStrategy(link) {
           user.avatar = user.avatar || profile._json.image.url;
           user.name.value = user.name.value || profile.displayName;
           user = await user.save();
-          return done(null, { id: user.id });
+          return done(null, { id: user.id, href: user.href });
         }
       }
 
       user = await createUser(profile);
-      return done(null, { id: user.id });
+      return done(null, { id: user.id, href: user.href });
     }
 
     loginGoogle().catch(done);
@@ -67,7 +76,7 @@ async function createUser(profile) {
     username,
     avatar: profile._json.image.url,
     'name.value': profile.displayName,
-    'profile.linkedin': {
+    'profile.google': {
       id: profile.id,
       link: profile._json.url,
     },

@@ -5,11 +5,13 @@ import { User } from '../../../data/models';
 /* eslint-disable no-underscore-dangle */
 
 
-export default function FacebookStrategy(link) {
+export default function FacebookStrategy(link, reload) {
+  let cbUrl = link ? 'link' : 'login';
+  cbUrl = reload ? 'reload' : cbUrl;
   return new Strategy({
     clientID: config.facebook.id,
     clientSecret: config.facebook.secret,
-    callbackURL: `/${link ? 'link' : 'login'}${config.facebook.callbackURL}`,
+    callbackURL: `/${cbUrl}${config.facebook.callbackURL}`,
     profileFields: ['name', 'displayName', 'birthday', 'email', 'link'],
     passReqToCallback: true,
   }, (req, accessToken, refreshToken, profile, done) => {
@@ -18,11 +20,21 @@ export default function FacebookStrategy(link) {
         let user = await User.findById(req.user.id);
         user.profile.facebook.id = profile.id;
         user.profile.facebook.link = profile._json.link;
-        user.avatar = user.avatar || `https://graph.facebook.com/${profile.id}/picture?type=large`;
-        user.name.value = user.name.value || profile.displayName;
-        user.birthDate.value = user.birthDate.value || new Date(profile._json.birthday);
+
+        user.avatar = reload ?
+          `https://graph.facebook.com/${profile.id}/picture?type=large`
+        : user.avatar || `https://graph.facebook.com/${profile.id}/picture?type=large`;
+
+        user.name.value = reload ?
+          profile.displayName
+        : user.name.value || profile.displayName;
+
+        user.birthDate.value = reload ?
+          new Date(profile._json.birthday)
+        : user.birthDate.value || new Date(profile._json.birthday);
+
         user = await user.save();
-        return done(null, { id: user.id });
+        return done(null, { id: user.id, href: user.href });
       }
 
       const users = await User.find({
@@ -30,7 +42,7 @@ export default function FacebookStrategy(link) {
       });
 
       if (users.length) {
-        return done(null, { id: users[0].id });
+        return done(null, { id: users[0].id, href: users[0].href });
       }
 
       const email = profile._json.email;
@@ -47,12 +59,12 @@ export default function FacebookStrategy(link) {
           user.name.value = user.name.value || profile.displayName;
           user.birthDate.value = user.birthDate.value || new Date(profile._json.birthday);
           user = await user.save();
-          return done(null, { id: user.id });
+          return done(null, { id: user.id, href: user.href });
         }
       }
 
       user = await createUser(profile);
-      return done(null, { id: user.id });
+      return done(null, { id: user.id, href: user.href });
     }
 
     loginFacebook().catch(done);

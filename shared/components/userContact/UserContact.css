@@ -1,9 +1,25 @@
+.header{
+  display: flex;
+  align-items: center;
+
+  & h2 {
+    flex-grow: 1;
+  }
+}
 
 .privateCheckbox{
-  margin-left: 10px;
+  margin: 0 auto;
+  width: auto !important;
 }
 
 .social{
   width: 100% !important;
   margin-left: 10px;
+}
+
+.reload{
+  margin-top: 10px;
+  &:hover {
+    text-decoration: underline;
+  }
 }

@@ -95,6 +95,10 @@ footer {
     padding: 0 30px;
   }
 
+  & .clickable {
+    cursor: pointer;
+  }
+
   & .center-y {
     position: relative !important;
     top: 50%;

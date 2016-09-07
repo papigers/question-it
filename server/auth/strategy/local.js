@@ -22,7 +22,7 @@ export default new Strategy({
         return done(err);
       }
       return valid ?
-        done(null, { id: user._id })
+        done(null, { id: user._id, href: user.href })
       : done(null, null, { message: 'Invalid username or password' });
     });
   }

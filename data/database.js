@@ -348,3 +348,21 @@ export function createUser(username, email, password) {
     });
   });
 }
+
+export function updateUser(href, update) {
+  const { profile } = update;
+  delete update.profile;
+  ['facebook', 'google', 'linkedin'].forEach(social => {
+    if (profile && profile[social]) {
+      update[`profile.${social}.public`] = !(!profile[social].public);
+    }
+  });
+  return new Promise((resolve, reject) => {
+    User.findOneAndUpdate({ href }, update, { new: true }, (err, user) => {
+      if (err) {
+        return reject(err);
+      }
+      return resolve(user);
+    });
+  });
+}

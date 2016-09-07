@@ -8,7 +8,9 @@
     padding-left: 5% !important;
     border-radius: 5px;
   }
-  
+}
+
+.focusHighlight{
   & input:focus {
     background-color: color($accent2Color w(85%)) !important;
   }

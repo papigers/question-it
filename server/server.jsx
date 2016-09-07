@@ -1,5 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import path from 'path';
 import favicon from 'express-favicon';
 import schema from '../data/schema';
 import graphQLHTTP from 'express-graphql';
@@ -15,6 +16,7 @@ import IsomorphicRouter from 'isomorphic-relay-router';
 
 import routes from '../shared/routes';
 import { routes as authRoutes, passport } from './auth';
+import upload from './upload';
 import Root from '../shared/root';
 
 import config from '../config';
@@ -40,6 +42,13 @@ app.use(expressJwt({
 app.use(passport.initialize());
 
 app.use(authRoutes);
+
+app.use('/upload', upload);
+
+app.get('/api/:id/avatar', (req, res) => {
+  const root = path.join(config.uploadLocation, req.params.id, 'images');
+  res.sendFile('avatar.png', { root });
+});
 
 /* eslint-enable no-console */
 

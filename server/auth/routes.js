@@ -63,8 +63,19 @@ router.get(`/link${auth.facebook.callbackURL}`, passport.authorize('facebook-lin
   res.redirect('/profile');
 });
 
+router.get('/reload/facebook', passport.authorize('facebook-reload', {
+  scope: ['email', 'user_birthday'],
+  session: false,
+}));
+
+router.get(`/reload${auth.facebook.callbackURL}`, passport.authorize('facebook-reload', {
+  session: false,
+}), (req, res) => {
+  res.redirect('/profile');
+});
+
 router.get('/login/linkedin', passport.authenticate('linkedin', {
-  state: auth.linkedin.state,
+  state: auth.state,
   session: false,
 }));
 
@@ -79,7 +90,7 @@ router.get(`/login${auth.linkedin.callbackURL}`, passport.authenticate('linkedin
 });
 
 router.get('/link/linkedin', passport.authorize('linkedin-link', {
-  state: auth.linkedin.state,
+  state: auth.state,
   session: false,
 }));
 
@@ -89,8 +100,19 @@ router.get(`/link${auth.linkedin.callbackURL}`, passport.authorize('linkedin-lin
   res.redirect('/profile');
 });
 
+router.get('/reload/linkedin', passport.authorize('linkedin-reload', {
+  state: auth.state,
+  session: false,
+}));
+
+router.get(`/reload${auth.linkedin.callbackURL}`, passport.authorize('linkedin-reload', {
+  session: false,
+}), (req, res) => {
+  res.redirect('/profile');
+});
+
 router.get('/login/google', passport.authenticate('google', {
-  state: auth.linkedin.state,
+  state: auth.state,
   scope: ['profile', 'email'],
   session: false,
 }));
@@ -106,12 +128,24 @@ router.get(`/login${auth.google.callbackURL}`, passport.authenticate('google', {
 });
 
 router.get('/link/google', passport.authorize('google-link', {
-  state: auth.linkedin.state,
+  state: auth.state,
   scope: ['profile', 'email'],
   session: false,
 }));
 
 router.get(`/link${auth.google.callbackURL}`, passport.authorize('google-link', {
+  session: false,
+}), (req, res) => {
+  res.redirect('/profile');
+});
+
+router.get('/reload/google', passport.authorize('google-reload', {
+  state: auth.state,
+  scope: ['profile', 'email'],
+  session: false,
+}));
+
+router.get(`/reload${auth.google.callbackURL}`, passport.authorize('google-reload', {
   session: false,
 }), (req, res) => {
   res.redirect('/profile');

@@ -11,7 +11,7 @@ import {
   GraphQLEnumType
 } from 'graphql';
 
-import GraphQLDate from 'graphql-custom-datetype';
+import GraphQLDate from 'graphql-date';
 
 import {
   connectionArgs,

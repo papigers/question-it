@@ -2,12 +2,14 @@ const path = require('path');
 
 const root = path.resolve(__dirname);
 const buildLocation = path.join(root, 'public', 'build');
+const uploadLocation = path.join(root, 'public', 'upload');
 const appURL = process.env.APP_URI || 'http://localhost';
 const port = process.env.PORT || 3000;
 
 module.exports = {
   root,
   buildLocation,
+  uploadLocation,
   favicon: path.join(root, 'public', 'favicon', 'favicon.ico'),
   hostname: 'localhost',
   port,
@@ -17,6 +19,7 @@ module.exports = {
   mockViewer: process.env.MOCK_VIEWER || '578db69904ec1604238533ca',
   
   auth: {
+    state: process.env.OAUTH_STATE,
     jwt: {
       secret: process.env.JWT_SECRET || 'wowsuchsecretsosecretary',
     },
@@ -33,7 +36,6 @@ module.exports = {
     linkedin: {
       id: process.env.LINKEDIN_ID,
       secret: process.env.LINKEDIN_SECRET,
-      state: process.env.LINKEDIN_STATE,
       callbackURL: '/linkedin/callback',
     },
   },

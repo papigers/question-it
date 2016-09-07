@@ -129,7 +129,7 @@ class RegisterForm extends React.Component {
           onChange={(e) => this.setState({ email: e.target.value })}
           value={email}
         />
-			
+
         <ValidTextField
           floatingLabelText="Password"
           muiId={`register-form-pass-${this.props.uniqueId}`}

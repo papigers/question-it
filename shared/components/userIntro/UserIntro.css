@@ -1,12 +1,22 @@
+.header{
+  display: flex;
+  align-items: center;
+
+  & h2 {
+    flex-grow: 1;
+  }
+}
+
 .editIcon{
   position: absolute !important;
   top: -3px;
 }
 
-.editBio{
+.restoreIcon{
   position: absolute !important;
-  right: -2px;
-  bottom: 5px;
+  top: -14px;
+  left: 220px;
+  z-index: 3;
 }
 
 .avatarContainer{
@@ -24,6 +34,23 @@
   position: absolute !important;
   left: 100px;
   top: 90px;
+}
+
+.restoreAvatar{
+  position: absolute !important;
+  left: 100px;
+  top: 3px;
+}
+
+.uploadImage{
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
 }
 
 .introRow{
@@ -45,4 +72,10 @@
 
 .fullRow{
   flex: 0 0  100%;
+}
+
+.editBio{
+  position: absolute !important;
+  left: 256px;
+  top: 0;
 }
