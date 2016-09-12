@@ -221,6 +221,9 @@ const pollType = new GraphQLObjectType({
       type: GraphQLInt,
       resolve: (poll => db.countPollVotes(poll._id)),
     },
+    deleted: {
+      type: GraphQLBoolean,
+    },
     createdAt: {
       type: new GraphQLNonNull(GraphQLDate),
     },
@@ -364,8 +367,8 @@ const CreatePollMutation = mutationWithClientMutationId({
   },
 
   mutateAndGetPayload: ({ title, multi, options, author }) => {
-    const { id: authorId } = fromGlobalId(author);
-    return db.createPoll(title, options, authorId, multi);
+    const { id: authorHref } = fromGlobalId(author);
+    return db.createPoll(title, options, authorHref, multi);
   },
 
 });
@@ -406,17 +409,17 @@ const CreateVoteMutation = mutationWithClientMutationId({
     },
     poll: {
       type: pollType,
-      resolve: (({ pollId }) => db.getPoll(pollId)),
+      resolve: (({ pollHref }) => db.findPoll({ href: pollHref }, true)),
     },
   },
   
   mutateAndGetPayload: ({ poll, user, options }) => {
-    const { id: pollId } = fromGlobalId(poll);
-    const { id: userId } = fromGlobalId(user);
+    const { id: pollHref } = fromGlobalId(poll);
+    const { id: userHref } = fromGlobalId(user);
     return new Promise((resolve, reject) => {
-      db.createVote(userId, pollId, options).then(vote => resolve({
+      db.createVote(userHref, pollHref, options).then(vote => resolve({
         voteId: vote.id,
-        pollId,
+        pollHref,
       })).catch(reject);
     });
   },
@@ -572,6 +575,40 @@ const UpdateUserMutation = mutationWithClientMutationId({
   },
 });
 
+const DeletePollMutation = mutationWithClientMutationId({
+  name: 'DeletePoll',
+
+  inputFields: {
+    pollId: {
+      type: new GraphQLNonNull(GraphQLID),
+    },
+  },
+
+  outputFields: {
+    deletedPollId: {
+      type: GraphQLID,
+      resolve: ({ pollId }) => pollId,
+    },
+    viewer: {
+      type: userType,
+      resolve: ((root, args, { viewerId }) => db.getUser(viewerId)),
+    },
+    store: {
+      type: storeType,
+      resolve: (() => store),
+    },
+  },
+
+  mutateAndGetPayload: ({ pollId }) => {
+    const { id: href } = fromGlobalId(pollId);
+    return new Promise((resolve, reject) => {
+      db.deletePoll(href)
+        .then(() => resolve({ pollId }))
+        .catch(reject);
+    });
+  },
+});
+
 const Mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
@@ -579,6 +616,7 @@ const Mutation = new GraphQLObjectType({
     votePoll: CreateVoteMutation,
     registerUser: RegisterUserMutation,
     updateUser: UpdateUserMutation,
+    deletePoll: DeletePollMutation,
   },
 });
 

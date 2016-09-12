@@ -5,7 +5,7 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import Paper from 'material-ui/Paper';
 
-import chartColors from './chartColors';
+import { chartColors } from '../../theme';
 
 import s from './PollItem.css';
 

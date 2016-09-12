@@ -12,3 +12,13 @@
 		fill: transparent;
 	}
 }
+
+.vote {
+  padding: 20px 50px !important;
+}
+
+.deleteBtn {
+  display: block !important;
+  margin: 0 auto;
+  padding: 10px 40%;
+}

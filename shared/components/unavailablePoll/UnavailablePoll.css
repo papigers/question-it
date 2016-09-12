@@ -1,0 +1,19 @@
+.back {
+  color: $primary2Color;
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.reasons {
+  margin: 0 auto;
+}
+
+.subheader {
+  font-size: 1.5em !important;
+  color: $primary1Color !important;
+}
+

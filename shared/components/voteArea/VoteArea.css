@@ -15,3 +15,27 @@
 .listItem{
 	max-width: 450px;
 }
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+  }
+  to {
+      opacity: 100;
+  }
+}
+
+.options{
+  animation: fadeIn .75s;
+}
+
+.authorLink {
+  color: $primary1Color !important;
+  text-decoration: none;
+  text-decoration-color: black;
+  -webkit-text-decoration-color: black;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

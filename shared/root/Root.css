@@ -1,3 +1,5 @@
+@custom-media --max-lg (max-width: $screen-lg-max);
+@custom-media --min-lg (min-width: $screen-lg);
 @custom-media --max-md (max-width: $screen-md-max);
 @custom-media --min-md (min-width: $screen-md);
 @custom-media --max-sm (max-width: $screen-sm-max);
@@ -103,6 +105,18 @@ footer {
     position: relative !important;
     top: 50%;
     transform: translate(0,-50%);
+  }
+
+  & .hide-lg-down {
+    @media(--max-lg) {
+      display: none !important;
+    }
+  }
+
+  & .hide-lg-up {
+    @media(--min-lg) {
+      display: none !important;
+    }
   }
 
   & .hide-md-down {

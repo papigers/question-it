@@ -55,11 +55,12 @@ export function getUsers(promise = true) {
 }
 
 export function findPoll(q, one = false, promise = true) {
+  q.deleted = false;
   return findDoc(Poll, q, promise, one);
 }
 
 export function getPoll(id, promise = true) {
-  const query = Poll.findById(id);
+  const query = Poll.findOne({ id, deleted: false });
   if (promise) {
     return new Promise((resolve, reject) => {
       query.exec((err, res) => err ? reject(err) : resolve(res));
@@ -71,6 +72,7 @@ export function getPoll(id, promise = true) {
 }
 
 export function countPolls(query = {}, promise = true) {
+  query.deleted = false;
   const q = Poll.count(query);
   if (promise) {
     return new Promise((resolve, reject) => {
@@ -123,11 +125,11 @@ export function countVotes(query = {}, promise = true) {
 }
 
 export function getUserPolls(id, orderBy = 1, promise = true) {
-  return getPolls({ author: id }, orderBy, promise);
+  return getPolls({ author: id, deleted: false }, orderBy, promise);
 }
 
 export function countUserPolls(id, promise = true) {
-  return countPolls({ author: id }, promise);
+  return countPolls({ author: id, deleted: false }, promise);
 }
 
 export function getUserVotes(id, promise = true) {
@@ -247,6 +249,7 @@ export function getVotePoll(id, promise = true) {
 }
 
 export function getPolls(query = {}, orderBy = 1, promise = true) {
+  query.deleted = false;
   switch (orderBy) {
     case 2:
       return newPolls(query, promise);
@@ -299,34 +302,43 @@ function trendingPolls(query, promise = true) {
   };
 }
 
-export function createPoll(title, options, userId, multi) {
-  const poll = new Poll({
-    title,
-    options,
-    multi,
-    author: userId,
-  });
+export function createPoll(title, options, userHref, multi) {
   return new Promise((resolve, reject) => {
-    poll.save((err, res) =>
-      err ? reject(err) : resolve(res)
-    );
+    findUser({ href: userHref }, true).then(user => {
+      const poll = new Poll({
+        title,
+        options,
+        multi,
+        author: user.id,
+      });
+      poll.save(
+        (err, res) => err ? reject(err) : resolve(res)
+      );
+    });
   });
 }
 
-export function createVote(user, poll, options) {
-  const vote = new Vote({
-    user,
-    options,
-  });
+export function createVote(userHref, pollHref, options) {
   return new Promise((resolve, reject) => {
-    vote.save((err, res) => {
-      if (err) {
-        reject(err);
-      }
-      else {
-        Poll.findByIdAndUpdate(poll, { $push: { votes: res._id } })
-          .exec((updErr) => updErr ? reject(updErr) : resolve(res));
-      }
+    findUser({ href: userHref }, true).then(user => {
+      const vote = new Vote({
+        user: user.id,
+        options,
+      });
+      vote.save((err, res) => {
+        if (err) {
+          reject(err);
+        }
+        else {
+          Poll.findOneAndUpdate({ href: pollHref }, { $push: { votes: res.id } }).exec((updErr) => {
+            if (updErr) {
+              res.remove();
+              return reject(updErr);
+            }
+            resolve(res);
+          });
+        }
+      });
     });
   });
 }
@@ -364,5 +376,15 @@ export function updateUser(href, update) {
       }
       return resolve(user);
     });
+  });
+}
+
+export function deletePoll(href) {
+  return new Promise((resolve, reject) => {
+    findPoll({ href }, true).then(poll => {
+      poll.deleted = true;
+      poll.save((err) =>
+                err ? reject(err) : resolve(href));
+    }).catch(reject);
   });
 }

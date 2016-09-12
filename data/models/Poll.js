@@ -27,6 +27,10 @@ const pollSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Vote',
   }],
+  deleted: {
+    type: Boolean,
+    default: false,
+  },
   href: {
     type: String,
     index: {

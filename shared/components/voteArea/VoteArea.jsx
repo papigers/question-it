@@ -13,6 +13,7 @@ import RadioUnchecked from 'material-ui/svg-icons/toggle/radio-button-unchecked'
 import RaisedButton from 'material-ui/RaisedButton';
 
 import s from './VoteArea.css';
+import { chartColors } from '../../theme';
 
 class VoteArea extends React.Component {
 
@@ -47,6 +48,7 @@ class VoteArea extends React.Component {
       multi,
       canVote,
       error,
+      showOptions: false,
     };
   }
 	
@@ -93,9 +95,13 @@ class VoteArea extends React.Component {
       }),
     });
   }
+
+  toggleVotes = () => {
+    this.setState({ showVotes: !this.state.showVotes });
+  }
 	
   render() {
-    const { canVote } = this.state;
+    const { canVote, showVotes } = this.state;
     const { loading, viewer, poll } = this.props;
 
     let submitLabel = 'Submit';
@@ -113,8 +119,9 @@ class VoteArea extends React.Component {
           <Checkbox
             label={option}
             key={i}
+            iconStyle={{ fill: chartColors[i] }}
             value={`${i}`}
-            checked={this.state.selected.includes(i)}
+            checked={this.state.selected.indexOf(i) >= 0}
             onCheckFunc={() => this.onChangeCheckbox(i)}
           />
         );
@@ -127,6 +134,7 @@ class VoteArea extends React.Component {
             value={`${i}`}
             checked={this.state.selected[0] === i}
             onCheckFunc={() => this.onChangeRadio(i)}
+            iconStyle={{ fill: chartColors[i] }}
             checkedIcon={<RadioChecked />}
             uncheckedIcon={<RadioUnchecked />}
           />
@@ -148,19 +156,47 @@ class VoteArea extends React.Component {
 
     return (
       <div>
-        <h1>Vote:</h1>
-        <h2>{poll.title}</h2>
-        <h4><Link to={`/profile/${poll.author.id}`}>{poll.author.username}</Link></h4>
-        <List>
-          {options}
-        </List>
-        <RaisedButton
-          label={submitLabel}
-          secondary
-          className={s.submitBtn}
-          disabled={!canVote || loading || !viewer}
-          onMouseUp={this.checkSubmit}
-        />
+        <h1 className="center-text">{poll.title}</h1>
+        <h3 className="center-text">
+          <Link className={s.authorLink} to={`/profile/${poll.author.id}`}>{poll.author.username}</Link>
+        </h3>
+        <div className="hide-lg-up">
+          <RaisedButton
+            label={showVotes ? 'Hide' : 'Vote'}
+            className={s.submitBtn}
+            disabled={!canVote || loading || !viewer}
+            onMouseUp={this.toggleVotes}
+            primary
+          />
+          {
+            showVotes ?
+              <div className={s.options}>
+                <List>
+                  {options}
+                </List>
+                <RaisedButton
+                  label={submitLabel}
+                  secondary
+                  className={s.submitBtn}
+                  disabled={!canVote || loading || !viewer}
+                  onMouseUp={this.checkSubmit}
+                />
+              </div> :
+            null
+          }
+        </div>
+        <div className="hide-md-down">
+          <List>
+            {options}
+          </List>
+          <RaisedButton
+            label={submitLabel}
+            secondary
+            className={s.submitBtn}
+            disabled={!canVote || loading || !viewer}
+            onMouseUp={this.checkSubmit}
+          />
+        </div>
         <p className={s.error}>{this.state.error}</p>
       </div>
     );

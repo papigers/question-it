@@ -2,9 +2,15 @@ import React from 'react';
 import Relay from 'react-relay';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
+import { DeletePollMutation } from '../../mutations';
+
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 import RefreshIndicator from 'material-ui/RefreshIndicator';
+import RaisedButton from 'material-ui/RaisedButton';
 
 import VoteArea from '../../components/voteArea';
+import UnavailablePoll from '../../components/unavailablePoll';
 
 let googleLoader;
 
@@ -44,10 +50,14 @@ import s from './Poll.css';
 
 class Poll extends React.Component {
 
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired,
+  }
+
   static propTypes = {
-    node: React.PropTypes.object.isRequired,
     store: React.PropTypes.object.isRequired,
     relay: React.PropTypes.object.isRequired,
+    node: React.PropTypes.object,
     viewer: React.PropTypes.object,
   }
   
@@ -56,25 +66,35 @@ class Poll extends React.Component {
     this.state = {
       loading: false,
       noVotes: false,
+      deleteOpen: false,
+      available: true,
     };
+  }
+
+  componentWillMount = () => {
+    if (!this.props.node || this.props.node.deleted) {
+      this.setState({ available: false });
+    }
   }
 
   componentDidMount = () => {
     NProgress.done();
 
-    this.loadGoogleCharts = getGoogleChartsLoader();
-    if (!this.loadGoogleCharts.loaded) {
-      this.loadGoogleCharts.load().then(() => {
+    if (this.state.avilable) {
+      this.loadGoogleCharts = getGoogleChartsLoader();
+      if (!this.loadGoogleCharts.loaded) {
+        this.loadGoogleCharts.load().then(() => {
+          this.drawChart();
+        });
+      }
+      else {
         this.drawChart();
-      });
-    }
-    else {
-      this.drawChart();
+      }
     }
   }
 
   componentDidUpdate = () => {
-    if (this.loadGoogleCharts.loaded && !this.state.noVotes) {
+    if (this.loadGoogleCharts && this.loadGoogleCharts.loaded && !this.state.noVotes) {
       this.drawChart();
     }
   }
@@ -156,13 +176,15 @@ class Poll extends React.Component {
 
     const col = document.getElementById('chart-col');
     const width = col.clientWidth * 0.9;
+    // const height = document.getElementById('vote-col').clientHeight;
+
 		// Set chart options
     const options = {
       is3D: true,
       legend: { position: 'top', alignment: 'center', maxLines: 2, textStyle: { fontSize: 16 } },
       titlePosition: 'none',
       width,
-      height: width,
+      height: width * 0.8,
     };
 
 		// Instantiate and draw our chart, passing in some options.
@@ -176,14 +198,60 @@ class Poll extends React.Component {
     }
   }
 
+  showDeleteDialog = () => {
+    this.setState({ deleteOpen: true });
+  }
+
+  hideDeleteDialog = () => {
+    this.setState({ deleteOpen: false });
+  }
+
+  deletePoll = () => {
+    const { relay, store, viewer, node: poll } = this.props;
+    const { router } = this.context;
+
+    this.setState({ deleteOpen: false });
+    relay.commitUpdate(new DeletePollMutation({ store, viewer, poll }), {
+      onSuccess: (() => router.push('/explore')),
+
+      // TODO: replace alert with a dialog.
+      onFailure: (() => alert('Couldn\'t delete poll. Try again later...')),
+    });
+  }
+
   render = () => {
     const { node, store, viewer } = this.props;
-    const { noVotes } = this.state;
+    const { noVotes, available } = this.state;
 
-    return (
+    const deleteActions = [
+      <FlatButton
+        label="Cancel"
+        secondary
+        onTouchTap={this.hideDeleteDialog}
+      />,
+      <FlatButton
+        label="Delete"
+        primary
+        onTouchTap={this.deletePoll}
+      />,
+    ];
+
+    return available ? (
       <div className="container ChartPage">
         <div className="row">
-          <div id="chart-col" className="col-xs-12 col-md-7 col-md-push-5">
+
+          <div className={`col-xs-12 col-md-5 ${s.vote}`} id="vote-col">
+            <VoteArea
+              poll={node}
+              viewer={viewer}
+              store={store}
+              loading={this.state.loading}
+              selected={this.getViewerVote()}
+              onSubmit={this.loadVotes}
+            />
+          </div>
+
+          <div id="chart-col" className="col-xs-12 col-md-7">
             <div id="chart-div">
               {(noVotes)
                 ?
@@ -198,6 +266,7 @@ class Poll extends React.Component {
                     flex: '1',
                     alignItems: 'center',
                     justifyContent: 'center',
+
                   }}
                 >
                   <div style={{ position: 'relative', alignSelf: 'center' }}>
@@ -213,19 +282,31 @@ class Poll extends React.Component {
             </div>
           </div>
 
-          <div className="col-xs-12 col-md-5 col-md-pull-7">
-            <VoteArea
-              poll={node}
-              viewer={viewer}
-              store={store}
-              loading={this.state.loading}
-              selected={this.getViewerVote()}
-              onSubmit={this.loadVotes}
-            />
-          </div>
+          {
+            node.author.id === viewer.id ?
+              <RaisedButton
+                label="Delete"
+                primary
+                className={`${s.deleteBtn} hide-md-down`}
+                onMouseUp={this.showDeleteDialog}
+              /> :
+            null
+          }
         </div>
+
+        <Dialog
+          title="Delete Poll?"
+          actions={deleteActions}
+          modal
+          open={this.state.deleteOpen}
+        >
+          Are you sure you want to delete this poll? This cannot be undone.
+        </Dialog>
       </div>
-		);
+		) :
+    (
+      <UnavailablePoll />
+    );
   }
 }
 
@@ -239,6 +320,10 @@ Poll = Relay.createContainer(Poll, {
   fragments: {
     node: (() => Relay.QL`
       fragments on Poll{
+        deleted,
+        author{
+          id,
+        },
         options,
         votes(first: $votesPageSize){
           edges{
@@ -253,18 +338,21 @@ Poll = Relay.createContainer(Poll, {
             hasNextPage,
           }
         },
-        ${VoteArea.getFragment('poll')}
+        ${VoteArea.getFragment('poll')},
+        ${DeletePollMutation.getFragment('poll')}
       }
     `),
     viewer: (() => Relay.QL`
       fragment on User{
         id,
-        ${VoteArea.getFragment('viewer')}
+        ${VoteArea.getFragment('viewer')},
+        ${DeletePollMutation.getFragment('viewer')}
       }
     `),
     store: (() => Relay.QL`
       fragment on Store{
-        ${VoteArea.getFragment('store')}
+        ${VoteArea.getFragment('store')},
+        ${DeletePollMutation.getFragment('store')}
       }
     `),
   },
