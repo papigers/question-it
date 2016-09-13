@@ -5,7 +5,7 @@
   * Password reset and replace.
 * ~~Relay mutations.~~ TODO:
   * ~~User: edit attributes mutation and views.~~
-    * Email contact.
+    * ~~Email contact.~~
 * ~~Poll pagination on scroll.~~
 * ~~Hooking up mongoose models and connect to GraphQl schema.~~
   * ~~Mongoose connection: pagination etc...~~

@@ -140,6 +140,13 @@ const userType = new GraphQLObjectType({
     },
     email: {
       type: GraphQLString,
+      resolve: ((user, args, { viewerId }) => {
+        const isPublic = user.publicEmail;
+        return isPublic || viewerId === user._id.toString() ? user.email : null;
+      }),
+    },
+    publicEmail: {
+      type: GraphQLBoolean,
     },
     avatar: {
       type: GraphQLString,
@@ -477,6 +484,9 @@ const updateUserInput = new GraphQLInputObjectType({
   fields: (() => ({
     id: {
       type: new GraphQLNonNull(GraphQLID),
+    },
+    publicEmail: {
+      type: GraphQLBoolean,
     },
     avatar: {
       type: GraphQLString,

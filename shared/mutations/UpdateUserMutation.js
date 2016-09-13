@@ -17,6 +17,7 @@ export default class UpdateUserMutation extends Relay.Mutation {
       fragment on UpdateUserPayload {
         viewer{
           bio,
+          publicEmail,
           avatar,
           birthDate{
             value,

@@ -40,6 +40,7 @@ class UserContact extends React.Component {
       linkedin: {
         public: user.linkedin.public,
       },
+      publicEmail: user.publicEmail,
       changed: false,
     };
   }
@@ -56,13 +57,7 @@ class UserContact extends React.Component {
   }
 
   onCheck = (social) => {
-    const changed = socials.some(soc => {
-      if (soc === social) {
-        return this.state[soc].public === this.props.user[soc].public;
-      }
-      return this.state[soc].public !== this.props.user[soc].public;
-    });
-    this.props.setChanged(changed);
+    const changed = this.isChanged(social);
     this.setState({
       [social]: {
         public: !this.state[social].public,
@@ -71,13 +66,39 @@ class UserContact extends React.Component {
     });
   }
 
+  checkEmail = () => {
+    const changed = this.isChanged('email');
+    this.setState({
+      publicEmail: !this.state.publicEmail,
+      changed,
+    });
+  }
+
+  isChanged = (social) => {
+    let changed = socials.some(soc => {
+      if (soc === social) {
+        return this.state[soc].public === this.props.user[soc].public;
+      }
+      return this.state[soc].public !== this.props.user[soc].public;
+    });
+
+    changed = changed ||
+      (social === 'email' ?
+      this.state.publicEmail === this.props.user.publicEmail :
+      this.state.publicEmail !== this.props.user.publicEmail);
+
+    this.props.setChanged(changed);
+    return changed;
+  }
+
   save = () => {
     this.setState({ changed: false });
     this.props.setChanged(false);
-    const { facebook, google, linkedin } = this.state;
+    const { facebook, google, linkedin, publicEmail } = this.state;
     this.props.relay.commitUpdate(new UpdateUserMutation({
       user: {
         id: this.context.viewer.id,
+        publicEmail,
         profile: {
           facebook,
           google,
@@ -155,21 +176,37 @@ class UserContact extends React.Component {
 
             {socialButtons}
 
-            <div className="col-xs-6 col-xs-offset-3" style={{ marginTop: 20 }}>
-              <Subheader className="subheader">Email:</Subheader>
-              <ListItem className="item" disabled>
-                <SocialButton className={s.social} type="envelope" isViewer={isViewer} />
-              </ListItem>
-              {isViewer ?
-                <Checkbox
-                  defaultChecked
-                  label="private"
-                  className={s.privateCheckbox}
-                />
-                : null
-              }
-            </div>
-
+            {isViewer || user.publicEmail ?
+              <div className="col-xs-6 col-xs-offset-3" style={{ marginTop: 20 }}>
+                <div className="row">
+                  <Subheader className="subheader">Email:</Subheader>
+                  <div className="col-xs-6 col-xs-offset-3 col-sm-4 col-sm-offset-0">
+                    <ListItem className="item" disabled>
+                      <SocialButton
+                        link={`mailto:${user.email}`}
+                        className={s.social}
+                        type="envelope"
+                        isViewer={isViewer}
+                        newWindow
+                      />
+                    </ListItem>
+                  </div>
+                  <div className="col-xs-12 col-sm-8">
+                    <h3 className="center-text">{user.email}</h3>
+                    {isViewer ?
+                      <Checkbox
+                        checked={!this.state.publicEmail}
+                        label="private"
+                        className={s.privateCheckbox}
+                        onCheck={this.checkEmail}
+                      />
+                      : null
+                    }
+                  </div>
+                </div>
+              </div>
+              : null
+            }
           </div>
         </Paper>
       </div>
@@ -185,6 +222,8 @@ UserContact = Relay.createContainer(UserContact, {
     user: (() => Relay.QL`
       fragment on User{
         id,
+        email,
+        publicEmail,
         facebook{
           link,
           public,
