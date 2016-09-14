@@ -97,6 +97,7 @@ class ValidTextField extends React.Component {
   }
 
   valid = (error, callback) => {
+    const callCallback = !!(callback && callback.constructor && callback.call && callback.apply);
     if (error) {
       if (this.state.valid && this.props.decValid) {
         this.props.decValid();
@@ -104,7 +105,7 @@ class ValidTextField extends React.Component {
       this.setState({
         error,
         valid: false,
-      }, () => callback(false));
+      }, () => callCallback ? callback(false) : null);
     }
     else {
       if (!this.state.valid && this.props.incValid) {
@@ -113,7 +114,7 @@ class ValidTextField extends React.Component {
       this.setState({
         error: '',
         valid: true,
-      }, () => callback(true));
+      }, () => callCallback ? callback(true) : null);
     }
   }
   

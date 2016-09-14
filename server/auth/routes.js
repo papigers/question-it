@@ -4,6 +4,8 @@ import jwt from 'jsonwebtoken';
 import { auth } from '../../config';
 const router = express.Router();
 
+import { User } from '../../data/models';
+
 router.post('/login/local', (req, res, next) => {
   passport.authenticate('local', { session: false }, (err, user, info) => {
     if (err) {
@@ -35,6 +37,32 @@ router.post('/login/local', (req, res, next) => {
 router.get('/logoff', (req, res) => {
   res.clearCookie('id_token');
   res.redirect('/');
+});
+
+router.post('/change-password', (req, res) => {
+  User.findById(req.user.id).then(user => {
+    user.validPassword(req.body.oldPassword, (err, valid) => {
+      if (err) {
+        return res.json({ error: 'Failed to change password, please try again later' });
+      }
+      if (!valid) {
+        return res.json({ error: 'Old password is wrong' });
+      }
+
+      user.generateHash(req.body.newPassword, (error, hash) => {
+        if (error) {
+          return res.json({ error: 'Failed to change password, please try again later' });
+        }
+        user.password = hash;
+        user.save((saveErr) => {
+          if (saveErr) {
+            return res.json({ error: 'Failed to change password, please try again later' });
+          }
+          return res.json({ success: true });
+        });
+      });
+    });
+  });
 });
 
 router.get('/login/facebook', passport.authenticate('facebook', {

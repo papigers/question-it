@@ -15,7 +15,11 @@ const styles = {
   },
 };
 
-class RegisterForm extends React.Component {
+class ChangePasswordForm extends React.Component {
+
+  static contextTypes = {
+    dialogController: React.PropTypes.object.isRequired,
+  }
 
   static propTypes = {
     uniqueId: React.PropTypes.string.isRequired,
@@ -25,7 +29,7 @@ class RegisterForm extends React.Component {
     super();
     this.state = {
       pressed: false,
-      maxValid: 3,
+      maxValid: 2,
       numValid: 0,
       oldPassword: '',
       newPassword: '',
@@ -52,7 +56,35 @@ class RegisterForm extends React.Component {
     if (this.state.maxValid !== this.state.numValid) {
       return;
     }
-    // const { newPassword, oldPassword } = this.state;
+    const { newPassword, oldPassword } = this.state;
+
+    fetch('/change-password', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      credentials: 'same-origin',
+      body: JSON.stringify({
+        oldPassword,
+        newPassword,
+      }),
+    }).then(result => result.json()).then(json => {
+      if (json.success) {
+        this.setState({ error: '' });
+        this.showSuccessDialog();
+      }
+      else {
+        this.setState({ error: json.error });
+      }
+    });
+  }
+
+  showSuccessDialog = () => {
+    this.context.dialogController.openDialog({
+      title: 'Password Changed!',
+      children: <h3 className="center-text">Your password has been changed successfuly!</h3>,
+    });
   }
 
   render() {
@@ -106,4 +138,4 @@ class RegisterForm extends React.Component {
   }
 }
 
-export default RegisterForm;
+export default ChangePasswordForm;
