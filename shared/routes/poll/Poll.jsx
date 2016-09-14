@@ -4,7 +4,6 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import { DeletePollMutation } from '../../mutations';
 
-import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RefreshIndicator from 'material-ui/RefreshIndicator';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -52,6 +51,7 @@ class Poll extends React.Component {
 
   static contextTypes = {
     router: React.PropTypes.object.isRequired,
+    dialogController: React.PropTypes.object.isRequired,
   }
 
   static propTypes = {
@@ -66,7 +66,6 @@ class Poll extends React.Component {
     this.state = {
       loading: false,
       noVotes: false,
-      deleteOpen: false,
       available: true,
     };
   }
@@ -80,7 +79,7 @@ class Poll extends React.Component {
   componentDidMount = () => {
     NProgress.done();
 
-    if (this.state.avilable) {
+    if (this.state.available) {
       this.loadGoogleCharts = getGoogleChartsLoader();
       if (!this.loadGoogleCharts.loaded) {
         this.loadGoogleCharts.load().then(() => {
@@ -199,11 +198,40 @@ class Poll extends React.Component {
   }
 
   showDeleteDialog = () => {
-    this.setState({ deleteOpen: true });
+    const deleteActions = [
+      <FlatButton
+        label="Cancel"
+        secondary
+        onTouchTap={this.context.dialogController.closeDialog}
+      />,
+      <FlatButton
+        label="Delete"
+        primary
+        onTouchTap={this.deletePoll}
+      />,
+    ];
+
+    this.context.dialogController.openDialog({
+      title: 'Delete Poll?',
+      actions: deleteActions,
+      modal: true,
+      children: <h3 className="center-text">Are you sure you want to delete this poll? This cannot be undone.</h3>,
+    });
   }
 
-  hideDeleteDialog = () => {
-    this.setState({ deleteOpen: false });
+  showFailDialog = () => {
+    this.context.dialogController.openDialog({
+      title: 'Poll Deletion Failed',
+      actions: (
+        <FlatButton
+          label="OK"
+          primary
+          onTouchTap={this.context.dialogController.closeDialog}
+        />
+      ),
+      children: <h4 className="center-text">Oops, Maybe try again later!</h4>,
+      modal: true,
+    });
   }
 
   deletePoll = () => {
@@ -213,28 +241,13 @@ class Poll extends React.Component {
     this.setState({ deleteOpen: false });
     relay.commitUpdate(new DeletePollMutation({ store, viewer, poll }), {
       onSuccess: (() => router.push('/explore')),
-
-      // TODO: replace alert with a dialog.
-      onFailure: (() => alert('Couldn\'t delete poll. Try again later...')),
+      onFailure: (() => this.showFailDialog()),
     });
   }
 
   render = () => {
     const { node, store, viewer } = this.props;
     const { noVotes, available } = this.state;
-
-    const deleteActions = [
-      <FlatButton
-        label="Cancel"
-        secondary
-        onTouchTap={this.hideDeleteDialog}
-      />,
-      <FlatButton
-        label="Delete"
-        primary
-        onTouchTap={this.deletePoll}
-      />,
-    ];
 
     return available ? (
       <div className="container ChartPage">
@@ -294,14 +307,6 @@ class Poll extends React.Component {
           }
         </div>
 
-        <Dialog
-          title="Delete Poll?"
-          actions={deleteActions}
-          modal
-          open={this.state.deleteOpen}
-        >
-          Are you sure you want to delete this poll? This cannot be undone.
-        </Dialog>
       </div>
 		) :
     (

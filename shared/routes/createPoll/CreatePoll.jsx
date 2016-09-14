@@ -9,7 +9,6 @@ import Checkbox from 'material-ui/Checkbox';
 import Paper from 'material-ui/Paper';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import FlatButton from 'material-ui/FlatButton';
-import Dialog from 'material-ui/Dialog';
 import IconButton from 'material-ui/IconButton';
 import Divider from 'material-ui/Divider';
 import { List, ListItem } from 'material-ui/List';
@@ -29,6 +28,7 @@ class CreatePoll extends React.Component {
   static contextTypes = {
     muiTheme: React.PropTypes.object.isRequired,
     router: React.PropTypes.object.isRequired,
+    dialogController: React.PropTypes.object.isRequired,
   }
   
   constructor() {
@@ -44,12 +44,7 @@ class CreatePoll extends React.Component {
       titleFocus: false,
       submitDisabled: false,
       addDisabled: false,
-      failDialog: false,
     };
-  }
-
-  componentWillMount() {
-
   }
 
   componentDidMount() {
@@ -125,7 +120,7 @@ class CreatePoll extends React.Component {
           return this.context.router.push(`/poll/${node.id}`);
         },
         onFailure: () => {
-          this.setState({ failDialog: true });
+          this.showFailDialog();
         },
       }
     );
@@ -137,6 +132,21 @@ class CreatePoll extends React.Component {
 
   titleBlur = () => {
     this.setState({ titleFocus: false });
+  }
+
+  showFailDialog = () => {
+    this.context.dialogController.openDialog({
+      title: 'Poll Creation Failed',
+      actions: (
+        <FlatButton
+          label="OK"
+          primary
+          onTouchTap={this.context.dialogController.closeDialog}
+        />
+      ),
+      children: <h4 className="center-text">Oops, Maybe try again later!</h4>,
+      modal: true,
+    });
   }
 
   render() {
@@ -171,20 +181,6 @@ class CreatePoll extends React.Component {
 
     return (
       <div className="container">
-        <Dialog
-          title="Poll Creation Failed"
-          actions={
-            <FlatButton
-              label="OK"
-              primary
-              onTouchTap={() => this.setState({ failDialog: false })}
-            />
-          }
-          modal
-          open={this.state.failDialog}
-        >
-          Oops, Maybe try again later!
-        </Dialog>
 
         <div className="row">
           <h1 className="center-text">Create Poll</h1>

@@ -42,12 +42,6 @@ $amber: rgba(255, 160, 0, .15);
 	padding: 20px 50px !important;
 }
 
-.dialogTitle{
-  font-size: 2.5em !important;
-  color: white !important;
-  background-color: $primary1Color;
-}
-
 .register{
 	padding: 20px 50px !important;
 	background: color($accent2Color w(80%));

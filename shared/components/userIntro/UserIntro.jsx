@@ -7,6 +7,7 @@ import Subheader from 'material-ui/Subheader';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 import Avatar from 'material-ui/Avatar';
 import EditIcon from 'material-ui/svg-icons/image/edit';
 import RestoreIcon from 'material-ui/svg-icons/action/restore';
@@ -24,6 +25,7 @@ class UserIntro extends React.Component {
 
   static contextTypes = {
     viewer: React.PropTypes.object.isRequired,
+    dialogController: React.PropTypes.object.isRequired,
   }
 
   static propTypes = {
@@ -104,8 +106,7 @@ class UserIntro extends React.Component {
         reader.readAsDataURL(input.files[0]);
       }
       else {
-        // TODO: remove alert to some modal
-        alert('Oops! Your avatar must be an image, try again!');
+        this.showNotImageDialog();
       }
     }
   }
@@ -210,8 +211,7 @@ class UserIntro extends React.Component {
             }, resolve);
           }
           else {
-            // TODO: remove alert to some modal
-            alert('Avatar upload failed, please try again later.');
+            this.showUploadFailedDialog();
           }
         });
       }
@@ -243,6 +243,36 @@ class UserIntro extends React.Component {
         },
       },
     }));
+  }
+
+  showNotImageDialog = () => {
+    this.context.dialogController.openDialog({
+      title: 'File is not an Image',
+      actions: (
+        <FlatButton
+          label="OK"
+          primary
+          onTouchTap={this.context.dialogController.closeDialog}
+        />
+      ),
+      children: <h4 className="center-text">Oops! Your avatar must be an image, try again!</h4>,
+      modal: true,
+    });
+  }
+
+  showUploadFailedDialog = () => {
+    this.context.dialogController.openDialog({
+      title: 'Avatar Upload Failed',
+      actions: (
+        <FlatButton
+          label="OK"
+          primary
+          onTouchTap={this.context.dialogController.closeDialog}
+        />
+      ),
+      children: <h4 className="center-text">Avatar upload failed, please try again later.</h4>,
+      modal: true,
+    });
   }
 
   render() {

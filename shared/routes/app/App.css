@@ -1,0 +1,5 @@
+.dialogTitle{
+  font-size: 2.5em !important;
+  color: white !important;
+  background-color: $primary1Color;
+}

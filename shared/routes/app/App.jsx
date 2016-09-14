@@ -1,8 +1,13 @@
 import React from 'react';
 import Relay from 'react-relay';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
+
+import Dialog from 'material-ui/Dialog';
 
 import Footer from '../../components/footer';
 import AppToolbar from '../../components/appToolbar';
+
+import s from './App.css';
 
 let logo = require('./logo.png');
 
@@ -23,11 +28,25 @@ class App extends React.Component {
 
   static childContextTypes = {
     viewer: React.PropTypes.object,
+    dialogController: React.PropTypes.object,
+  }
+
+  constructor() {
+    super();
+    this.state = {
+      dialog: {
+        open: false,
+      },
+    };
   }
 
   getChildContext() {
     return {
       viewer: this.props.viewer,
+      dialogController: {
+        openDialog: this.openDialog,
+        closeDialog: this.closeDialog,
+      },
     };
   }
 
@@ -39,9 +58,27 @@ class App extends React.Component {
     this.context.router.push('/');
   }
 
+  openDialog = (dialog) => {
+    this.setState({
+      dialog: {
+        ...dialog,
+        open: true,
+      },
+    });
+  }
+
+  closeDialog = () => {
+    this.setState({
+      dialog: {
+        ...this.state.dialog,
+        open: false,
+      },
+    });
+  }
+
   render() {
     const { main, flexibleSpace, tabs } = this.props;
-
+    const { dialog } = this.state;
 
     return (
       <div id="app-view">
@@ -66,10 +103,18 @@ class App extends React.Component {
         <footer>
           <Footer />
         </footer>
+
+        <Dialog
+          {...dialog}
+          titleClassName={`center-text ${s.dialogTitle}`}
+          onRequestClose={this.closeDialog}
+        />
       </div>
     );
   }
 }
+
+App = withStyles(s)(App);
 
 App = Relay.createContainer(App, {
   fragments: {

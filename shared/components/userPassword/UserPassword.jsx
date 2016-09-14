@@ -5,7 +5,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
 import { ListItem } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
-import Dialog from 'material-ui/Dialog';
 
 import ChangePasswordForm from '../changePasswordForm';
 
@@ -13,16 +12,16 @@ import s from './UserPassword.css';
 
 class UserPassword extends React.Component {
 
-  constructor() {
-    super();
-    this.state = {
-      changePassword: false,
-    };
+  static contextTypes = {
+    dialogController: React.PropTypes.object.isRequired,
   }
 
-  openChangePassword = () => this.setState({ changePassword: true })
-
-  closeChangePassword = () => this.setState({ changePassword: false })
+  openChangePassword = () => {
+    this.context.dialogController.openDialog({
+      title: 'Change Password',
+      children: <ChangePasswordForm uniqueId="change-password" />,
+    });
+  }
 
   render() {
     return (
@@ -61,16 +60,6 @@ class UserPassword extends React.Component {
             </div>
           </div>
         </Paper>
-
-        <Dialog
-          title="Change Password"
-          titleClassName={`center-text ${s.dialogTitle}`}
-          open={this.state.changePassword}
-          onRequestClose={this.closeChangePassword}
-          autoScrollBodyContent
-        >
-          <ChangePasswordForm uniqueId="change-password" />
-        </Dialog>
 
       </div>
     );
