@@ -73,7 +73,7 @@ class Explore extends React.Component {
   handleScroll = () => {
     const { relay, store } = this.props;
     const elm = this.refs.polls;
-    if (elm.clientHeight <= window.scrollY + 112 + elm.offsetTop + 500 && !this.state.loading) {
+    if (elm && elm.clientHeight <= window.scrollY + 112 + elm.offsetTop + 500 && !this.state.loading) {
       if (store.polls.pageInfo.hasNextPage) {
         this.setState({ loading: true });
         NProgress.start();

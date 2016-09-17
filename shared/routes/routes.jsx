@@ -4,6 +4,7 @@ import { Route, IndexRoute, IndexRedirect, Redirect } from 'react-router';
 import { storeQuery, viewerQuery, nodeQuery } from '../queries';
 
 import App from './app';
+import About, { AboutFlexibleSpace } from './about';
 import Home, { HomeFlexibleSpace } from './home';
 import Login from './login';
 import Explore, { ExploreTabs, ExploreFlexibleSpace } from './explore';
@@ -27,6 +28,12 @@ export default (
     <IndexRoute
       components={{ main: Home, flexibleSpace: HomeFlexibleSpace }}
       queries={{ main: storeQuery }}
+      render={{ main: renderLoading }}
+    />
+
+    <Route
+      path="about"
+      components={{ main: About, flexibleSpace: AboutFlexibleSpace }}
       render={{ main: renderLoading }}
     />
 

@@ -46,8 +46,6 @@ body {
   height: 100%;
 }
 
-
-
 main {
   flex-grow: 1;
   flex-shrink: 0;
@@ -75,6 +73,12 @@ footer {
     flex-direction: column;
     width: 100%;
     min-height: 100%;
+  }
+
+  & #chart-col {
+    &, & div {
+      margin: 0 auto;
+    }
   }
 
   & .center-text {

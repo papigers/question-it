@@ -15,8 +15,10 @@
   * ~~Linkedin~~
   * ~~Local~~
   * ~~Linking accounts~~
-* About Page
-  * Showcase used packages and technologies.
+* ~~About Page~~
+  * ~~Showcase used packages and technologies.~~
+* Use React Helmet.
+* Update dependencies.
 * ~~Deploy to heroku.~~
   * ~~Deployment scripts~~
   * Export local DB

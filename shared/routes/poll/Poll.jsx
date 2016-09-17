@@ -61,10 +61,16 @@ class Poll extends React.Component {
     viewer: React.PropTypes.object,
   }
   
-  constructor() {
+  constructor(props) {
     super();
     this.state = {
       loading: false,
+      votes: props.node.options.map((option) => (
+        [
+          option,
+          0,
+        ]
+      )),
       noVotes: false,
       available: true,
     };
@@ -92,8 +98,9 @@ class Poll extends React.Component {
     }
   }
 
-  componentDidUpdate = () => {
-    if (this.loadGoogleCharts && this.loadGoogleCharts.loaded && !this.state.noVotes) {
+  componentDidUpdate = (prevProps) => {
+    const moreVotes = prevProps.node.votes.length !== this.props.node.votes.length;
+    if (moreVotes && this.loadGoogleCharts && this.loadGoogleCharts.loaded && !this.state.noVotes) {
       this.drawChart();
     }
   }
@@ -157,6 +164,8 @@ class Poll extends React.Component {
       ]
     ));
     node.votes.edges.forEach(vote => vote.node.options.forEach(option => votes[option][1]++));
+
+    this.setState({ votes });
 
     const noVotes = votes.every(vote => vote[1] === 0);
     
@@ -247,7 +256,7 @@ class Poll extends React.Component {
 
   render = () => {
     const { node, store, viewer } = this.props;
-    const { noVotes, available } = this.state;
+    const { noVotes, available, votes } = this.state;
 
     return available ? (
       <div className="container ChartPage">
@@ -260,6 +269,7 @@ class Poll extends React.Component {
               store={store}
               loading={this.state.loading}
               selected={this.getViewerVote()}
+              votes={votes}
               onSubmit={this.loadVotes}
             />
           </div>

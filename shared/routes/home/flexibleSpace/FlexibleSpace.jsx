@@ -23,8 +23,7 @@ class FlexibleSpace extends React.Component {
         <img src={this.props.logo} alt="Question It Logo" className={s.logo} />
         <h2 className={s.subheader}>Online Voting Application</h2>
         <p>
-          Question It is an online voting application, inspired by a FreeCodeCamp project.<br />
-          It is created using React and Material-UI.
+          Question It is an online voting application, inspired by a FreeCodeCamp project.
         </p>
         <RaisedButton
           linkButton

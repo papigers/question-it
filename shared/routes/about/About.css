@@ -1,0 +1,11 @@
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.moreCard {
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: auto;
+}

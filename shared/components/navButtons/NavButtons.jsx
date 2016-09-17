@@ -14,6 +14,7 @@ import s from './NavButtons.css';
 
 const pages = [
 	{ label: 'Home', path: '/' },
+  { label: 'About', path: '/about' },
 	{ label: 'Explore', path: '/explore' },
   { label: 'Create', path: '/poll/new' },
   { label: 'My Profile', path: '/profile' },

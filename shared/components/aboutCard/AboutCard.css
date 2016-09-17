@@ -1,0 +1,29 @@
+.card {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background: #f5f5f5 !important;
+}
+
+.author {
+  color: inherit;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.logo {
+  min-width: 150px !important;
+  max-width: 150px !important;
+  min-height: 150px !important;
+  max-height: 150px !important;
+  display: block;
+  margin: 0 auto;
+}
+
+.actions {
+  background-color: $primary1Color !important;
+  &, & button {
+    color: white !important;
+  }
+}

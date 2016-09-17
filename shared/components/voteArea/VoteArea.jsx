@@ -11,6 +11,7 @@ import Checkbox from 'material-ui/Checkbox';
 import RadioChecked from 'material-ui/svg-icons/toggle/radio-button-checked';
 import RadioUnchecked from 'material-ui/svg-icons/toggle/radio-button-unchecked';
 import RaisedButton from 'material-ui/RaisedButton';
+import Avatar from 'material-ui/Avatar';
 
 import s from './VoteArea.css';
 import { chartColors } from '../../theme';
@@ -22,6 +23,7 @@ class VoteArea extends React.Component {
     store: React.PropTypes.object.isRequired,
     relay: React.PropTypes.object.isRequired,
     onSubmit: React.PropTypes.func.isRequired,
+    votes: React.PropTypes.array.isRequired,
     loading: React.PropTypes.bool,
     viewer: React.PropTypes.object,
   };
@@ -102,7 +104,7 @@ class VoteArea extends React.Component {
 	
   render() {
     const { canVote, showVotes } = this.state;
-    const { loading, viewer, poll } = this.props;
+    const { loading, viewer, poll, votes } = this.props;
 
     let submitLabel = 'Submit';
     if (loading) {
@@ -118,7 +120,7 @@ class VoteArea extends React.Component {
         checkbox = (
           <Checkbox
             label={option}
-            key={i}
+            key={`checkbox${i}`}
             iconStyle={{ fill: chartColors[i] }}
             value={`${i}`}
             checked={this.state.selected.indexOf(i) >= 0}
@@ -130,7 +132,7 @@ class VoteArea extends React.Component {
         checkbox = (
           <Checkbox
             label={option}
-            key={i}
+            key={`checkbox${i}`}
             value={`${i}`}
             checked={this.state.selected[0] === i}
             onCheckFunc={() => this.onChangeRadio(i)}
@@ -147,6 +149,15 @@ class VoteArea extends React.Component {
             key={`item${i}`}
             disabled={!canVote || loading}
             onTouchTap={checkbox.props.onCheckFunc}
+            rightAvatar={
+              <Avatar
+                backgroundColor={chartColors[i]}
+                size={30}
+                style={{ margin: 5 }}
+              >
+                {votes[i][1]}
+              </Avatar>
+            }
           >
             {checkbox}
           </ListItem>
@@ -160,11 +171,10 @@ class VoteArea extends React.Component {
         <h3 className="center-text">
           <Link className={s.authorLink} to={`/profile/${poll.author.id}`}>{poll.author.username}</Link>
         </h3>
-        <div className="hide-lg-up">
+        <div className="hide-md-up">
           <RaisedButton
             label={showVotes ? 'Hide' : 'Vote'}
             className={s.submitBtn}
-            disabled={!canVote || loading || !viewer}
             onMouseUp={this.toggleVotes}
             primary
           />
