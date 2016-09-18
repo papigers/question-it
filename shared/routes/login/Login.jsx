@@ -1,6 +1,7 @@
 import React from 'react';
 import Relay from 'react-relay';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
+import Helmet from 'react-helmet';
 
 import LoginSection from '../../components/loginSection';
 import RegisterForm from '../../components/registerForm';
@@ -46,7 +47,9 @@ class LoginPage extends React.Component {
   render() {
     return (
       <div className={s.root}>
-			
+        <Helmet
+          title="Login"
+        />
         <div className={`row ${s.row}`}>
           
           <div className={`col-xs-12 ${s.login}`}>

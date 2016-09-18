@@ -13,6 +13,7 @@ import { renderToString } from 'react-dom/server';
 import { match } from 'react-router';
 import Relay from 'react-relay';
 import IsomorphicRouter from 'isomorphic-relay-router';
+import Helmet from 'react-helmet';
 
 import routes from '../shared/routes';
 import { routes as authRoutes, passport } from './auth';
@@ -94,26 +95,16 @@ app.use((req, res, next) => {
       );
 
       const componentHTML = renderToString(InitialComponent);
+      const head = Helmet.rewind();
       const HTML = `
       <!DOCTYPE html>
-      <html>
+      <html ${head.htmlAttributes.toString()}>
         <head>
-          <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-          <meta http-equiv="Content-Style-Type" content="text/css">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Question It - Online Polls</title>
-          <script async type="application/javascript" src="/bundle/bundle.js"></script>
+          ${head.title.toString()}
+          ${head.meta.toString()}
+          ${head.script.toString()}
+          ${head.link.toString()}
           <style type="text/css">${css.join('')}</style>
-          <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
-          <link href="https://file.myfontastic.com/m6D5EwwEfBU4hxAfLHHbdR/icons.css" rel="stylesheet">
-          <link rel="apple-touch-icon" sizes="180x180" href="/public/favicon/apple-touch-icon.png">
-          <link rel="icon" type="image/png" href="/public/favicon/favicon-32x32.png" sizes="32x32">
-          <link rel="icon" type="image/png" href="/public/favicon/favicon-16x16.png" sizes="16x16">
-          <link rel="manifest" href="/public/favicon/manifest.json">
-          <link rel="mask-icon" href="/public/favicon/safari-pinned-tab.svg" color="#d50000">
-          <link rel="shortcut icon" href="/public/favicon/favicon.ico">
-          <meta name="msapplication-config" content="/public/favicon/browserconfig.xml">
-          <meta name="theme-color" content="#a50000">
         </head>
         <body>
           <div id="react-view">${componentHTML}</div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
+import Helmet from 'react-helmet';
 
 import Relay from 'react-relay';
 import { CreatePollMutation } from '../../mutations';
@@ -181,6 +182,9 @@ class CreatePoll extends React.Component {
 
     return (
       <div className="container">
+        <Helmet
+          title="Create Poll"
+        />
 
         <div className="row">
           <h1 className="center-text">Create Poll</h1>

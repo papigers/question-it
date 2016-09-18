@@ -1,6 +1,7 @@
 import React from 'react';
 import Relay from 'react-relay';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
+import Helmet from 'react-helmet';
 
 import Paper from 'material-ui/Paper';
 import CircularProgress from 'material-ui/CircularProgress';
@@ -98,8 +99,15 @@ class Explore extends React.Component {
     const { tab } = this.props.params;
 
     let header = null;
+    let title = null;
     if (explore[tab]) {
       header = <h1 className={s.header}>{explore[tab].header} Polls</h1>;
+      if (explore[tab].header.toLowerCase() === 'search') {
+        title = 'Search Polls';
+      }
+      else {
+        title = `Explore ${explore[tab].header} Polls`;
+      }
     }
 
     const { store } = this.props;
@@ -112,6 +120,10 @@ class Explore extends React.Component {
 
     return (
       <div className={s.root}>
+        <Helmet
+          title={title}
+        />
+
         <Paper zDepth={2} className="container center-text">
           {header}
           <div className={`${s.content}`}>

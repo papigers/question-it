@@ -17,7 +17,7 @@
   * ~~Linking accounts~~
 * ~~About Page~~
   * ~~Showcase used packages and technologies.~~
-* Use React Helmet.
+* ~~Use React Helmet.~~
 * Update dependencies.
 * ~~Deploy to heroku.~~
   * ~~Deployment scripts~~

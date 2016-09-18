@@ -1,6 +1,7 @@
 import React from 'react';
 import Relay from 'react-relay';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
+import Helmet from 'react-helmet';
 
 import { DeletePollMutation } from '../../mutations';
 
@@ -260,6 +261,9 @@ class Poll extends React.Component {
 
     return available ? (
       <div className="container ChartPage">
+        <Helmet
+          title={node.title}
+        />
         <div className="row">
 
           <div className={`col-xs-12 col-md-5 ${s.vote}`} id="vote-col">
@@ -336,6 +340,7 @@ Poll = Relay.createContainer(Poll, {
     node: (() => Relay.QL`
       fragments on Poll{
         deleted,
+        title,
         author{
           id,
         },

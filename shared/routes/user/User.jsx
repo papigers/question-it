@@ -1,6 +1,7 @@
 import React from 'react';
 import Relay from 'react-relay';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
+import Helmet from 'react-helmet';
 
 import { List, ListItem } from 'material-ui/List';
 import { Tabs, Tab } from 'material-ui/Tabs';
@@ -121,6 +122,9 @@ class User extends React.Component {
 
     return (
       <div>
+        <Helmet
+          title={user.username}
+        />
         <div className={`hide-sm-up ${s.fixedTabs}`} >
           <Paper zDepth={2}>
             <Tabs
@@ -185,6 +189,7 @@ User = Relay.createContainer(User, {
     user: (() => Relay.QL`
       fragment on User{
         id,
+        username
         ${UserIntro.getFragment('user')},
         ${UserStats.getFragment('user')},
         ${UserContact.getFragment('user')}

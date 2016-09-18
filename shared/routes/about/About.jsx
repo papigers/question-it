@@ -1,5 +1,6 @@
 import React from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
+import Helmet from 'react-helmet';
 
 import AboutCard from '../../components/aboutCard';
 import cards from './cards';
@@ -27,6 +28,9 @@ class About extends React.Component {
     );
     return (
       <div className="container">
+        <Helmet
+          title="About"
+        />
         <h1 className="center-text">
           Here you can see many of the technologies and librarys I used, to make Question It happen:
         </h1>

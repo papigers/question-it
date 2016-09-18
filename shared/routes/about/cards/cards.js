@@ -165,6 +165,15 @@ const more = {
     link2: 'https://github.com/kriasoft/isomorphic-style-loader',
     label2: 'Github',
   },
+  reactHelmet: {
+    title: 'React Helmet',
+    author: 'nfl',
+    text: 'React Helmet lets you dynamically manage and render your head tags from React components.',
+    link1: 'https://www.npmjs.org/package/react-helmet',
+    label1: 'npm',
+    link2: 'https://github.com/nfl/react-helmet',
+    label2: 'Github',
+  },
 };
 
 export default { main, more };
