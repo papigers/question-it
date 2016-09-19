@@ -6,6 +6,7 @@
 .settings {
   margin-left: 15px !important;
 	margin-right: 15px !important;
+  min-width: 50px !important;
 
   & button {
     min-width: 50px !important;

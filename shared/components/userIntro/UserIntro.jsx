@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Relay from 'react-relay';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
@@ -20,6 +21,16 @@ import { UpdateUserMutation } from '../../mutations';
 import debounce from '../../utils/debounce';
 
 import s from './UserIntro.css';
+
+function isMounted(component) {
+  try {
+    ReactDOM.findDOMNode(component);
+    return true;
+  }
+  catch (e) {
+    return false;
+  }
+}
 
 class UserIntro extends React.Component {
 
@@ -121,7 +132,7 @@ class UserIntro extends React.Component {
   }
 
   validateName = (event, valid) => {
-    setTimeout(() => document.activeElement.id !== 'UserIntro-EditName' && this.setState({
+    setTimeout(() => document.activeElement.id !== 'UserIntro-EditName' && isMounted(this) && this.setState({
       edit: {
         ...this.state.edit,
         name: !valid,
@@ -178,7 +189,7 @@ class UserIntro extends React.Component {
   }
 
   validateBio = (event, valid) => {
-    setTimeout(() => document.activeElement.id !== 'UserIntro-EditBio' && this.setState({
+    setTimeout(() => document.activeElement.id !== 'UserIntro-EditBio' && isMounted(this) && this.setState({
       edit: {
         ...this.state.edit,
         bio: false,

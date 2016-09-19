@@ -67,7 +67,7 @@ class NavButtons extends React.Component {
     });
     return (
       <div className={s.root}>
-        <Desktop className="hide-sm-down" pages={showPages} isActive={this.isActive} />
+        <Desktop className="hide-md-down" pages={showPages} isActive={this.isActive} />
         {loggedOn && <div>
           <RaisedButton
             className={s.settings}
@@ -86,15 +86,12 @@ class NavButtons extends React.Component {
             <Menu>
               <MenuItem
                 primaryText="Logoff"
-                linkButton
-                containerElement={
-                  <a href="/logoff" />
-                }
+                href="/logoff"
               />
             </Menu>
           </Popover>
         </div>}
-        <Mobile className="hide-sm-up" pages={showPages} isActive={this.isActive} />
+        <Mobile className="hide-md-up" pages={showPages} isActive={this.isActive} />
       </div>
     );
   }

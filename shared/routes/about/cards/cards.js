@@ -6,6 +6,7 @@ const muiLogo = require('./mui.png');
 const routerLogo = require('./react-router.png');
 const webpackLogo = require('./webpack.png');
 const babelLogo = require('./babel.png');
+const postcssLogo = require('./postcss.png');
 const nodeLogo = require('./nodejs.png');
 const expressLogo = require('./express.png');
 const passportLogo = require('./passport.png');
@@ -77,6 +78,16 @@ const main = {
     link1: 'http://babeljs.io/',
     label1: 'Site',
     link2: 'https://github.com/babel/babel',
+    label2: 'Github',
+  },
+  postcss: {
+    logo: postcssLogo,
+    logoAlt: 'PostCSS Logo',
+    title: 'PostCSS',
+    text: 'PostCSS is a CSS JavaScript customizeable transpiler, which can be used to compile custom CSS files.',
+    link1: 'http://postcss.org/',
+    label1: 'Site',
+    link2: 'https://github.com/postcss/postcss',
     label2: 'Github',
   },
   node: {

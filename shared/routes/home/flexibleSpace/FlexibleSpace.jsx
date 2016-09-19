@@ -26,7 +26,6 @@ class FlexibleSpace extends React.Component {
           Question It is an online voting application, inspired by a FreeCodeCamp project.
         </p>
         <RaisedButton
-          linkButton
           containerElement={
             <Link to={viewer ? '/poll/new' : '/login'} />
 					}

@@ -4,6 +4,10 @@
 	margin-bottom: -40px;
 	min-height: 350px;
 
+  &, & div {
+    margin: 0 auto;
+  }
+
 	div[dir="ltr"]{
 		margin: 0 auto;
 	}
@@ -11,6 +15,10 @@
 	rect{
 		fill: transparent;
 	}
+}
+
+.paper {
+  overflow: hidden !important;
 }
 
 .vote {

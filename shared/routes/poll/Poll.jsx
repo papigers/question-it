@@ -8,6 +8,7 @@ import { DeletePollMutation } from '../../mutations';
 import FlatButton from 'material-ui/FlatButton';
 import RefreshIndicator from 'material-ui/RefreshIndicator';
 import RaisedButton from 'material-ui/RaisedButton';
+import Paper from 'material-ui/Paper';
 
 import VoteArea from '../../components/voteArea';
 import UnavailablePoll from '../../components/unavailablePoll';
@@ -264,7 +265,7 @@ class Poll extends React.Component {
         <Helmet
           title={node.title}
         />
-        <div className="row">
+        <Paper className={`row ${s.paper}`}>
 
           <div className={`col-xs-12 col-md-5 ${s.vote}`} id="vote-col">
             <VoteArea
@@ -319,7 +320,7 @@ class Poll extends React.Component {
               /> :
             null
           }
-        </div>
+        </Paper>
 
       </div>
 		) :

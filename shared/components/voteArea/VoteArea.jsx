@@ -124,7 +124,7 @@ class VoteArea extends React.Component {
             iconStyle={{ fill: chartColors[i] }}
             value={`${i}`}
             checked={this.state.selected.indexOf(i) >= 0}
-            onCheckFunc={() => this.onChangeCheckbox(i)}
+            onCheck={() => this.onChangeCheckbox(i)}
           />
         );
       }
@@ -135,7 +135,7 @@ class VoteArea extends React.Component {
             key={`checkbox${i}`}
             value={`${i}`}
             checked={this.state.selected[0] === i}
-            onCheckFunc={() => this.onChangeRadio(i)}
+            onCheck={() => this.onChangeRadio(i)}
             iconStyle={{ fill: chartColors[i] }}
             checkedIcon={<RadioChecked />}
             uncheckedIcon={<RadioUnchecked />}

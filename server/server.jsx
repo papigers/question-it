@@ -7,6 +7,7 @@ import graphQLHTTP from 'express-graphql';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import expressJwt from 'express-jwt';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import React from 'react';
 import { renderToString } from 'react-dom/server';
@@ -25,6 +26,8 @@ import config from '../config';
 const GRAPHQL_URL = `${config.appURL}:${config.port}/graphql`;
 
 const app = express();
+
+injectTapEventPlugin();
 
 app.use(favicon(config.favicon));
 

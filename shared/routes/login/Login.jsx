@@ -25,7 +25,7 @@ class LoginPage extends React.Component {
       let redirect = '/';
       const { query } = this.props.location;
       if (query && query.callback) {
-        redirect = JSON.parse(sessionStorage.getItem('oauth-after-login')) || '/';
+        redirect = sessionStorage.getItem('oauth-after-login') || '/';
       }
       this.context.router.replace(redirect);
       sessionStorage.removeItem('oauth-after-login');

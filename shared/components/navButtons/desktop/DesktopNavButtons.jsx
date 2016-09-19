@@ -11,16 +11,16 @@ class DesktopNavButtons extends React.Component {
   static propTypes = {
     pages: React.PropTypes.array.isRequired,
     isActive: React.PropTypes.func.isRequired,
+    className: React.PropTypes.string,
   }
   render() {
-    const { pages, isActive } = this.props;
+    const { pages, isActive, className } = this.props;
     return (
-      <div className={`hide-sm-down ${s.root}`}>
+      <div className={`${className} ${s.root}`}>
         {
           pages.map(
             (obj, i) => (
               <RaisedButton
-                linkButton
                 containerElement={
                   <Link to={obj.path} />
                 }

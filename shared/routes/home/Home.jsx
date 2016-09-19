@@ -37,7 +37,6 @@ class Home extends React.Component {
           </h1>
 
           <RaisedButton
-            linkButton
             containerElement={
               <Link to="/explore" />
             }

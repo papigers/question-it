@@ -19,7 +19,6 @@ class FlexibleSpace extends React.Component {
       <div className={`container ${s.root}`}>
         <SearchBar hint="Explore Polls" value={this.props.query} />
         <RaisedButton
-          linkButton
           containerElement={
             <Link to="/poll/new" />
 					}

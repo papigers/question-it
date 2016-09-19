@@ -203,7 +203,7 @@ class CreatePoll extends React.Component {
                 onBlur={this.titleBlur}
               />
 
-              <List classNmae={s.answers}>
+              <List className={s.answers}>
                 {answerList}
               </List>
 

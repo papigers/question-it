@@ -15,10 +15,11 @@ class MobileNavButtons extends React.Component {
   static propTypes = {
     pages: React.PropTypes.array.isRequired,
     isActive: React.PropTypes.func.isRequired,
+    className: React.PropTypes.string,
   }
 
   render() {
-    const { pages, isActive } = this.props;
+    const { pages, isActive, className } = this.props;
     return (
       <IconMenu
         iconButtonElement={
@@ -28,14 +29,13 @@ class MobileNavButtons extends React.Component {
         }
         anchorOrigin={{ horizontal: 'middle', vertical: 'center' }}
         targetOrigin={{ horizontal: 'right', vertical: 'top' }}
-        className={`hide-sm-up ${s.navBtn}`}
+        className={`${className} ${s.navBtn}`}
       >
 				{
 					pages.map(
             (obj, i) => (
               <MenuItem
                 primaryText={obj.label}
-                linkButton
                 containerElement={
                   <Link to={obj.path} />
                 }

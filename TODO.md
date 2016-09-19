@@ -18,11 +18,11 @@
 * ~~About Page~~
   * ~~Showcase used packages and technologies.~~
 * ~~Use React Helmet.~~
-* Update dependencies.
+* ~~Update dependencies.~~
 * ~~Deploy to heroku.~~
   * ~~Deployment scripts~~
-  * Export local DB
-  * Export environment variables.
+  * ~~Export local DB~~
+  * ~~Export environment variables~~
 * Use for GitHub Pages.
 
 # In a perfect world:

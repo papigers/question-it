@@ -22,12 +22,12 @@ class SocialButton extends React.Component {
     const { type, disabled, isViewer, link, newWindow, onClick } = this.props;
     return (
       <FloatingActionButton
-        linkButton
         onClick={onClick}
         className={`${s.root} ${disabled ? s.disabled : s[type]} ${this.props.className}`}
         iconClassName={`icon-${type}`}
         disabled={disabled && !isViewer}
-        containerElement={link ? <a href={link} target={newWindow ? '_blank' : '_self'} /> : null}
+        href={link}
+        target={newWindow ? '_blank' : '_self'}
       />
 		);
   }

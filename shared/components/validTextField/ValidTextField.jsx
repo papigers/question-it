@@ -34,7 +34,7 @@ class ValidTextField extends React.Component {
     max: React.PropTypes.number,
     rowsMax: React.PropTypes.number,
     focusHighlight: React.PropTypes.bool,
-    focusOnUnvalid: React.PropTypes.bool,
+    focusOnInvalid: React.PropTypes.bool,
     counter: React.PropTypes.bool,
     focus: React.PropTypes.bool,
     value: React.PropTypes.string,
@@ -61,7 +61,7 @@ class ValidTextField extends React.Component {
 
   onBlur = (event) => {
     const callback = (valid) => {
-      if (!valid && this.props.focusOnUnvalid) {
+      if (!valid && this.props.focusOnInvalid) {
         event.preventDefault();
         this.refs.field.input.focus();
       }
@@ -159,13 +159,20 @@ class ValidTextField extends React.Component {
 	
   render() {
     const { confirm, focusHighlight } = this.props;
-    const confirmProps = Object.assign({}, this.props);
+    const inputProps = Object.assign({}, this.props);
+    [
+      'required', 'muiId', 'incValid', 'decValid',
+      'confirm', 'min', 'max', 'rowsMax', 'focusHighlight',
+      'focusOnInvalid', 'counter', 'focus',
+    ].forEach(key => delete inputProps[key]);
+
+    const confirmProps = Object.assign({}, inputProps);
     delete confirmProps.value;
 
     return (
       <div>
         <TextField
-          {...this.props}
+          {...inputProps}
           className={`${s.field} ${focusHighlight ? s.focusHighlight : ''}`}
           id={this.props.muiId}
           errorText={this.state.error}

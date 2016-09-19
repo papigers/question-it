@@ -124,7 +124,7 @@ class AppToolbar extends React.Component {
                 />
               </ToolbarGroup>
 
-              <ToolbarGroup lastChild float="right">
+              <ToolbarGroup lastChild>
                 <NavButtons />
               </ToolbarGroup>
 
