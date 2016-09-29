@@ -83,7 +83,9 @@ class RegisterForm extends React.Component {
         }).then(result => result.json()).then(json => {
           if (json.success) {
             this.setState({ error: '' });
-            window.location.href = sessionStorage.getItem('after-login') || json.redirect;
+            let redirect = sessionStorage.getItem('after-login');
+            redirect = redirect || json.redirect;
+            window.location.href = redirect;
           }
           else {
             this.setState({ error: json.error });
