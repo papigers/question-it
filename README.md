@@ -1,4 +1,4 @@
-# Question-It
+# [Question-It](https://question-it.herokuapp.com/)
 ### _Isomorphic_ Reactive Voting Application
 * React
 * Material-UI
@@ -6,6 +6,8 @@
 * GraphQL
 * Relay
 * MongoDB/Mongoose
+
+[Learn More](https://question-it.herokuapp.com/about)
 
 #### Voting Application
 Simple application where everyone can view polls and their results, users can register and login to create and vote on polls.  
