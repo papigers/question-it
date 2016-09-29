@@ -1,4 +1,4 @@
-# Question-It (WIP)
+# Question-It
 ### _Isomorphic_ Reactive Voting Application
 * React
 * Material-UI
