@@ -28,6 +28,10 @@ class VoteArea extends React.Component {
     viewer: React.PropTypes.object,
   };
 
+  static contextTypes = {
+    router: React.PropTypes.object,
+  };
+
   constructor(props) {
     super();
     const { options, multi } = props.poll;
@@ -96,6 +100,11 @@ class VoteArea extends React.Component {
         this.setState({ canVote: true, error: 'Vote Failed. Try again later...' });
       }),
     });
+  }
+
+  redirectLogin = () => {
+    sessionStorage.setItem('after-login', window.location.pathname);
+    this.context.router.push('/login');
   }
 
   toggleVotes = () => {
@@ -188,8 +197,8 @@ class VoteArea extends React.Component {
                   label={submitLabel}
                   secondary
                   className={s.submitBtn}
-                  disabled={!canVote || loading || !viewer}
-                  onMouseUp={this.checkSubmit}
+                  disabled={!canVote || loading}
+                  onMouseUp={viewer ? this.checkSubmit : this.redirectLogin}
                 />
               </div> :
             null
@@ -203,8 +212,8 @@ class VoteArea extends React.Component {
             label={submitLabel}
             secondary
             className={s.submitBtn}
-            disabled={!canVote || loading || !viewer}
-            onMouseUp={this.checkSubmit}
+            disabled={!canVote || loading}
+            onMouseUp={viewer ? this.checkSubmit : this.redirectLogin}
           />
         </div>
         <p className={s.error}>{this.state.error}</p>

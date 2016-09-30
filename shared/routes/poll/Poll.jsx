@@ -112,7 +112,7 @@ class Poll extends React.Component {
       const { viewer } = this.props;
       const { votes } = this.props.node;
 
-      if (!viewer) {
+      if (!(viewer && viewer.id)) {
         return null;
       }
 
@@ -311,7 +311,7 @@ class Poll extends React.Component {
           </div>
 
           {
-            node.author.id === viewer.id ?
+            viewer && viewer.id && node.author.id === viewer.id ?
               <RaisedButton
                 label="Delete"
                 primary
