@@ -1,3 +1,21 @@
+@custom-media --min-sm (min-width: $screen-sm);
+
 .removeShadowTrans{
   transition: none !important;
+}
+
+.logo {
+  width: auto;
+  height: 64px;
+  display: block;
+}
+
+.title {
+  @media(--min-sm) {
+    font-size: 26px !important;
+  }
+}
+
+.navButtons {
+  float: right;
 }

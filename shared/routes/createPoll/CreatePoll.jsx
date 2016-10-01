@@ -175,6 +175,7 @@ class CreatePoll extends React.Component {
             </IconButton>
           }
           primaryText={item}
+          innerDivStyle={{ marginLeft: 24 }}
         />
         <Divider />
       </div>

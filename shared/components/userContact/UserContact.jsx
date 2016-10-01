@@ -180,7 +180,7 @@ class UserContact extends React.Component {
               <div className="col-xs-6 col-xs-offset-3" style={{ marginTop: 20 }}>
                 <div className="row">
                   <Subheader className="subheader">Email:</Subheader>
-                  <div className="col-xs-6 col-xs-offset-3 col-sm-4 col-sm-offset-0">
+                  <div className="col-xs-12 col-sm-4 col-sm-offset-0">
                     <ListItem className="item" disabled>
                       <SocialButton
                         link={`mailto:${user.email}`}

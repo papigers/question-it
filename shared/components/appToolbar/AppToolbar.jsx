@@ -11,9 +11,6 @@ import NavButtons from '../navButtons';
 import s from './AppToolbar.css';
 
 const styles = {
-  title: {
-    fontSize: 30,
-  },
   toolbar: {
     position: 'fixed',
     top: 0,
@@ -105,6 +102,7 @@ class AppToolbar extends React.Component {
           >
             <Toolbar>
               <ToolbarGroup
+                firstChild
                 onClick={this.props.onLogoClick}
                 style={{ cursor: (this.props.onLogoClick ? 'pointer' : '') }}
               >
@@ -112,7 +110,7 @@ class AppToolbar extends React.Component {
                   this.props.logoUrl ?
                     <img
                       src={this.props.logoUrl}
-                      style={{ width: 'auto', height, display: 'block' }}
+                      className={s.logo}
                       alt="Question It Logo"
                     />
                   :
@@ -120,11 +118,12 @@ class AppToolbar extends React.Component {
                 }
                 <ToolbarTitle
                   text={this.props.title}
-                  style={{ ...styles.title, color: textColor, fontWeight: 600 }}
+                  className={s.title}
+                  style={{ color: textColor, fontWeight: 600 }}
                 />
               </ToolbarGroup>
 
-              <ToolbarGroup lastChild>
+              <ToolbarGroup lastChild className={s.navButtons}>
                 <NavButtons />
               </ToolbarGroup>
 

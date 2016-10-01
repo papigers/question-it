@@ -1,14 +1,15 @@
 .titleField{
   width: 65% !important;
-  font-size: 1.4rem !important;
 
   & input{
     text-align: center;
   }
 
   & label{
+    width: 100%;
     left: 50%;
     transform: translate(-50%) !important;
+    font-size: 1.3rem !important;
   }
 
 }
@@ -37,20 +38,24 @@
 }
 
 .container{
-  width: 70% !important;
+  max-width: 380px !important;
   margin: 0 auto;
 }
 
 .answers{
-  width: 55% !important;
   margin: 0 auto;
-  text-align: left;
 }
 
 .checkbox{
-  width: 45% !important;
   margin: 15px auto;
-  text-align: left;
+  
+  & > div {
+    justify-content: center; 
+  }
+  
+  & label {
+    width: initial !important;
+  }
 }
 
 .error{
