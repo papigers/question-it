@@ -22,7 +22,7 @@ const AUTOPREFIXER_BROWSERS = [
 
 const webpackConfig = (options) => ({
   context: config.root,
-  entry: [path.resolve(__dirname, '../client/index.jsx')],
+  entry: ['babel-polyfill' ,'./client/index.jsx'],
   resolve: {
     modulesDirectories: ['node_modules', 'shared'],
     extensions: ['', '.js', '.jsx'],
