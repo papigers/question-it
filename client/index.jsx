@@ -23,7 +23,8 @@ browserHistory.listen(location => {
 });
 
 const loadedStates = ['complete', 'loaded', 'interactive'];
-if (loadedStates.includes(document.readyState) && document.body) {
+const docReady = loadedStates.some(state => document.readyState == state);
+if (docReady && document.body) {
   NProgress.configure({
     minimum: 0.2,
     trickleRate: 0.05,

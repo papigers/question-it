@@ -111,7 +111,7 @@ app.use((req, res, next) => {
         </head>
         <body>
           <div id="react-view">${componentHTML}</div>
-          <link rel="stylesheet" href="/nprogress/nprogress.css"></script>
+          <link rel="stylesheet" href="/nprogress/nprogress.css"></link>
           <script type="application/javascript" src="/nprogress/nprogress.js"></script>
           <script type="application/javascript">
             NProgress.start();
