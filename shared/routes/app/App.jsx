@@ -9,7 +9,7 @@ import AppToolbar from '../../components/appToolbar';
 
 import s from './App.css';
 
-let logo = require('./logo.png');
+let logo = require('./logobg.png');
 
 class App extends React.Component {
   static contextTypes = {
